@@ -1,13 +1,13 @@
 import { Input as NativeBaseInput, IInputProps, FormControl } from 'native-base';
 
 type Props = IInputProps & {
-//   errorMessage?: string | null;
+  errorMessage?: string | null;
   size: 'small' | 'big';   
 }
 
-export function Input({ size, ...rest }: Props) {
+export function Input({ errorMessage = null, isInvalid, size, ...rest }: Props) {
   
-    // const invalid = !!errorMessage || isInvalid;
+    const invalid = !!errorMessage || isInvalid;
 
     return ( //O uso do mb={4} aqui no form control e pra ele NAO FICAR TAO ESPAÇADO quando der erro
         <FormControl mb={4}>
@@ -19,15 +19,15 @@ export function Input({ size, ...rest }: Props) {
                 px={4}
                 borderWidth={0}
                 fontSize="md"
-                color="white"
+                color="gray.700"
                 fontFamily="body"
-                placeholderTextColor="gray.300"
+                placeholderTextColor="gray.400"
 
-                // isInvalid={invalid}
-                // _invalid={{
-                //   borderWidth: 1,
-                //   borderColor: "red.500"
-                // }}
+                isInvalid={invalid}
+                _invalid={{
+                  borderWidth: 1,
+                  borderColor: "red.500"
+                }}
                 
                 _focus={{
                 bgColor: 'gray.100',
@@ -37,9 +37,9 @@ export function Input({ size, ...rest }: Props) {
                 {...rest}
             />
 
-            {/* <FormControl.ErrorMessage _text={{ color: 'red.500' }}>
+            <FormControl.ErrorMessage _text={{ color: 'red.500' }}>
                 {errorMessage}
-            </FormControl.ErrorMessage> */}
+            </FormControl.ErrorMessage>
 
         </FormControl>
     );
