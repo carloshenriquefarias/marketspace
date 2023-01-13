@@ -7,7 +7,7 @@ import { Theme } from './src/theme';
 
 // import {AuthContext, AuthContextProvider} from '@contexts/AuthContext';
 
-// import { Routes } from './src/routes';
+import { Routes } from './src/routes';
 import { SignIn } from '@screens/SignIn';
 import { SignUp } from '@screens/SignUp';
 // import { Home } from '@screens/Home';
@@ -26,7 +26,8 @@ export default function App() {
         translucent
       />
 
-      <SignUp/>     
+      {/* <SignUp/>      */}
+      <Routes/>
             
     </NativeBaseProvider>
   );

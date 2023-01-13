@@ -1,20 +1,27 @@
-import { Input as NativeBaseInput, IInputProps, FormControl } from 'native-base';
+import { Input as NativeBaseInput, IInputProps, FormControl, Pressable, Icon } from 'native-base';
+import { Text, View } from 'react-native';
+
+import { useState } from "react";
+import React from "react";
+
+import { MaterialIcons } from "@expo/vector-icons";
 
 type Props = IInputProps & {
-  errorMessage?: string | null;
-  size: 'small' | 'big';   
+  errorMessage?: string | null; 
+  typeInput?: null | 'password';
+//   iconInput?: null | 'icon';
 }
 
-export function Input({ errorMessage = null, isInvalid, size, ...rest }: Props) {
+export function Input({ typeInput = null, errorMessage = null, isInvalid, size, ...rest }: Props) {
   
     const invalid = !!errorMessage || isInvalid;
+    const [show, setShow] = React.useState(false);
 
-    return ( //O uso do mb={4} aqui no form control e pra ele NAO FICAR TAO ESPAÇADO quando der erro
-        <FormControl mb={4}>
+    return (
+        <FormControl mb={4} isInvalid={invalid}>
 
             <NativeBaseInput 
-                bg="gray.100"
-                size={size === 'big' ?  'h={36}': 'h={14}'} //Ver depois
+                bg="gray.100"                
                 h={14}
                 px={4}
                 borderWidth={0}
@@ -34,8 +41,32 @@ export function Input({ errorMessage = null, isInvalid, size, ...rest }: Props) 
                 borderWidth: 1,
                 borderColor: 'blue.500'
                 }}
+                            
+                // InputLeftElement={                                      
+                //     <Icon                        
+                //         size={5} 
+                //         ml="2" 
+                //         color="muted.400" 
+                //     />                    
+                // }                
+                
+                type={show ? "text" : "password"}             
+                InputRightElement={
+                    (typeInput==="password")?
+                    <Pressable onPress={() => setShow(!show)}>
+                        <Icon 
+                            as={<MaterialIcons name={show ? "visibility" : "visibility-off"} />} 
+                            size={5} 
+                            mr="2" 
+                            color="muted.400" 
+                        />
+                    </Pressable>
+                    : <View></View>
+                } 
+
                 {...rest}
-            />
+                
+            />            
 
             <FormControl.ErrorMessage _text={{ color: 'red.500' }}>
                 {errorMessage}
