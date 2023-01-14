@@ -11,11 +11,19 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import LogoSvg from '@assets/logo.svg';
-// import { AppError } from "@utils/AppError";
+
+import { AppError } from "@utils/AppError";
+
+import { api } from "@services/api";
+import  axios  from 'axios';
+
+import * as ImagePicker from 'expo-image-picker';
+import * as FileSystem from 'expo-file-system';
 
 import { useNavigation } from "@react-navigation/native";
 
-import { VStack, Text, Center, Heading, ScrollView, Image, Stack, Icon, Pressable, HStack, View, } from "native-base";
+import { VStack, Text, Center, Heading, ScrollView, Image, Stack, 
+    Icon, Pressable, HStack, View, useToast, Skeleton} from "native-base";
 import { UserPhoto } from '@components/UserPhoto';
 import { TouchableOpacity } from 'react-native';
 
@@ -35,10 +43,14 @@ const signUpSchema = yup.object({
     password_confirm: yup.string().required('Confirme a senha.').oneOf([yup.ref('password'), null], 'A confirmação da senha não confere')
 });  
 
+const PHOTO_SIZE = 20;
 
 export function SignUp() {
 
     const navigation = useNavigation();  
+    const toast = useToast();
+    const [isLoading, setIsLoading] = useState(false);
+    const [photoIsLoading, setPhotoIsLoading] = useState(false);
     const [userPhoto, setUserPhoto] = useState('https://github.com/JRSparrowII.png');
 
     const { control, handleSubmit, formState: { errors } } = useForm<FormDataProps>({
@@ -50,8 +62,63 @@ export function SignUp() {
     }    
     
     async function handleSignUp({name, email, telefone, password }: FormDataProps) {
-        console.log(handleSignUp)
+        try {
+            setIsLoading(true)        
+      
+           await api.post('/users', { name, email, telefone, password });            
+            // await singIn(email, password)
+      
+        } catch (error) {
+            setIsLoading(false);
+        
+            const isAppError = error instanceof AppError;
+            const title = isAppError ? error.message : 'Não foi possível criar a conta. Tente novamente mais tarde';
+        
+            toast.show({    
+                title,
+                placement: 'top',
+                bgColor: 'red.500'
+            })
+        }        
     }  
+
+    async function handleUserPhotoSelected(){
+        setPhotoIsLoading(true);
+        
+        try {
+          const photoSelected = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            quality: 1,
+            aspect: [4, 4], //Tamanho da imagem
+            allowsEditing: true, //Deixa o usuario editar a imagem
+          });
+      
+          if(photoSelected.canceled) {
+            return;
+          }
+    
+            if(photoSelected.uri) {
+        
+                const photoInfo = await FileSystem.getInfoAsync(photoSelected.uri);
+                
+                if(photoInfo.size && (photoInfo.size  / 1024 / 1024 ) > 2){
+                
+                    return toast.show({
+                        title: 'Essa imagem é muito grande. Escolha uma de até 5MB.',
+                        placement: 'top',
+                        bgColor: 'red.500'
+                    })
+                }        
+                setUserPhoto(photoSelected.assets[0].uri);
+            }
+      
+        } catch (error) {
+          console.log(error)
+          
+        } finally {
+          setPhotoIsLoading(false)
+        }
+    }
 
     return (
         <ScrollView 
@@ -80,16 +147,38 @@ export function SignUp() {
                 <Center>                    
                    
                     <HStack alignItems="center">
-                        <UserPhoto                         
-                            size={20}
-                            source={{ uri: userPhoto }}
-                            alt="Imagem do usuário"
-                            mr={-4}
-                            mb={5}
-                        /> 
 
-                        <TouchableOpacity onPress={handleSignUp} >
-                            <View mt={3} w={12} h={12} rounded={24} backgroundColor="white" alignItems="center">
+                        { //Mudando a foto de perfil
+                            photoIsLoading ?
+                            <Skeleton 
+                                w={PHOTO_SIZE}
+                                h={PHOTO_SIZE}
+                                rounded="full"
+                                startColor="gray.700"
+                                endColor="gray.400"
+                            />
+                            :
+                            <UserPhoto 
+                                source={{ uri: userPhoto }}
+                                alt="Foto do usuário"
+                                size={PHOTO_SIZE}
+                                mr={-4}
+                                mb={5}
+                                ml={5}
+                            />
+                        }                       
+
+                        <TouchableOpacity  
+                            onPress={handleUserPhotoSelected}                           
+                        >
+                            <View 
+                            mt={3} 
+                            w={12} 
+                            h={12} 
+                            rounded={24} 
+                            backgroundColor="white" 
+                            alignItems="center"
+                            >
                                 <Icon  
                                     as={MaterialIcons} // No Icone passa a biblioteca e as propriedades
                                     name="edit" 
@@ -99,7 +188,7 @@ export function SignUp() {
                             </View>                        
                         </TouchableOpacity>
 
-                    </HStack>                                       
+                    </HStack>
 
                     <Controller 
                         control={control}
@@ -108,12 +197,15 @@ export function SignUp() {
                         <Input 
                             placeholder="Nome"
                             onChangeText={onChange}
-                            value={value}                             
+                            value={value}          
+                            keyboardType="default"
+                            autoCapitalize="none"     
+                            secureTextEntry={false}               
                             errorMessage={errors.name?.message}
                         />
                         )}
                     />
-
+                   
                     <Controller 
                         control={control}
                         name="email"
@@ -123,7 +215,8 @@ export function SignUp() {
                                 onChangeText={onChange}
                                 value={value}
                                 keyboardType="email-address"
-                                autoCapitalize="none"                       
+                                autoCapitalize="none"       
+                                            
                                 errorMessage={errors.email?.message}
                             />
                         )}
@@ -136,7 +229,9 @@ export function SignUp() {
                             <Input 
                                 placeholder="Telefone"
                                 onChangeText={onChange}
-                                value={value}                                  
+                                keyboardType="numeric"
+                                value={value}  
+                                type="text"                                
                                 errorMessage={errors.telefone?.message}
                             />
                         )}
@@ -161,7 +256,7 @@ export function SignUp() {
                         name="password_confirm"
                         render={({ field: { onChange, value } }) => (
                             <Input 
-                                placeholder="Confirmar a Senha"                                 
+                                placeholder="Confirmar a Senha"                                                               
                                 onChangeText={onChange}
                                 value={value}
                                 onSubmitEditing={handleSubmit(handleSignUp)} //Usar o botao do teclado
@@ -176,7 +271,8 @@ export function SignUp() {
                     <Button 
                         title="Entrar" 
                         size="total"  
-                        onPress={handleSubmit(handleSignUp)} 
+                        onPress={handleSubmit(handleSignUp)}  
+                        isLoading={isLoading}                     
                         variant="base2"                       
                     />
                     
