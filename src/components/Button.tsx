@@ -7,18 +7,19 @@ type Props = IButtonProps & {
   size?: 'total' | 'half' 
 }
 
-export function Button({ title, variant = 'default',...rest }: Props) {
+export function Button({ title, variant = 'default', size = 'half',...rest }: Props) {
   return (
     <ButtonNativeBase
-        w="full"
-        //   w={size === "half" ? 'gray.500' : 'full'}
-        h={14}      
+        // w="full"
+        w={size === "half" ? '50%' : 'full'}
+        h={size === "half" ? '10' : '14'}
+        // h={14}      
         bg={variant === 'default' ? 'gray.300' :  
           variant === 'base1' ? 'blue.500' : 'gray.700'
         } //Condicional de butao     
 
         borderColor="blue.500"
-        rounded="xl" //Border radius
+        rounded="md" //Border radius
 
         _pressed={{
             bg: variant === 'default' ? 'gray.400' : 'blue.700'  
