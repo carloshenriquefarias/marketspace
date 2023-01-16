@@ -27,12 +27,12 @@ export function AppRoutes() {
 
   return (
     <Navigator screenOptions={{ 
-        headerShown: false, // Remove o cabecalho de todas as tela
-        tabBarShowLabel: false, // Remove o nome de todas os icones das tela
-        tabBarActiveTintColor: colors.gray[700], // Define a cor do icone selecionado das tela
+        headerShown: false,
+        tabBarShowLabel: false,
+        tabBarActiveTintColor: colors.gray[700],
         tabBarInactiveTintColor: colors.gray[400],
 
-        tabBarStyle: { // Define a cor do fundo da parte de baixo das tela
+        tabBarStyle: {
             backgroundColor: colors.gray[100],
             borderTopWidth: 0,
             height: Platform.OS === "android" ? 'auto' : 96,
