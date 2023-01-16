@@ -9,21 +9,19 @@ type Props = IButtonProps & {
 
 export function Button({ title, variant = 'default', size = 'half',...rest }: Props) {
   return (
-    <ButtonNativeBase
-        // w="full"
+    <ButtonNativeBase        
         w={size === "half" ? '50%' : 'full'}
-        h={size === "half" ? '10' : '14'}
-        // h={14}      
+        h={size === "half" ? '10' : '14'}           
         bg={variant === 'default' ? 'gray.300' :  
           variant === 'base1' ? 'blue.500' : 'gray.700'
-        } //Condicional de butao     
+        }    
 
         borderColor="blue.500"
-        rounded="md" //Border radius
+        rounded="md"
 
         _pressed={{
             bg: variant === 'default' ? 'gray.400' : 'blue.700'  
-        }} //Hover button
+        }}
         {...rest}
     >
         <Text 

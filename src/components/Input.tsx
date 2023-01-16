@@ -40,15 +40,7 @@ export function Input({ typeInput = null, errorMessage = null, isInvalid, size, 
                 bgColor: 'gray.100',
                 borderWidth: 1,
                 borderColor: 'blue.500'
-                }}
-                            
-                // InputLeftElement={                                      
-                //     <Icon                        
-                //         size={5} 
-                //         ml="2" 
-                //         color="gray.700" 
-                //     />                    
-                // }                
+                }}                             
                 
                 type={noShow ? "password" : "text" }             
                 InputRightElement={
@@ -56,13 +48,13 @@ export function Input({ typeInput = null, errorMessage = null, isInvalid, size, 
                     <Pressable onPress={() => setNoShow(!noShow)}>
                         <Icon 
                             as={<MaterialIcons name={noShow ?  "visibility-off" : "visibility"} />} 
-                            size={5} 
+                            size={7} 
                             mr="2" 
                             color="muted.400" 
                         />
                     </Pressable>
                     : <View></View>
-                } 
+                }        
 
                 {...rest}
                 
