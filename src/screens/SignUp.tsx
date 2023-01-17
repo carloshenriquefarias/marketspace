@@ -1,5 +1,5 @@
 import { Input } from '@components/Input'
-import { Button } from '@components/Button'
+import { ButtonDefault } from '@components/Button'
 
 import { useState } from "react";
 import React from "react";
@@ -268,7 +268,7 @@ export function SignUp() {
                         )}
                     />  
                   
-                    <Button 
+                    <ButtonDefault 
                         title="Entrar" 
                         size="total"  
                         onPress={handleSubmit(handleSignUp)}  
@@ -283,7 +283,7 @@ export function SignUp() {
                         Ja possui uma conta?
                     </Text>
 
-                    <Button 
+                    <ButtonDefault 
                         title="Ir para o login" 
                         size="total"   
                         variant="default" 

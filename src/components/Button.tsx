@@ -7,7 +7,7 @@ type Props = IButtonProps & {
   size?: 'total' | 'half' 
 }
 
-export function Button({ title, variant = 'default', size = 'half',...rest }: Props) {
+export function ButtonDefault({ title, variant = 'default', size = 'half',...rest }: Props) {
   return (
     <ButtonNativeBase        
         w={size === "half" ? '50%' : 'full'}

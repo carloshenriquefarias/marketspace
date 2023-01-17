@@ -1,7 +1,7 @@
 import { AppNavigatorRoutesProps } from '@routes/app.routes';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { View, Text, HStack, ScrollView, VStack, Box, Icon, useToast, FlatList} from 'native-base';
-import { Button } from '@components/Button'
+import { ButtonDefault } from '@components/Button'
 import { Product } from '@components/Product'
 import { UserPhoto } from '@components/UserPhoto';
 import { useEffect, useState } from 'react'; 
@@ -18,18 +18,18 @@ export function Home(){
     const navigation = useNavigation<AppNavigatorRoutesProps>();
     const [userPhoto, setUserPhoto] = useState('https://github.com/JRSparrowII.png');
     const [product, setProduct] = useState<string[]>([
-        {
-            id: '1'
-        },
-        {
-            id: '2'
-        },
-        {
-            id: '3'
-        },
-        {
-            id: '4'
-        }
+        // {
+        //     id: '1'
+        // },
+        // {
+        //     id: '2'
+        // },
+        // {
+        //     id: '3'
+        // },
+        // {
+        //     id: '4'
+        // }
     ]);
     const toast = useToast();
 
@@ -92,7 +92,7 @@ export function Home(){
                                         
                     </HStack>               
 
-                    <Button 
+                    <ButtonDefault 
                         title="Criar Anúncio" 
                         size="half"                             
                         variant="base2" 
