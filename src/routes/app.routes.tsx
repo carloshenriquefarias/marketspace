@@ -8,6 +8,7 @@ import ProfileSvg from '@assets/profile.svg';
 
 import { Home } from '@screens/Home';
 import { NewAd } from '@screens/NewAd';
+import { Preview } from '@screens/Preview';
 import { ProductDetails } from '@screens/ProductDetails';
 
 type AppRoutes = {
@@ -15,6 +16,7 @@ type AppRoutes = {
   productdetails: undefined;
   exit: undefined;
   newad: undefined;
+  preview: undefined;
 }
 
 export type AppNavigatorRoutesProps = BottomTabNavigationProp<AppRoutes>;
@@ -76,6 +78,12 @@ export function AppRoutes() {
         <Screen 
             name='newad'
             component={NewAd}
+            options={{ tabBarButton: () => null }} //Nao quer ter disponivel no menu
+        />
+
+        <Screen 
+            name='preview'
+            component={Preview}
             options={{ tabBarButton: () => null }} //Nao quer ter disponivel no menu
         />
     </Navigator>
