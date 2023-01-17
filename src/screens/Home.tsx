@@ -1,18 +1,67 @@
 import { AppNavigatorRoutesProps } from '@routes/app.routes';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
-import { View, Text, HStack, ScrollView, VStack, Box, Icon} from 'native-base';
+import { View, Text, HStack, ScrollView, VStack, Box, Icon, useToast, FlatList} from 'native-base';
 import { Button } from '@components/Button'
+import { Product } from '@components/Product'
 import { UserPhoto } from '@components/UserPhoto';
-import { useState } from 'react'; 
+import { useEffect, useState } from 'react'; 
 import { InputFilter } from '@components/InputFilter'
 
 import { AntDesign, FontAwesome5} from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons'; 
 
+import { AppError } from '@utils/AppError';
+import { api } from '@services/api';
+
 export function Home(){
 
     const navigation = useNavigation<AppNavigatorRoutesProps>();
     const [userPhoto, setUserPhoto] = useState('https://github.com/JRSparrowII.png');
+    const [product, setProduct] = useState<string[]>([
+        {
+            id: '1'
+        },
+        {
+            id: '2'
+        },
+        {
+            id: '3'
+        },
+        {
+            id: '4'
+        }
+    ]);
+    const toast = useToast();
+
+    function handleProductDetails() {
+        navigation.navigate('productdetails');
+    } 
+    
+    function handleNewAd() {
+        navigation.navigate('newad');
+    }
+
+    async function fetchProduct() {
+        // try {
+        //   const response = await api.get('a/docs');
+        //   setProduct(response.data);
+        //   // console.log(response.data);
+    
+        // } catch (error) {
+        //   const isAppError = error instanceof AppError;
+        //   const title = isAppError ? error.message : 'Não foi possível carregar os produtos';
+    
+        //   toast.show({
+        //     title,
+        //     placement: 'top',
+        //     bgColor: 'red.500'
+        //   })
+        // }
+    }
+
+    useEffect(() => {
+        fetchProduct();
+    },[])
 
     return(
 
@@ -47,6 +96,7 @@ export function Home(){
                         title="Criar Anúncio" 
                         size="half"                             
                         variant="base2" 
+                        onPress={handleNewAd}
                     //Colocar o icone no butao                      
                     />                    
                 </HStack>  
@@ -108,6 +158,26 @@ export function Home(){
 
                 <InputFilter
                     typeInput={"filter"}
+                />
+
+                <FlatList 
+                    data={product}
+                    keyExtractor={item => item.id}
+                    numColumns={2}
+                    renderItem={({ item }) => (
+                        <Product                    
+                            image='source={{ uri: userPhoto }}'
+                            title='Tenis vermelho'
+                            price={50}
+                            status='NOVO'
+                            avatar='source={{ uri: userPhoto }}'
+                        />                      
+                    )}
+                    w='full' 
+                    showsVerticalScrollIndicator={false}
+                    _contentContainerStyle={{
+                        paddingBottom: 20
+                    }}
                 /> 
                 
                  
