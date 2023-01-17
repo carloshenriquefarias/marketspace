@@ -7,12 +7,14 @@ import HistorySvg from '@assets/history.svg';
 import ProfileSvg from '@assets/profile.svg';
 
 import { Home } from '@screens/Home';
-import { ItemDetails } from '@screens/ItemDetails';
+import { NewAd } from '@screens/NewAd';
+import { ProductDetails } from '@screens/ProductDetails';
 
 type AppRoutes = {
   home: undefined;
-  itemdetails: {itemdetailsId: string};
+  productdetails: undefined;
   exit: undefined;
+  newad: undefined;
 }
 
 export type AppNavigatorRoutesProps = BottomTabNavigationProp<AppRoutes>;
@@ -51,8 +53,8 @@ export function AppRoutes() {
         />
 
         <Screen 
-            name='itemdetails'
-            component={ItemDetails}
+            name='productdetails'
+            component={ProductDetails}
             options={{
             tabBarIcon: ({ color }) => (
                 <HistorySvg fill={color} width={iconSize} height={iconSize} />
@@ -62,13 +64,19 @@ export function AppRoutes() {
 
         <Screen 
             name='exit'
-            component={ItemDetails}
+            component={ProductDetails}
             options={{
                 tabBarIcon: ({ color }) => (
                 <HistorySvg fill={color} width={iconSize} height={iconSize} />
                 )
             }}
             // options={{ tabBarButton: () => null }} //Nao quer ter disponivel no menu
+        />
+
+        <Screen 
+            name='newad'
+            component={NewAd}
+            options={{ tabBarButton: () => null }} //Nao quer ter disponivel no menu
         />
     </Navigator>
   );

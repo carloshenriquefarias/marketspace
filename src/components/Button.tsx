@@ -12,6 +12,7 @@ export function Button({ title, variant = 'default', size = 'half',...rest }: Pr
     <ButtonNativeBase        
         w={size === "half" ? '50%' : 'full'}
         h={size === "half" ? '10' : '14'}           
+        
         bg={variant === 'default' ? 'gray.300' :  
           variant === 'base1' ? 'blue.500' : 'gray.700'
         }    

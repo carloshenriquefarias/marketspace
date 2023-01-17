@@ -25,9 +25,9 @@ export default function App() {
         backgroundColor="transparent"
         translucent
       />
-
-      {/* <SignUp/>      */}
-      <Routes/>
+      
+      {/* //Lembrar de colocar o loading */}
+      { fontsloaded ? <Routes/> : null}  
             
     </NativeBaseProvider>
   );
