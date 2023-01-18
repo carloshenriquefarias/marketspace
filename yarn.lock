@@ -1055,6 +1055,11 @@
     "@babel/helper-validator-identifier" "^7.19.1"
     "to-fast-properties" "^2.0.0"
 
+"@expo-google-fonts/karla@^0.2.2":
+  "integrity" "sha512-MPKYN8K83sSqAvkawZ2ylrd3tyFQwhSk0LTCDiQAkUJGWDXo+y1PBf1LM8b48zT87V7ne5AsEjHOWAIbpV6MOQ=="
+  "resolved" "https://registry.npmjs.org/@expo-google-fonts/karla/-/karla-0.2.2.tgz"
+  "version" "0.2.2"
+
 "@expo-google-fonts/roboto@^0.2.2":
   "integrity" "sha512-qP0oZsR8rTID5T9wEXSt9yCYMnKYKlvIlrJGGpd+t71Obt2J51+51PBpvxd5c8fpABEru3zx6ENmpU9lzwr8zw=="
   "resolved" "https://registry.npmjs.org/@expo-google-fonts/roboto/-/roboto-0.2.2.tgz"

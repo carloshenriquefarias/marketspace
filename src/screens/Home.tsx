@@ -18,18 +18,18 @@ export function Home(){
     const navigation = useNavigation<AppNavigatorRoutesProps>();
     const [userPhoto, setUserPhoto] = useState('https://github.com/JRSparrowII.png');
     const [product, setProduct] = useState<string[]>([
-        // {
-        //     id: '1'
-        // },
-        // {
-        //     id: '2'
-        // },
-        // {
-        //     id: '3'
-        // },
-        // {
-        //     id: '4'
-        // }
+        {
+            id: '1'
+        },
+        {
+            id: '2'
+        },
+        {
+            id: '3'
+        },
+        {
+            id: '4'
+        }
     ]);
     const toast = useToast();
 
@@ -127,7 +127,10 @@ export function Home(){
                             />
 
                             <VStack ml={4}>
-                                <Text color="gray.600" fontSize={20} fontWeight="bold">4</Text>  
+                                <Text color="gray.600" fontSize={20} fontWeight="bold" 
+                                    lineHeight={'2xl'}>
+                                    4
+                                </Text>  
                                 <Text color="black" fontSize={12}>anuncios ativos</Text> 
                             </VStack>
                         </HStack>
@@ -159,7 +162,7 @@ export function Home(){
                 <InputFilter
                     typeInput={"filter"}
                 />
-
+{/* 
                 <FlatList 
                     data={product}
                     keyExtractor={item => item.id}
@@ -179,7 +182,7 @@ export function Home(){
                         paddingBottom: 20
                     }}
                 /> 
-                
+                 */}
                  
                 
 

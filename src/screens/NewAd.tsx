@@ -3,6 +3,7 @@ import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { Header } from '@components/Header';
 import { View, Text, HStack, Icon, VStack, Button, Radio, Stack, Switch, Checkbox, ScrollView } from 'native-base';
 import { FontAwesome5} from '@expo/vector-icons';
+import { Feather } from '@expo/vector-icons'; 
 import { ButtonDefault } from '@components/Button'
 
 import React, { useState } from "react";
@@ -10,17 +11,32 @@ import { TextArea, Box, Center, NativeBaseProvider } from "native-base";
 
 import { Input } from '@components/Input'
 
+// const TextAreas = () => {
+//     const [textAreaValue, setTextAreaValue] = useState();
+//     return <Box alignItems="center" w="100%">
+//             <TextArea value={textAreaValue}
+//                 placeholder="Descrição do produto"
+//                 backgroundColor="gray.100"
+//                 // onChange={e => setTextAreaValue(e.currentTarget.value)} // for web
+//                 onChangeText={text => setTextAreaValue(text)}
+//                 w="100%" maxW="300" 
+//             />
+//       </Box>;
+// };
+
 const TextAreas = () => {
-    const [textAreaValue, setTextAreaValue] = useState();
     return <Box alignItems="center" w="100%">
-            <TextArea value={textAreaValue}
+            <TextArea 
+                h={40} 
+                w="full" maxW="full"
                 placeholder="Descrição do produto"
                 backgroundColor="gray.100"
-                // onChange={e => setTextAreaValue(e.currentTarget.value)} // for web
-                onChangeText={text => setTextAreaValue(text)}
-                w="100%" maxW="300" 
+                fontSize="md"
+                borderColor="blue.500"
+                size={14}
             />
-      </Box>;
+        </Box>
+    ;
 };
 
 const Radios = () => {
@@ -39,11 +55,11 @@ const Radios = () => {
             w="100%" maxW="300px"
         >
             
-            <Radio value="1" colorScheme="green" size="md" my={1}>
+            <Radio value="1" colorScheme="blue" size="md" my={1}>
                 Produto Novo
             </Radio>
 
-            <Radio value="2" colorScheme="green" size="md" my={1}>
+            <Radio value="2" colorScheme="blue" size="md" my={1}>
                 Produto Usado
             </Radio>
             
@@ -54,22 +70,19 @@ const Radios = () => {
 const Switchs = () => {
     return <HStack alignItems="center" space={0}>
         <Text></Text>
-        <Switch size="lg" />
+        <Switch size="lg" color="blue" bg="blue"/>
       </HStack>;
 };
 
 const Checkboxs = () => {
     const [groupValues, setGroupValues] = React.useState([]);
     return <Checkbox.Group onChange={setGroupValues} value={groupValues} accessibilityLabel="choose numbers">
-        {/* <Checkbox value="one" my={2}>
-          Boleto
-        </Checkbox> */}
         <Checkbox value="one">Boleto</Checkbox>
-        <Checkbox value="two" mt={2}>Pix</Checkbox>
+        <Checkbox value="two" mt={2} >Pix</Checkbox>
         <Checkbox value="three" mt={2}>Dinheiro</Checkbox>
         <Checkbox value="four" mt={2}>Cartão de crédito</Checkbox>
         <Checkbox value="five" mt={2}>Depósito Bancário</Checkbox>
-      </Checkbox.Group>;
+    </Checkbox.Group>;
 };
   
 
@@ -93,7 +106,7 @@ export function NewAd(){
             
             <VStack>
                 <Header
-                    title='Criar Anúncio'                
+                    title='Criar Anúncio'            
                 />
 
                 <VStack             
@@ -103,7 +116,7 @@ export function NewAd(){
                     // h="500px"
                     // width="full"
                 >
-                    <Text color="gray.700" fontFamily="heading">
+                    <Text color="gray.700" fontFamily="heading" fontSize="md">
                         Imagens
                     </Text>
 
@@ -118,52 +131,57 @@ export function NewAd(){
                     >
                         <Button h={24} w={24} backgroundColor="gray.300">
                             <Icon 
-                                as={FontAwesome5}
-                                name="arrow-left"
+                                as={Feather}
+                                name="plus"
                                 color="gray.400"
-                                size={6}
+                                size={7}
                                 // ml={1}
                             />  
                         </Button>
 
                         <Button h={24} w={24} backgroundColor="gray.300">
                             <Icon 
-                                as={FontAwesome5}
-                                name="arrow-left"
+                                as={Feather}
+                                name="plus"
                                 color="gray.400"
-                                size={6}
+                                size={7}
                                 // ml={1}
                             />  
                         </Button>
 
                         <Button h={24} w={24} backgroundColor="gray.300">
                             <Icon 
-                                as={FontAwesome5}
-                                name="arrow-left"
+                                as={Feather}
+                                name="plus"
                                 color="gray.400"
-                                size={6}
+                                size={7}
                                 // ml={1}
                             />  
                         </Button>
                     </HStack>
 
-                    <Text color="gray.700" mt={5} mb={5}>
+                    <Text color="gray.700" mt={5} mb={5} fontFamily="heading" fontSize="md">
                         Sobre o produto
                     </Text>
 
                     <Input placeholder='Título do anúncio'/>
 
-                    <TextAreas/>
+                    <VStack
+                       // style={{backgroundColor: 'orange'}}
+                    >
+                        <TextAreas/>
+                    </VStack>
+                    
 
                     <Radios/>
 
-                    <Text color="gray.700" mt={5} mb={5}>
+                    <Text color="gray.700" mt={5} mb={5} fontFamily="heading" fontSize="md">
                         Venda
                     </Text>
 
                     <Input placeholder='R$ Valor do produto'/>
 
-                    <Text color="gray.700">
+                    <Text color="gray.700" fontFamily="heading" fontSize="md">
                         Aceita troca?
                     </Text>
 
