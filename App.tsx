@@ -1,6 +1,6 @@
 import { View, StatusBar, RecyclerViewBackedScrollView } from 'react-native';
 import { NativeBaseProvider } from 'native-base';
-import { useFonts, Roboto_400Regular, Roboto_700Bold } from '@expo-google-fonts/roboto';
+import { useFonts, Karla_400Regular, Karla_700Bold } from '@expo-google-fonts/karla';
 // import { Loading } from '@components/Loading';
 
 import { Theme } from './src/theme';
@@ -14,7 +14,7 @@ import { SignUp } from '@screens/SignUp';
 
 export default function App() {
 
-  const [fontsloaded] = useFonts({Roboto_400Regular, Roboto_700Bold})
+  const [fontsloaded] = useFonts({Karla_400Regular, Karla_700Bold})
 
   return (
 

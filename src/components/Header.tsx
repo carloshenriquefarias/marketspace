@@ -1,17 +1,18 @@
 import { AppNavigatorRoutesProps } from '@routes/app.routes';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
-import { View, Text, HStack, Icon } from 'native-base';
-import { FontAwesome5} from '@expo/vector-icons';
+import { View, Text, HStack, Icon, VStack } from 'native-base';
+import { FontAwesome5, SimpleLineIcons} from '@expo/vector-icons';
 import { Pressable } from 'react-native';
 
 type HeaderProps = {
     icon?: string;
     iconleft?: string;
     title?: string;
+    subtitle?: string;
     variant?: 'default' | 'base1' 
 }
 
-export function Header({title, variant = 'default', icon, iconleft, ...rest} : HeaderProps){   
+export function Header({title, subtitle, variant = 'default', icon, iconleft, ...rest} : HeaderProps){   
 
     const navigation = useNavigation<AppNavigatorRoutesProps>();   
     
@@ -41,6 +42,7 @@ export function Header({title, variant = 'default', icon, iconleft, ...rest} : H
                 />   
             </Pressable>
 
+            <VStack>
             <Text 
                 color={variant === 'default' ? 'gray.700' : 'white'}
                 fontFamily="heading"
@@ -50,10 +52,21 @@ export function Header({title, variant = 'default', icon, iconleft, ...rest} : H
                 {title}
             </Text>
 
+            <Text 
+                color={variant === 'default' ? 'gray.700' : 'white'}
+                fontFamily="body"
+                fontSize="md"
+                textAlign="center"
+            >
+                {subtitle}
+            </Text>
+            </VStack>
+            
+
             <Pressable>
                 <Icon 
-                    as={FontAwesome5}
-                    name="arrow-right"
+                    as={SimpleLineIcons}
+                    name="pencil"
                     color="blue.500"
                     size={6}
                     // ml={1}

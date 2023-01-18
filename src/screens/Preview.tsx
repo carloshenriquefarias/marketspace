@@ -24,8 +24,9 @@ export function Preview(){
 
             <VStack>
                 <Header
-                    title='Pré visualização do anúncio é assim que seu anauncio vai aparrecer'                
+                    title='Pré visualização do anúncio'                
                     variant='base1'
+                    subtitle='é assim que seu anauncio vai aparrecer'
                 />
 
                 <Image
