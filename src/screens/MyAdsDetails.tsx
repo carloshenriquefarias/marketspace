@@ -8,7 +8,7 @@ import BackgroundImg from '@assets/produto_1.png';
 
 import React, { useState } from "react";
 
-export function Preview(){
+export function MyAdsDetails(){
 
     const navigation = useNavigation<AppNavigatorRoutesProps>();   
     const [userPhoto, setUserPhoto] = useState('https://github.com/JRSparrowII.png');
@@ -17,20 +17,14 @@ export function Preview(){
         navigation.navigate('preview');
     } 
 
-    function handleOpenMyAdsDetails() { 
-        navigation.navigate('myadsdetails');
-    } 
-
     return(
         <ScrollView 
             contentContainerStyle={{ flexGrow: 1 }} 
             showsVerticalScrollIndicator={false}>
 
             <VStack>
-                <Header
-                    title='Pré visualização do anúncio'                
-                    variant='base1'
-                    subtitle='é assim que seu anauncio vai aparrecer'
+                <Header               
+                    variant='default'
                 />
 
                 <Image
@@ -105,24 +99,25 @@ export function Preview(){
                         
                 </VStack>
 
-                <HStack justifyContent="space-between" padding={8} space={2}>
+                <VStack padding={8}>
 
                     <ButtonDefault 
-                        title="Voltar e Editar" 
-                        size="half"                             
-                        variant="default"  
+                        title="Desativar anúncio" 
+                        size="total"                             
+                        variant="base2"  
                         // onPress={handleNewAd}
                     //Colocar o icone no butao                      
                     />          
 
                     <ButtonDefault 
-                        title="Publicar" 
-                        size="half"                             
-                        variant="base2" 
-                        onPress={handleOpenMyAdsDetails}
+                        title="Excluir anúncio" 
+                        size="total"                             
+                        variant="default"  
+                        onPress={handleOpenPreview}
+                        mt={4}
                     //Colocar o icone no butao                      
                     />                    
-                </HStack>  
+                </VStack>  
             </VStack> 
         </ScrollView>       
     )        

@@ -7,22 +7,9 @@ import { Feather } from '@expo/vector-icons';
 import { ButtonDefault } from '@components/Button'
 
 import React, { useState } from "react";
-import { TextArea, Box, Center, NativeBaseProvider } from "native-base";
+import { TextArea, Box } from "native-base";
 
 import { Input } from '@components/Input'
-
-// const TextAreas = () => {
-//     const [textAreaValue, setTextAreaValue] = useState();
-//     return <Box alignItems="center" w="100%">
-//             <TextArea value={textAreaValue}
-//                 placeholder="Descrição do produto"
-//                 backgroundColor="gray.100"
-//                 // onChange={e => setTextAreaValue(e.currentTarget.value)} // for web
-//                 onChangeText={text => setTextAreaValue(text)}
-//                 w="100%" maxW="300" 
-//             />
-//       </Box>;
-// };
 
 const TextAreas = () => {
     return <Box alignItems="center" w="100%">
@@ -166,12 +153,7 @@ export function NewAd(){
 
                     <Input placeholder='Título do anúncio'/>
 
-                    <VStack
-                       // style={{backgroundColor: 'orange'}}
-                    >
-                        <TextAreas/>
-                    </VStack>
-                    
+                    <TextAreas/>           
 
                     <Radios/>
 
