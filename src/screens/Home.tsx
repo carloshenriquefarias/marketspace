@@ -162,7 +162,7 @@ export function Home(){
                 <InputFilter
                     typeInput={"filter"}
                 />
-{/* 
+
                 <FlatList 
                     data={product}
                     keyExtractor={item => item.id}
@@ -181,18 +181,10 @@ export function Home(){
                     _contentContainerStyle={{
                         paddingBottom: 20
                     }}
-                /> 
-                 */}
-                 
-                
+                />       
 
-            </VStack>   
-            
-           
+            </VStack>                         
 
-                                 
-
-        </ScrollView>        
-        
+        </ScrollView>
     )
 }
