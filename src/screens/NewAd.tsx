@@ -1,7 +1,7 @@
 import { AppNavigatorRoutesProps } from '@routes/app.routes';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { Header } from '@components/Header';
-import { View, Text, HStack, Icon, VStack, Button, Radio, Stack, Switch, Checkbox, ScrollView } from 'native-base';
+import { View, Text, HStack, Icon, VStack, Button, Radio, Stack, Switch, Checkbox, ScrollView, IconButton } from 'native-base';
 import { FontAwesome5} from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons'; 
 import { ButtonDefault } from '@components/Button'
@@ -10,6 +10,9 @@ import React, { useState } from "react";
 import { TextArea, Box } from "native-base";
 
 import { Input } from '@components/Input'
+import { ArrowLeft } from 'phosphor-react-native';
+
+import { useTheme } from 'native-base';
 
 const TextAreas = () => {
     return <Box alignItems="center" w="100%">
@@ -17,7 +20,7 @@ const TextAreas = () => {
                 h={40} 
                 w="full" maxW="full"
                 placeholder="Descrição do produto"
-                backgroundColor="gray.100"
+                backgroundColor="white"
                 fontSize="md"
                 borderColor="blue.500"
                 size={14}
@@ -75,7 +78,8 @@ const Checkboxs = () => {
 
 export function NewAd(){
 
-    const navigation = useNavigation<AppNavigatorRoutesProps>();   
+    const navigation = useNavigation<AppNavigatorRoutesProps>();  
+    const {colors, sizes} = useTheme(); 
 
     function handleOpenPreview() { 
         navigation.navigate('preview');
@@ -89,20 +93,23 @@ export function NewAd(){
         <ScrollView 
             contentContainerStyle={{ flexGrow: 1 }} 
             showsVerticalScrollIndicator={false}>
+                            
+            <VStack padding={8} backgroundColor='gray.100'>
+                <HStack justifyContent="space-between" pt={5}>
+                    <IconButton
+                        p={0}
+                        icon={<ArrowLeft size={sizes[6]} color={colors.gray[500]} />}
+                        onPress={navigation.goBack}
+                    />
 
-            
-            <VStack>
-                <Header
-                    title='Criar Anúncio'            
-                />
+                    <Text fontSize="xl" fontFamily="heading">
+                        Criar anúncio
+                    </Text>
 
-                <VStack             
-                    // flex="1" 
-                    padding={8}
-                    backgroundColor='gray.200'
-                    // h="500px"
-                    // width="full"
-                >
+                    <Box size={6} bg="gray.100"/>
+                </HStack>
+
+                <VStack mt={5}>                
                     <Text color="gray.700" fontFamily="heading" fontSize="md">
                         Imagens
                     </Text>
@@ -176,7 +183,7 @@ export function NewAd(){
                     <Checkboxs/>      
                 </VStack>
 
-                <HStack justifyContent="space-between" padding={8} space={2}>
+                <HStack justifyContent="space-between" space={2} mt={5}>
 
                     <ButtonDefault 
                         title="Cancelar" 

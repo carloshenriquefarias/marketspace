@@ -17,7 +17,7 @@ export function InputFilter({ typeInput = null}: Props) {
     return (
         
         <NativeBaseInput
-            bg="gray.100"                
+            bg="white"                
                 h={14}
                 px={4}
                 borderWidth={0}

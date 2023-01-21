@@ -6,13 +6,15 @@ import { Pressable } from 'react-native';
 
 type HeaderProps = {
     icon?: string;
-    iconleft?: string;
+    iconright?: 'disabled' | 'edit' | 'add'
     title?: string;
     subtitle?: string;
-    variant?: 'default' | 'base1' 
+    variant?: 'default' | 'base1'     
 }
 
-export function Header({title, subtitle, variant = 'default', icon, iconleft, ...rest} : HeaderProps){   
+export function Header(
+    {title, subtitle, variant = 'default', icon, iconright = 'disabled', ...rest} 
+    : HeaderProps){   
 
     const navigation = useNavigation<AppNavigatorRoutesProps>();   
     
@@ -23,54 +25,59 @@ export function Header({title, subtitle, variant = 'default', icon, iconleft, ..
     return(
 
         <HStack 
-            padding={8} 
-            paddingTop={12}            
+            // pt={5} 
+            // pb={2} 
+            alignItems="center"
+            pr={8} 
+            pl={8}
+            // paddingTop={25}            
             w="full"
-            h={32}
-            justifyContent="space-between"            
-
+            h={32} 
+            justifyContent="space-between"   
+            flex="1"
             bg={variant === 'default' ? 'gray.300' : 'blue.500' } 
         >
             <Pressable>
                 <Icon 
                     as={FontAwesome5}
                     name="arrow-left"
-                    color="blue.500"
-                    size={6}
+                    color="gray.500"
+                    size={5}
                     onPress={handleGoBack}
                     // ml={1}
                 />   
             </Pressable>
 
-            <VStack>
-            <Text 
-                color={variant === 'default' ? 'gray.700' : 'white'}
-                fontFamily="heading"
-                fontSize="lg"
-                textAlign="center"
-            >
-                {title}
-            </Text>
+            <VStack textAlign="center" pt={5}>
+                <Text 
+                    color={variant === 'default' ? 'gray.700' : 'white'}
+                    fontFamily="heading"
+                    fontSize="lg"
+                    textAlign="center"
+                >
+                    {title}
+                </Text>
 
-            <Text 
-                color={variant === 'default' ? 'gray.700' : 'white'}
-                fontFamily="body"
-                fontSize="md"
-                textAlign="center"
-            >
-                {subtitle}
-            </Text>
-            </VStack>
-            
+                <Text 
+                    color={variant === 'default' ? 'gray.700' : 'white'}
+                    fontFamily="body"
+                    fontSize="md"
+                    textAlign="center"
+                >
+                    {subtitle}
+                </Text>
+            </VStack>            
 
             <Pressable>
-                <Icon 
-                    as={SimpleLineIcons}
-                    name="pencil"
+                {/* <Icon
+                    as={iconright === 'edit' ? {SimpleLineIcons} : 
+                    iconright === 'add' ? {FontAwesome5} : ''}
+                    // as={SimpleLineIcons}
+                    name={iconright === 'edit' ? "pencil" :  iconright === 'add' ? 'arrow-left' : ''}
                     color="blue.500"
-                    size={6}
+                    size={5}
                     // ml={1}
-                />   
+                />    */}
             </Pressable>   
         </HStack>
     )

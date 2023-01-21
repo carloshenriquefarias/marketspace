@@ -1,5 +1,5 @@
 import { Platform } from 'react-native';
-import { Icon, useTheme } from 'native-base';
+import { HStack, Icon, Tag, useTheme } from 'native-base';
 import { createBottomTabNavigator, BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 
 import HomeSvg from '@assets/home.svg';
@@ -14,6 +14,8 @@ import { Preview } from '@screens/Preview';
 import { ProductDetails } from '@screens/ProductDetails';
 
 import { AntDesign, FontAwesome5} from '@expo/vector-icons';
+import { ButtonDefault } from '@components/Button';
+import { ArrowLeft } from 'phosphor-react-native';
 
 type AppRoutes = {
   home: undefined;
@@ -65,6 +67,8 @@ export function AppRoutes() {
             component={MyAds}
             options={{
                 tabBarIcon: ({ color }) => (
+                    // <Tag color={colors.gray[500]} size={sizes[7]}/>
+
                     <Icon 
                         as={AntDesign}
                         name="tago"
@@ -75,46 +79,12 @@ export function AppRoutes() {
                     // O icone do meio nao esta funcionado
                 )
             }}
-            // options={{ tabBarButton: () => null }}
         />
 
         <Screen 
             name='myadsdetails'
             component={MyAdsDetails}
             options={{ tabBarButton: () => null }}
-        />
-
-        <Screen 
-            name='productdetails'
-            component={ProductDetails}
-            options={{ tabBarButton: () => null }}
-        />
-
-        {/* <Screen 
-            name='productdetails'
-            component={ProductDetails}
-            options={{
-                tabBarIcon: ({ color }) => (
-                    <Icon 
-                        as={AntDesign}
-                        name="tago"
-                        color="gray.400"
-                        fill={color}
-                        size={6}
-                    />
-                    // O icone do meio nao esta funcionado
-                )
-            }}
-        />       */}
-
-        <Screen 
-            name='exit'
-            component={ProductDetails}
-            options={{
-                tabBarIcon: ({ color }) => (
-                <HistorySvg fill={color} width={iconSize} height={iconSize} />
-                )
-            }}            
         />
 
         <Screen 
@@ -127,7 +97,46 @@ export function AppRoutes() {
             name='preview'
             component={Preview}
             options={{ tabBarButton: () => null }} 
+            // options={{
+            //     tabBarIcon: ({ color,  }) => (
+            //         <HStack justifyContent="space-between" padding={8} space={2}>
+
+            //             <ButtonDefault 
+            //                 title="Voltar e Editar" 
+            //                 size="half"                             
+            //                 variant="default"  
+            //                 leftIcon={<ArrowLeft color={colors.gray[500]} size={sizes[5]} />}
+            //                 // onPress={handleNewAd}                    
+            //             />          
+
+            //             <ButtonDefault 
+            //                 title="Publicar" 
+            //                 size="half"                             
+            //                 variant="base1" 
+            //                 // onPress={handleOpenMyAdsDetails}
+            //                 leftIcon={<Tag color={colors.gray[200]} size={sizes[5]} /> }                                         
+            //             />                    
+            //         </HStack>  
+            //     )
+            // }}
         />
+
+        <Screen 
+            name='productdetails'
+            component={ProductDetails}
+            options={{ tabBarButton: () => null }}
+        />
+
+        <Screen 
+            name='exit'
+            component={ProductDetails}
+            options={{
+                tabBarIcon: ({ color }) => (
+                <HistorySvg fill={color} width={iconSize} height={iconSize} />
+                )
+            }}            
+        />
+
     </Navigator>
   );
 }

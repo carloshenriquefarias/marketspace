@@ -21,7 +21,7 @@ export function Input({ typeInput = null, errorMessage = null, isInvalid, size, 
         <FormControl mb={4} isInvalid={invalid}>
 
             <NativeBaseInput 
-                bg="gray.100"                
+                bg="white"                
                 h={14}
                 px={4}
                 borderWidth={0}
