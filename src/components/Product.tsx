@@ -2,6 +2,7 @@ import { View, Text, HStack, ScrollView, VStack, Box, Image, Icon, useToast, Pre
 import { useState } from 'react';
 import { ImageBackground, TouchableOpacity, TouchableOpacityProps } from 'react-native';
 import BackgroundImg from '@assets/produto_1.png';
+import { Status } from './Status';
 
 type PropsProduct = {
     image: string;
@@ -47,21 +48,12 @@ export function Product({image, status = 'NOVO', avatar, title, price, ...rest}:
                         padding={2}
                         top={-120}
                     >
-                        <Avatar h={5} w={5} rounded="full" bg="gray.100" source={{ uri: userPhoto }}>
+                        <Avatar h={6} w={6} rounded="full" bg="gray.100" source={{ uri: userPhoto }}>
                             {avatar}
                         </Avatar>
 
-                        <Box
-                            bg={status === 'NOVO' ? 'blue.500' : 'gray.600'} 
-                            color="white"                       
-                            fontSize={5} 
-                            rounded={8}
-                            h={5}
-                            w={10}
-                            textAlign="center"
-                        >
-                            {status}
-                        </Box>
+                        <Status variant='New' title='Novo'/>
+
                     </HStack>   
                     
                 </VStack>

@@ -12,10 +12,14 @@ import { Entypo } from '@expo/vector-icons';
 
 import { AppError } from '@utils/AppError';
 import { api } from '@services/api';
+import { useTheme } from 'native-base';
+
+import { ArrowRight, MagnifyingGlass, Plus, Sliders, Tag, X } from 'phosphor-react-native';
 
 export function Home(){
 
     const navigation = useNavigation<AppNavigatorRoutesProps>();
+    const {colors, sizes} = useTheme();
     const [userPhoto, setUserPhoto] = useState('https://github.com/JRSparrowII.png');
     const [product, setProduct] = useState<string[]>([
         {
@@ -39,6 +43,10 @@ export function Home(){
     
     function handleNewAd() {
         navigation.navigate('newad');
+    }
+
+    function handleMyAds() {
+        navigation.navigate('myads');
     }
 
     async function fetchProduct() {
@@ -97,7 +105,7 @@ export function Home(){
                         size="half"                             
                         variant="base2" 
                         onPress={handleNewAd}
-                    //Colocar o icone no butao                      
+                        leftIcon={<Plus size={sizes[5]} color={colors.gray[200]} />}                 
                     />                    
                 </HStack>  
 
@@ -119,12 +127,7 @@ export function Home(){
                             justifyContent="space-between" 
                             alignItems="center"                                                
                         >
-                            <Icon 
-                                as={AntDesign}
-                                name="tago"
-                                color="blue.700"
-                                size={6}
-                            />
+                            <Tag color={colors.blue[500]} size={sizes[7]} />
 
                             <VStack ml={4}>
                                 <Text color="gray.600" fontSize={20} fontWeight="bold" 
@@ -140,14 +143,7 @@ export function Home(){
                             alignItems="center"                       
                         >
                             <Text color="blue.700" fontWeight="bold" fontSize={13}>Meus anuncios </Text>
-
-                            <Icon 
-                                as={FontAwesome5}
-                                name="arrow-right"
-                                color="blue.500"
-                                size={4}
-                                ml={1}
-                            />                            
+                            <ArrowRight color={colors.blue[500]} size={sizes[5]} />
                         </HStack>                         
                     </HStack>                    
                 </Box>
@@ -159,6 +155,17 @@ export function Home(){
                     Compre produtos variados
                 </Text>
 
+                <HStack justifyContent="space-between" space={2}>
+                    <ButtonDefault 
+                        variant="base1" size="half" title='teste'
+                        onPress={handleProductDetails}
+                    />
+
+                    <ButtonDefault 
+                        variant="base2" size="half" title='Meus anuncios'
+                        onPress={handleMyAds}
+                    />
+                </HStack>
                 <InputFilter
                     typeInput={"filter"}
                 />

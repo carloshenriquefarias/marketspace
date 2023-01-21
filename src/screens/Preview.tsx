@@ -1,16 +1,22 @@
 import { AppNavigatorRoutesProps } from '@routes/app.routes';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { Header } from '@components/Header';
-import { Text, HStack, Icon, VStack, ScrollView, Image, Avatar, Box } from 'native-base';
+import { Text, HStack, Icon, VStack, ScrollView, Image, Avatar, Box, Center, Heading, View } from 'native-base';
 import { FontAwesome5} from '@expo/vector-icons';
 import { ButtonDefault } from '@components/Button'
-import BackgroundImg from '@assets/produto_1.png';
+import { Status } from '@components/Status'
+import BackgroundImg from '@assets/produto_2.png';
+
+import { ArrowLeft, ArrowRight, Bank, Barcode, CreditCard, 
+Money, QrCode, MagnifyingGlass, Plus, Sliders, Tag, X } from 'phosphor-react-native';
 
 import React, { useState } from "react";
+import { useTheme } from 'native-base';
 
 export function Preview(){
 
-    const navigation = useNavigation<AppNavigatorRoutesProps>();   
+    const navigation = useNavigation<AppNavigatorRoutesProps>(); 
+    const {colors, sizes} = useTheme();  
     const [userPhoto, setUserPhoto] = useState('https://github.com/JRSparrowII.png');
 
     function handleOpenPreview() { 
@@ -21,33 +27,44 @@ export function Preview(){
         navigation.navigate('myadsdetails');
     } 
 
+    function handleOpenNewAd() { 
+        navigation.navigate('newad');
+    }
+
     return(
         <ScrollView 
             contentContainerStyle={{ flexGrow: 1 }} 
             showsVerticalScrollIndicator={false}>
 
-            <VStack>
-                <Header
-                    title='Pré visualização do anúncio'                
-                    variant='base1'
-                    subtitle='é assim que seu anauncio vai aparrecer'
-                />
+            <VStack flex={1}>
 
-                <Image
-                    w='full'
-                    h={40}
-                    // rounded="lg"                       
-                    source={BackgroundImg}
-                    alt="Tenis vermelho"              
-                    resizeMode="cover"         
-                />
+                <Center bg="blue.500" h={32} pt={8}>
+                    <Heading fontSize="md" color="gray.100">
+                        Pré visualização do anúncio
+                    </Heading>
+
+                    <Text fontSize="sm" color="gray.100">
+                        É assim que seu produto vai aparecer!
+                    </Text>
+                </Center>
+
+                <View h='300px' >
+                    <Image
+                        w='full'
+                        h='full'
+                        // rounded="lg"                       
+                        source={BackgroundImg}
+                        alt="Tenis vermelho"              
+                        resizeMode="cover"         
+                    />
+                </View>                
 
                 <VStack             
-                    flex="1" 
+                    flex="1"
                     padding={8}
                     backgroundColor='gray.200'
                 >                    
-                    <HStack space={3}>
+                    <HStack space={3} mb={3}>
                         <Avatar 
                             h={5} w={5} 
                             rounded="full" 
@@ -60,20 +77,12 @@ export function Preview(){
                         </Text> 
                     </HStack>
 
-                    <Box
-                        bg='blue.500' 
-                        color="white"                       
-                        fontSize={5} 
-                        rounded={8}
-                        h={5}
-                        w={10}
-                        mt={5}
-                        textAlign="center"
-                    >
-                        Novo
-                    </Box>
+                    <Status
+                        title='Usado'
+                        variant='Used'
+                    />
 
-                    <HStack justifyContent="space-between">
+                    <HStack justifyContent="space-between" mt={3}>
                         <Text color="gray.700" fontFamily="heading" fontSize="lg">
                             Luminaria Pendente
                         </Text>
@@ -102,25 +111,70 @@ export function Preview(){
                     <Text color="gray.700" mb={5} fontWeight="bold" mt={3}>
                         Meios de pagamentos aceitos:
                     </Text>
+
+                    <VStack mt={2}>
+                        
+                        <HStack space={2}>
+                            <Barcode size={sizes[5]} color={colors.gray[700]} />
+
+                            <Text fontSize="sm" color="gray.700">
+                                Boleto
+                            </Text>
+                        </HStack>
+                        
+                        <HStack space={2}>
+                            <QrCode size={sizes[5]} color={colors.gray[700]} />
+
+                            <Text fontSize="sm" color="gray.700">
+                                Pix
+                            </Text>
+                        </HStack>                 
+                        
+                        <HStack space={2}>
+                            <Money size={sizes[5]} color={colors.gray[700]} />
+
+                            <Text fontSize="sm" color="gray.700">
+                                Dinheiro
+                            </Text>
+                        </HStack>
+                                                
+                        <HStack space={2}>
+                            <CreditCard size={sizes[5]} color={colors.gray[700]} />
+
+                            <Text fontSize="sm" color="gray.700">
+                                Cartão de crédito
+                            </Text>
+                        </HStack>
+                                               
+                        <HStack space={2}>
+                            <Bank size={sizes[5]} color={colors.gray[700]} />
+
+                            <Text fontSize="sm" color="gray.700">
+                                Depósito bancário
+                            </Text>
+                        </HStack>
+                        
+                     </VStack>
                         
                 </VStack>
 
-                <HStack justifyContent="space-between" padding={8} space={2}>
+                {/* //QUANDO FOR MEXER AQUI, OLHE ISSO NO APP ROUTES */}
+                <HStack justifyContent="space-between" pr={8} pl={8}space={2}>
 
                     <ButtonDefault 
                         title="Voltar e Editar" 
                         size="half"                             
                         variant="default"  
-                        // onPress={handleNewAd}
-                    //Colocar o icone no butao                      
+                        leftIcon={<ArrowLeft color={colors.gray[500]} size={sizes[5]} />}
+                        onPress={handleOpenNewAd}                    
                     />          
 
                     <ButtonDefault 
                         title="Publicar" 
                         size="half"                             
-                        variant="base2" 
+                        variant="base1" 
                         onPress={handleOpenMyAdsDetails}
-                    //Colocar o icone no butao                      
+                        leftIcon={<Tag color={colors.gray[200]} size={sizes[5]} /> }                                         
                     />                    
                 </HStack>  
             </VStack> 

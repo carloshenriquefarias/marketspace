@@ -1,41 +1,45 @@
 import { AppNavigatorRoutesProps } from '@routes/app.routes';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { Header } from '@components/Header';
-import { View, Text, HStack, Icon, VStack, Button, Radio, Stack, Switch, Checkbox, ScrollView, CheckIcon, Center, FlatList } from 'native-base';
+import { View, Text, HStack, Icon, VStack, Button, Radio, Stack, Switch, Checkbox, ScrollView, CheckIcon, Center, FlatList, IconButton } from 'native-base';
 import { FontAwesome5} from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons'; 
 import { ButtonDefault } from '@components/Button'
 
 import { Product } from '@components/Product'
 
+import { useTheme } from 'native-base';
+
 import React, { useState } from "react";
 import { TextArea, Box, Select } from "native-base";
 
 import { Input } from '@components/Input'
+import { Plus } from 'phosphor-react-native';
 
-const Example = () => {
+type ActiveTypes = 'todos' | 'ativos' | 'inativos';
+
+const Selects = () => {
     const [service, setService] = React.useState("");
     return <Center>
         <Box maxW="300">
             <Select 
                 selectedValue={service} 
                 minWidth="150" 
-                accessibilityLabel="Choose Service" 
-                placeholder="Todos" 
+                accessibilityLabel="Escolha o tipo de anúncio" 
+                placeholder="Escolha o anuncio" 
+                fontSize="md"
 
                 _selectedItem={{
-                    bg: "gray.600",
+                    bg: "gray.700",
                     endIcon: 
                         <CheckIcon size="5"/>
                 }} 
                 mt={1} 
                 onValueChange={itemValue => setService(itemValue)}
             >
-                <Select.Item label="UX Research" value="ux" />
-                <Select.Item label="Web Development" value="web" />
-                <Select.Item label="Cross Platform Development" value="cross" />
-                <Select.Item label="UI Designing" value="ui" />
-                <Select.Item label="Backend Development" value="backend" />
+                <Select.Item label="Todos" value="all" />
+                <Select.Item label="Novos" value="new" />
+                <Select.Item label="Usados" value="used" />
             </Select>
         </Box>
     </Center>;
@@ -44,6 +48,8 @@ const Example = () => {
 export function MyAds(){
 
     const navigation = useNavigation<AppNavigatorRoutesProps>();  
+    const {colors, sizes} = useTheme();
+    const [active, setActive] = useState<ActiveTypes>('todos');
     const [userPhoto, setUserPhoto] = useState('https://github.com/JRSparrowII.png'); 
     const [product, setProduct] = useState<string[]>([
         // {
@@ -68,23 +74,46 @@ export function MyAds(){
         navigation.navigate('home');
     } 
 
+    function handleNewAd() { 
+        navigation.navigate('newad');
+    } 
+
     return(
         <ScrollView 
             contentContainerStyle={{ flexGrow: 1 }} 
             showsVerticalScrollIndicator={false}>
 
             
-            <VStack>
-                <Header
-                    title='Meus Anúncios'            
-                />   
+            <VStack padding={8} >
 
-                <HStack justifyContent="space-between" padding={8} alignItems="center">
+                <HStack 
+                    justifyContent="space-between" 
+                >
+                    <IconButton/>  
+
+                    <Center>
+                        <Text 
+                            fontFamily="heading" 
+                            color="gray.700"
+                            fontSize="2xl"
+                        > 
+                            Meus anúncios
+                        </Text>
+                    </Center>
+                    
+                    <IconButton
+                        icon={<Plus size={sizes[6]} color={colors.gray[600]} weight="bold"/>}
+                        onPress={handleNewAd}
+                    />          
+
+                </HStack>       
+
+                <HStack justifyContent="space-between" alignItems="center" mt={5}>
                     <Text color="gray.700" fontFamily="body" fontSize="lg">
                         9 anúnicios
                     </Text>
 
-                    <Example/>
+                    <Selects/>
                 </HStack>              
             </VStack> 
 

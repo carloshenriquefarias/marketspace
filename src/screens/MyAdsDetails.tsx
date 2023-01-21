@@ -1,47 +1,83 @@
+import { Text, HStack, Icon, VStack, ScrollView, Image, Avatar, Box, IconButton, View } from 'native-base';
+import { useTheme } from 'native-base';
+
 import { AppNavigatorRoutesProps } from '@routes/app.routes';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
+
 import { Header } from '@components/Header';
-import { Text, HStack, Icon, VStack, ScrollView, Image, Avatar, Box } from 'native-base';
-import { FontAwesome5} from '@expo/vector-icons';
+
+import { ArrowLeft, ArrowRight, Bank, Barcode, CreditCard, PencilSimpleLine, Power, TrashSimple,
+    Money, QrCode, MagnifyingGlass, Plus, Sliders, Tag, X } from 'phosphor-react-native'
+;
+
 import { ButtonDefault } from '@components/Button'
-import BackgroundImg from '@assets/produto_1.png';
 
 import React, { useState } from "react";
+
+import BackgroundImg from '@assets/produto_1.png';
+import { Status } from '@components/Status';
 
 export function MyAdsDetails(){
 
     const navigation = useNavigation<AppNavigatorRoutesProps>();   
+    const [deactivate, setDeactivate] = useState();
     const [userPhoto, setUserPhoto] = useState('https://github.com/JRSparrowII.png');
+    const {colors, sizes} = useTheme();
 
     function handleOpenPreview() { 
         navigation.navigate('preview');
     } 
 
+    function handleOpenEdit() { 
+        navigation.navigate('newad');
+    } 
+
+    function deactivateButton(){
+        //CRIAR A FUNCAO DE DESATIVAR O ANUNCIO
+    }
+
     return(
-        <ScrollView 
+        <ScrollView
             contentContainerStyle={{ flexGrow: 1 }} 
             showsVerticalScrollIndicator={false}>
 
-            <VStack>
-                <Header               
-                    variant='default'
-                />
+            <VStack backgroundColor='gray.100'>
 
-                <Image
-                    w='full'
-                    h={40}
-                    // rounded="lg"                       
-                    source={BackgroundImg}
-                    alt="Tenis vermelho"              
-                    resizeMode="cover"         
-                />
+                <HStack 
+                    justifyContent="space-between" 
+                    pt={10}
+                    pr={6}
+                    pl={6}
+                    pb={2}
+                >
+                    <IconButton
+                        icon={<ArrowLeft size={sizes[6]} color={colors.gray[600]} weight="bold"/>}
+                        onPress={handleOpenPreview}
+                    />          
+
+                    <IconButton
+                        icon={<PencilSimpleLine size={sizes[6]} color={colors.gray[600]} weight="bold"/>}
+                        onPress={handleOpenEdit}
+                    />
+                </HStack>
+
+                <View h='300px' >
+                    <Image
+                        w='full'
+                        h='full'
+                        // rounded="lg"                       
+                        source={BackgroundImg}
+                        alt="Tenis vermelho"              
+                        resizeMode="cover"         
+                    />
+                </View>    
 
                 <VStack             
                     flex="1" 
-                    padding={8}
-                    backgroundColor='gray.200'
+                    padding={6}
+                    backgroundColor='gray.100'
                 >                    
-                    <HStack space={3}>
+                    <HStack space={3} mb={3}>
                         <Avatar 
                             h={5} w={5} 
                             rounded="full" 
@@ -54,20 +90,12 @@ export function MyAdsDetails(){
                         </Text> 
                     </HStack>
 
-                    <Box
-                        bg='blue.500' 
-                        color="white"                       
-                        fontSize={5} 
-                        rounded={8}
-                        h={5}
-                        w={10}
-                        mt={5}
-                        textAlign="center"
-                    >
-                        Novo
-                    </Box>
-
-                    <HStack justifyContent="space-between">
+                    <Status
+                        title='Usado'
+                        variant='Used'
+                    />
+                    
+                    <HStack justifyContent="space-between" mt={5}>
                         <Text color="gray.700" fontFamily="heading" fontSize="lg">
                             Luminaria Pendente
                         </Text>
@@ -96,17 +124,62 @@ export function MyAdsDetails(){
                     <Text color="gray.700" mb={5} fontWeight="bold" mt={3}>
                         Meios de pagamentos aceitos:
                     </Text>
+
+                    <VStack mt={2}>
+                        
+                        <HStack space={2}>
+                            <Barcode size={sizes[5]} color={colors.gray[700]} />
+
+                            <Text fontSize="sm" color="gray.700">
+                                Boleto
+                            </Text>
+                        </HStack>
+                        
+                        <HStack space={2}>
+                            <QrCode size={sizes[5]} color={colors.gray[700]} />
+
+                            <Text fontSize="sm" color="gray.700">
+                                Pix
+                            </Text>
+                        </HStack>                 
+                        
+                        <HStack space={2}>
+                            <Money size={sizes[5]} color={colors.gray[700]} />
+
+                            <Text fontSize="sm" color="gray.700">
+                                Dinheiro
+                            </Text>
+                        </HStack>
+                                                
+                        <HStack space={2}>
+                            <CreditCard size={sizes[5]} color={colors.gray[700]} />
+
+                            <Text fontSize="sm" color="gray.700">
+                                Cartão de crédito
+                            </Text>
+                        </HStack>
+                                               
+                        <HStack space={2}>
+                            <Bank size={sizes[5]} color={colors.gray[700]} />
+
+                            <Text fontSize="sm" color="gray.700">
+                                Depósito bancário
+                            </Text>
+                        </HStack>
+                        
+                     </VStack>
                         
                 </VStack>
 
-                <VStack padding={8}>
+                <VStack pr={6} pl={6}>
 
                     <ButtonDefault 
                         title="Desativar anúncio" 
                         size="total"                             
                         variant="base2"  
-                        // onPress={handleNewAd}
-                    //Colocar o icone no butao                      
+                        onPress={deactivate}
+                        leftIcon={<Power size={sizes[5]} color={colors.gray[100]} />}
+                        // onPress={handleNewAd}                    
                     />          
 
                     <ButtonDefault 
@@ -114,8 +187,8 @@ export function MyAdsDetails(){
                         size="total"                             
                         variant="default"  
                         onPress={handleOpenPreview}
-                        mt={4}
-                    //Colocar o icone no butao                      
+                        mt={2}
+                        leftIcon={<TrashSimple size={sizes[5]} color={colors.gray[700]} />}                    
                     />                    
                 </VStack>  
             </VStack> 
