@@ -1,18 +1,23 @@
 import { AppNavigatorRoutesProps } from '@routes/app.routes';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { Header } from '@components/Header';
-import { View, Text, HStack, Icon, VStack, Button, Radio, Stack, Switch, Checkbox, ScrollView, IconButton } from 'native-base';
+import { View, Text, HStack, Icon, VStack, Button, Radio, Stack, Switch, Checkbox, ScrollView, IconButton, Avatar } from 'native-base';
 import { FontAwesome5} from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons'; 
 import { ButtonDefault } from '@components/Button'
 
-import React, { useState } from "react";
+import React from "react";
 import { TextArea, Box } from "native-base";
 
 import { Input } from '@components/Input'
 import { ArrowLeft } from 'phosphor-react-native';
 
 import { useTheme } from 'native-base';
+
+import * as ImagePicker from 'expo-image-picker';
+import * as FileSystem from 'expo-file-system';
+import { useState } from 'react';
+import { Camera, Plus } from 'phosphor-react-native';
 
 const TextAreas = () => {
     return <Box alignItems="center" w="100%">
@@ -81,6 +86,10 @@ export function NewAd(){
     const navigation = useNavigation<AppNavigatorRoutesProps>();  
     const {colors, sizes} = useTheme(); 
 
+    const [userPhoto, setUserPhoto] = useState('https://github.com/JRSparrowII.png');  
+    const [image, setImage] = useState(false);    
+    const PHOTO_SIZE = 24;
+
     function handleOpenPreview() { 
         navigation.navigate('preview');
     } 
@@ -88,6 +97,32 @@ export function NewAd(){
     function handleGoHome() { 
         navigation.navigate('home');
     } 
+
+    async function handleUserPhotoSelected(){
+        setImage(true);
+        
+        try {
+          const photoSelected = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            quality: 1,
+            aspect: [4, 4], //Tamanho da imagem
+            allowsEditing: true, //Deixa o usuario editar a imagem
+          });
+      
+          if(photoSelected.canceled) {
+            return;
+          }           
+
+            setUserPhoto(photoSelected.assets[0].uri);
+      
+        } catch (error) {
+          console.log(error)
+          
+        } finally {
+          setImage(false)
+        }
+    }
+
 
     return(
         <ScrollView 
@@ -120,38 +155,24 @@ export function NewAd(){
 
                     <HStack 
                         justifyContent="space-between" 
-                        // alignItem="center"
                         mt={5}
                     >
-                        <Button h={24} w={24} backgroundColor="gray.300">
-                            <Icon 
-                                as={Feather}
-                                name="plus"
-                                color="gray.400"
-                                size={7}
-                                // ml={1}
-                            />  
-                        </Button>
+                        <Button
+                            onPress={handleUserPhotoSelected} 
+                            h={24} w={24} 
+                            backgroundColor="gray.300"
+                            alignItems="center"
+                        >
+                            {image ? (
+                                <Avatar
+                                    source={{ uri: userPhoto }}   
+                                    size={24}                     
+                                />
+                            ) : (
+                                <Plus />
+                            )}
+                        </Button>   
 
-                        <Button h={24} w={24} backgroundColor="gray.300">
-                            <Icon 
-                                as={Feather}
-                                name="plus"
-                                color="gray.400"
-                                size={7}
-                                // ml={1}
-                            />  
-                        </Button>
-
-                        <Button h={24} w={24} backgroundColor="gray.300">
-                            <Icon 
-                                as={Feather}
-                                name="plus"
-                                color="gray.400"
-                                size={7}
-                                // ml={1}
-                            />  
-                        </Button>
                     </HStack>
 
                     <Text color="gray.700" mt={5} mb={5} fontFamily="heading" fontSize="md">

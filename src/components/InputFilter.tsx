@@ -7,12 +7,14 @@ import React from "react";
 
 import { MaterialIcons } from "@expo/vector-icons";
 import { Entypo, FontAwesome5, Octicons} from '@expo/vector-icons'; 
+// import { Modals } from './Modal';
 
 type Props = IInputProps & {
     typeInput?: null | 'filter';
+    fulanodetal: () => void;
 }
 
-export function InputFilter({ typeInput = null}: Props) { 
+export function InputFilter({ typeInput = null, fulanodetal }: Props) { 
 
     return (
         
@@ -50,7 +52,9 @@ export function InputFilter({ typeInput = null}: Props) {
                         style={{height:22, width:3, backgroundColor:'lightgray'}}
                     />           
 
-                    <Pressable>
+                    <Pressable 
+                        onPress={() => fulanodetal()}
+                    >
                         <Icon 
                             as={<Entypo name="sound-mix" size={24} color="gray.700" />}
                             ml="2"

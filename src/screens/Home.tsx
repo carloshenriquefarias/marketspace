@@ -1,7 +1,8 @@
 import { AppNavigatorRoutesProps } from '@routes/app.routes';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
-import { View, Text, HStack, ScrollView, VStack, Box, Icon, useToast, FlatList} from 'native-base';
+import { View, Text, HStack, ScrollView, VStack, Box, Icon, useToast, FlatList, Modal} from 'native-base';
 import { ButtonDefault } from '@components/Button'
+import { FilterModal } from '@components/FilterModal'
 import { Product } from '@components/Product'
 import { UserPhoto } from '@components/UserPhoto';
 import { useEffect, useState } from 'react'; 
@@ -16,24 +17,17 @@ import { useTheme } from 'native-base';
 
 import { ArrowRight, MagnifyingGlass, Plus, Sliders, Tag, X } from 'phosphor-react-native';
 
+
+
+
 export function Home(){
 
     const navigation = useNavigation<AppNavigatorRoutesProps>();
     const {colors, sizes} = useTheme();
+    const [visibleModal, setVisibleModal] = useState(false)
     const [userPhoto, setUserPhoto] = useState('https://github.com/JRSparrowII.png');
     const [product, setProduct] = useState<string[]>([
-        {
-            id: '1'
-        },
-        {
-            id: '2'
-        },
-        {
-            id: '3'
-        },
-        {
-            id: '4'
-        }
+        
     ]);
     const toast = useToast();
 
@@ -45,9 +39,18 @@ export function Home(){
         navigation.navigate('newad');
     }
 
-    function handleMyAds() {
-        navigation.navigate('myads');
+    // function handleMyAds() {
+    //     navigation.navigate('myads');
+    // }
+
+    function handleOpenModal() {
+        setVisibleModal(true);
     }
+
+    function handleCloseModal() {
+        setVisibleModal(false);
+    }
+
 
     async function fetchProduct() {
         // try {
@@ -163,14 +166,16 @@ export function Home(){
 
                     <ButtonDefault 
                         variant="base2" size="half" title='Meus anuncios'
-                        onPress={handleMyAds}
+                        // onPress={handleMyAds}
                     />
                 </HStack>
+                
                 <InputFilter
                     typeInput={"filter"}
+                    fulanodetal={handleOpenModal}
                 />
 
-                <FlatList 
+                {/* <FlatList 
                     data={product}
                     keyExtractor={item => item.id}
                     numColumns={2}
@@ -188,7 +193,11 @@ export function Home(){
                     _contentContainerStyle={{
                         paddingBottom: 20
                     }}
-                />       
+                /> */}
+
+                {(visibleModal) ?
+                    <FilterModal />
+                :null}
 
             </VStack>                         
 
