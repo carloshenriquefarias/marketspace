@@ -1,24 +1,20 @@
 import { AppNavigatorRoutesProps } from '@routes/app.routes';
-import { useNavigation, useFocusEffect } from '@react-navigation/native';
-import { View, Text, HStack, ScrollView, VStack, Box, Icon, useToast, FlatList, Modal} from 'native-base';
+import { useNavigation } from '@react-navigation/native';
+import { useEffect, useState } from 'react'; 
+
+import { useTheme } from 'native-base';
+import { ArrowRight, Plus, Tag} from 'phosphor-react-native';
+
+import { Text, HStack, ScrollView, VStack, Box, useToast, FlatList} from 'native-base';
+
 import { ButtonDefault } from '@components/Button'
 import { FilterModal } from '@components/FilterModal'
 import { Product } from '@components/Product'
 import { UserPhoto } from '@components/UserPhoto';
-import { useEffect, useState } from 'react'; 
-import { InputFilter } from '@components/InputFilter'
-
-import { AntDesign, FontAwesome5} from '@expo/vector-icons';
-import { Entypo } from '@expo/vector-icons'; 
+import { InputFilter } from '@components/InputFilter' 
 
 import { AppError } from '@utils/AppError';
 import { api } from '@services/api';
-import { useTheme } from 'native-base';
-
-import { ArrowRight, MagnifyingGlass, Plus, Sliders, Tag, X } from 'phosphor-react-native';
-
-
-
 
 export function Home(){
 
@@ -39,9 +35,9 @@ export function Home(){
         navigation.navigate('newad');
     }
 
-    // function handleMyAds() {
-    //     navigation.navigate('myads');
-    // }
+    function handleMyAds() {
+        navigation.navigate('myads');
+    }
 
     function handleOpenModal() {
         setVisibleModal(true);
@@ -166,7 +162,7 @@ export function Home(){
 
                     <ButtonDefault 
                         variant="base2" size="half" title='Meus anuncios'
-                        // onPress={handleMyAds}
+                        onPress={handleMyAds}
                     />
                 </HStack>
                 

@@ -1,6 +1,6 @@
-import { View, Text, HStack, ScrollView, VStack, Box, Image, Icon, useToast, Pressable, Avatar} from 'native-base';
+import { Text, HStack, VStack, Image, Pressable, Avatar} from 'native-base';
 import { useState } from 'react';
-import { ImageBackground, TouchableOpacity, TouchableOpacityProps } from 'react-native';
+
 import BackgroundImg from '@assets/produto_1.png';
 import { Status } from './Status';
 

@@ -1,13 +1,12 @@
 import { Input as NativeBaseInput, IInputProps, FormControl, Pressable, Icon, HStack } from 'native-base';
-import { Text, TouchableOpacity, View } from 'react-native';
+import { View } from 'react-native';
+import { useState } from "react";
 import { Feather } from '@expo/vector-icons';
 
-import { useState } from "react";
 import React from "react";
 
 import { MaterialIcons } from "@expo/vector-icons";
 import { Entypo, FontAwesome5, Octicons} from '@expo/vector-icons'; 
-// import { Modals } from './Modal';
 
 type Props = IInputProps & {
     typeInput?: null | 'filter';

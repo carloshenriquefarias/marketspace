@@ -1,20 +1,16 @@
 import { AppNavigatorRoutesProps } from '@routes/app.routes';
-import { useNavigation, useFocusEffect } from '@react-navigation/native';
-import { Header } from '@components/Header';
-import { View, Text, HStack, Icon, VStack, Button, Radio, Stack, Switch, Checkbox, ScrollView, CheckIcon, Center, FlatList, IconButton } from 'native-base';
-import { FontAwesome5} from '@expo/vector-icons';
-import { Feather } from '@expo/vector-icons'; 
-import { ButtonDefault } from '@components/Button'
+import { AppTabNavigatorRoutesProps } from '@routes/app.tab.routes';
+import { useNavigation} from '@react-navigation/native';
 
-import { Product } from '@components/Product'
-
-import { useTheme } from 'native-base';
+import { Text, HStack, VStack, ScrollView, CheckIcon, useTheme, Box, Select, 
+    Center, FlatList, IconButton } from 'native-base'
+;
 
 import React, { useState } from "react";
-import { TextArea, Box, Select } from "native-base";
 
-import { Input } from '@components/Input'
 import { Plus } from 'phosphor-react-native';
+
+import { Product } from '@components/Product';
 
 type ActiveTypes = 'todos' | 'ativos' | 'inativos';
 
@@ -48,6 +44,7 @@ const Selects = () => {
 export function MyAds(){
 
     const navigation = useNavigation<AppNavigatorRoutesProps>();  
+    const navigationTab = useNavigation<AppTabNavigatorRoutesProps>(); 
     const {colors, sizes} = useTheme();
     const [active, setActive] = useState<ActiveTypes>('todos');
     const [userPhoto, setUserPhoto] = useState('https://github.com/JRSparrowII.png'); 
@@ -71,7 +68,7 @@ export function MyAds(){
     } 
 
     function handleGoHome() { 
-        navigation.navigate('home');
+        navigationTab.navigate('home');
     } 
 
     function handleNewAd() { 
@@ -117,7 +114,7 @@ export function MyAds(){
                 </HStack>              
             </VStack> 
 
-            <VStack>            
+            {/* <VStack>            
                 <FlatList 
                     data={product}
                     keyExtractor={item => item.id}
@@ -137,7 +134,7 @@ export function MyAds(){
                         paddingBottom: 20
                     }}
                 /> 
-            </VStack>
+            </VStack> */}
         </ScrollView>       
     )        
 }

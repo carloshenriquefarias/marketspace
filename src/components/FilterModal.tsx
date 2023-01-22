@@ -1,5 +1,23 @@
 import React from "react";
-import { Modal, Button, Input, FormControl, HStack, Center, NativeBaseProvider } from "native-base";
+import { Modal, Button, FormControl, HStack, Switch, VStack, Checkbox } from "native-base";
+import { Status } from "./Status";
+
+const Switchs = () => {
+    return <HStack alignItems="center" space={0}>
+        <Switch size="lg" color="blue" bg="blue"/>
+    </HStack>;
+};
+
+const Checkboxs = () => {
+    const [groupValues, setGroupValues] = React.useState([]);
+    return <Checkbox.Group onChange={setGroupValues} value={groupValues} accessibilityLabel="choose numbers">
+        <Checkbox value="one">Boleto</Checkbox>
+        <Checkbox value="two" mt={2} >Pix</Checkbox>
+        <Checkbox value="three" mt={2}>Dinheiro</Checkbox>
+        <Checkbox value="four" mt={2}>Cartão de crédito</Checkbox>
+        <Checkbox value="five" mt={2}>Depósito Bancário</Checkbox>
+    </Checkbox.Group>;
+};
 
 export function FilterModal() {
     const [modalVisible, setModalVisible] = React.useState(true);
@@ -9,34 +27,63 @@ export function FilterModal() {
         <Modal isOpen={modalVisible} onClose={() => setModalVisible(false)} initialFocusRef={initialRef} finalFocusRef={finalRef}>
             <Modal.Content>
             <Modal.CloseButton />
-            <Modal.Header>Contact Us</Modal.Header>
+            <Modal.Header fontWeight="bold" color="gray.700">Filtrar Anúncios</Modal.Header>
 
             <Modal.Body>
                 <FormControl>
-                    <FormControl.Label>Name</FormControl.Label>
-                        <Input ref={initialRef} />
-                            </FormControl>
-                        <FormControl mt="3">
-                    <FormControl.Label>Email</FormControl.Label>
-                    <Input />
+                    <FormControl.Label fontWeight="bold" colorScheme="gray.700">
+                        Condição
+                    </FormControl.Label>
+
+                    <HStack flexDirection="row" space={2} mb={5}>
+                        <Status 
+                            variant="New"
+                            title="Novo"
+                            close="true"
+                        />
+
+                        <Status 
+                            variant="Used"
+                            title="Usado"
+                            close="true"
+                        />
+                    </HStack>
+
+                    <VStack>
+                        <FormControl.Label fontWeight="bold" color="gray.700">
+                            Aceita troca?
+                        </FormControl.Label>
+
+                        <Switchs/>
+                    </VStack>
+
+                    <VStack>
+                        <FormControl.Label fontWeight="bold" color="gray.700" mb={3}>
+                            Meios de pagamentos aceitos:
+                        </FormControl.Label>
+
+                        <Checkboxs/>
+                    </VStack>
+                    
+                       
                 </FormControl>
             </Modal.Body>
 
-            <Modal.Footer>
-                <Button.Group space={2}>
-                    <Button variant="ghost" colorScheme="blueGray" onPress={() => {
+            <HStack justifyContent="space-between" w="full" p={5} >
+                <Button.Group space={5}>
+                    <Button variant="gray.700" bg="gray.200" colorScheme="blueGray" onPress={() => {
                         setModalVisible(false);
                     }}>
-                        Cancel
+                        Resetar filtros
                     </Button>
 
-                    <Button onPress={() => {
+                    <Button colorScheme="gray.700" bg="gray.700" onPress={() => {
                         setModalVisible(false);
                     }}>
-                        Save
+                        Aplicar filtros
                     </Button>
                 </Button.Group>
-            </Modal.Footer>
+            </HStack>
 
             </Modal.Content>
         </Modal>

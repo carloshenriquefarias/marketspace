@@ -1,17 +1,17 @@
 import { AppNavigatorRoutesProps } from '@routes/app.routes';
-import { useNavigation, useFocusEffect } from '@react-navigation/native';
-import { Header } from '@components/Header';
-import { Text, HStack, Icon, VStack, ScrollView, Image, Avatar, Box, Center, Heading, View } from 'native-base';
-import { FontAwesome5} from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
+import React, { useState } from "react";
+
+import { Text, HStack, VStack, ScrollView, Image, useTheme, Avatar, 
+    Center, Heading, View } from 'native-base'
+;
+
 import { ButtonDefault } from '@components/Button'
 import { Status } from '@components/Status'
+
 import BackgroundImg from '@assets/produto_2.png';
 
-import { ArrowLeft, ArrowRight, Bank, Barcode, CreditCard, 
-Money, QrCode, MagnifyingGlass, Plus, Sliders, Tag, X } from 'phosphor-react-native';
-
-import React, { useState } from "react";
-import { useTheme } from 'native-base';
+import { ArrowLeft, Bank, Barcode, CreditCard, Money, QrCode, Tag} from 'phosphor-react-native';
 
 export function Preview(){
 
@@ -162,7 +162,6 @@ export function Preview(){
                 </VStack> 
             </ScrollView>  
             
-            {/* //QUANDO FOR MEXER AQUI, OLHE ISSO NO APP ROUTES */}
             <HStack 
                 justifyContent="space-between" 
                 pr={8} pl={8}
@@ -175,7 +174,6 @@ export function Preview(){
                 w='full'
                 h='12%'
             >
-
                 <ButtonDefault 
                     title="Voltar e Editar" 
                     size="half"                             

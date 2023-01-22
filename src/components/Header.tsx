@@ -1,7 +1,9 @@
 import { AppNavigatorRoutesProps } from '@routes/app.routes';
-import { useNavigation, useFocusEffect } from '@react-navigation/native';
-import { View, Text, HStack, Icon, VStack } from 'native-base';
-import { FontAwesome5, SimpleLineIcons} from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
+
+import { Text, HStack, Icon, VStack } from 'native-base';
+import { FontAwesome5} from '@expo/vector-icons';
+
 import { Pressable } from 'react-native';
 
 type HeaderProps = {
@@ -25,12 +27,9 @@ export function Header(
     return(
 
         <HStack 
-            // pt={5} 
-            // pb={2} 
             alignItems="center"
             pr={8} 
-            pl={8}
-            // paddingTop={25}            
+            pl={8}          
             w="full"
             h={32} 
             justifyContent="space-between"   
@@ -44,7 +43,6 @@ export function Header(
                     color="gray.500"
                     size={5}
                     onPress={handleGoBack}
-                    // ml={1}
                 />   
             </Pressable>
 
