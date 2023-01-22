@@ -1,5 +1,5 @@
 import { Platform } from 'react-native';
-import { HStack, Icon, Tag, useTheme } from 'native-base';
+import { Icon, useTheme } from 'native-base';
 import { createBottomTabNavigator, BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 
 import HomeSvg from '@assets/home.svg';
@@ -7,15 +7,11 @@ import HistorySvg from '@assets/history.svg';
 import ProfileSvg from '@assets/profile.svg';
 
 import { Home } from '@screens/Home';
-
-import { MyAdsDetails } from '@screens/MyAdsDetails';
 import { MyAds } from '@screens/MyAds';
-import { Preview } from '@screens/Preview';
+
 import { ProductDetails } from '@screens/ProductDetails';
 
 import { AntDesign, FontAwesome5} from '@expo/vector-icons';
-import { ButtonDefault } from '@components/Button';
-import { ArrowLeft } from 'phosphor-react-native';
 
 type AppRoutes = {
   home: undefined;
@@ -27,7 +23,7 @@ type AppRoutes = {
   preview: undefined;
 }
 
-export type AppNavigatorRoutesProps = BottomTabNavigationProp<AppRoutes>;
+export type AppTabNavigatorRoutesProps = BottomTabNavigationProp<AppRoutes>;
 
 const { Navigator, Screen } = createBottomTabNavigator<AppRoutes>();
 
@@ -68,8 +64,6 @@ export function Tab() {
             component={MyAds}
             options={{
                 tabBarIcon: ({ color }) => (
-                    // <Tag color={colors.gray[500]} size={sizes[7]}/>
-
                     <Icon 
                         as={AntDesign}
                         name="tago"
@@ -84,7 +78,7 @@ export function Tab() {
         
         <Screen 
             name='exit'
-            component={ProductDetails}
+            component={ProductDetails} //Esse aqui e o botao de sair!
             options={{
                 tabBarIcon: ({ color }) => (
                 <HistorySvg fill={color} width={iconSize} height={iconSize} />

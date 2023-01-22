@@ -1,23 +1,21 @@
 import { AppNavigatorRoutesProps } from '@routes/app.routes';
-import { useNavigation, useFocusEffect } from '@react-navigation/native';
-import { Header } from '@components/Header';
-import { View, Text, HStack, Icon, VStack, Button, Radio, Stack, Switch, Checkbox, ScrollView, IconButton, Avatar } from 'native-base';
-import { FontAwesome5} from '@expo/vector-icons';
-import { Feather } from '@expo/vector-icons'; 
-import { ButtonDefault } from '@components/Button'
+import { AppTabNavigatorRoutesProps } from '@routes/app.tab.routes';
+import { useNavigation } from '@react-navigation/native';
 
 import React from "react";
-import { TextArea, Box } from "native-base";
+import { useState } from 'react';
 
+import { Text, HStack, VStack, Button, Radio, Stack, TextArea, Box, useTheme,
+    Switch, Checkbox, ScrollView, IconButton, Avatar } from 'native-base'
+;
+
+import { ButtonDefault } from '@components/Button';
 import { Input } from '@components/Input'
-import { ArrowLeft } from 'phosphor-react-native';
 
-import { useTheme } from 'native-base';
+import { ArrowLeft, Plus } from 'phosphor-react-native';
 
 import * as ImagePicker from 'expo-image-picker';
-import * as FileSystem from 'expo-file-system';
-import { useState } from 'react';
-import { Camera, Plus } from 'phosphor-react-native';
+// import * as FileSystem from 'expo-file-system';
 
 const TextAreas = () => {
     return <Box alignItems="center" w="100%">
@@ -83,7 +81,9 @@ const Checkboxs = () => {
 
 export function NewAd(){
 
-    const navigation = useNavigation<AppNavigatorRoutesProps>();  
+    const navigation = useNavigation<AppNavigatorRoutesProps>(); 
+    const navigationTab = useNavigation<AppTabNavigatorRoutesProps>(); 
+
     const {colors, sizes} = useTheme(); 
 
     const [userPhoto, setUserPhoto] = useState('https://github.com/JRSparrowII.png');  
@@ -95,7 +95,7 @@ export function NewAd(){
     } 
 
     function handleGoHome() { 
-        navigation.navigate('home');
+        navigationTab.navigate('home');
     } 
 
     async function handleUserPhotoSelected(){
@@ -105,8 +105,8 @@ export function NewAd(){
           const photoSelected = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
             quality: 1,
-            aspect: [4, 4], //Tamanho da imagem
-            allowsEditing: true, //Deixa o usuario editar a imagem
+            aspect: [4, 4],
+            allowsEditing: true, 
           });
       
           if(photoSelected.canceled) {
@@ -123,104 +123,116 @@ export function NewAd(){
         }
     }
 
-
     return(
-        <ScrollView 
-            contentContainerStyle={{ flexGrow: 1 }} 
-            showsVerticalScrollIndicator={false}>
-                            
-            <VStack padding={8} backgroundColor='gray.100'>
-                <HStack justifyContent="space-between" pt={5}>
-                    <IconButton
-                        p={0}
-                        icon={<ArrowLeft size={sizes[6]} color={colors.gray[500]} />}
-                        onPress={navigation.goBack}
-                    />
+        <VStack>
+        
+            <ScrollView 
+                contentContainerStyle={{ flexGrow: 1 }} 
+                showsVerticalScrollIndicator={false}>
+                                
+                <VStack padding={8} backgroundColor='gray.100' flex={1}  pb='28%'>
+                    <HStack justifyContent="space-between" pt={5}>
+                        <IconButton
+                            p={0}
+                            icon={<ArrowLeft size={sizes[6]} color={colors.gray[500]} />}
+                            onPress={navigation.goBack}
+                        />
 
-                    <Text fontSize="xl" fontFamily="heading">
-                        Criar anúncio
-                    </Text>
+                        <Text fontSize="xl" fontFamily="heading">
+                            Criar anúncio
+                        </Text>
 
-                    <Box size={6} bg="gray.100"/>
-                </HStack>
-
-                <VStack mt={5}>                
-                    <Text color="gray.700" fontFamily="heading" fontSize="md">
-                        Imagens
-                    </Text>
-
-                    <Text color="gray.700">
-                        Escolha até 3 imagens para mostrar o quanto seu produto é incrivel!
-                    </Text>
-
-                    <HStack 
-                        justifyContent="space-between" 
-                        mt={5}
-                    >
-                        <Button
-                            onPress={handleUserPhotoSelected} 
-                            h={24} w={24} 
-                            backgroundColor="gray.300"
-                            alignItems="center"
-                        >
-                            {image ? (
-                                <Avatar
-                                    source={{ uri: userPhoto }}   
-                                    size={24}                     
-                                />
-                            ) : (
-                                <Plus />
-                            )}
-                        </Button>   
-
+                        <Box size={6} bg="gray.100"/>
                     </HStack>
 
-                    <Text color="gray.700" mt={5} mb={5} fontFamily="heading" fontSize="md">
-                        Sobre o produto
-                    </Text>
+                    <VStack mt={5}>                
+                        <Text color="gray.700" fontFamily="heading" fontSize="md">
+                            Imagens
+                        </Text>
 
-                    <Input placeholder='Título do anúncio'/>
+                        <Text color="gray.700">
+                            Escolha até 3 imagens para mostrar o quanto seu produto é incrivel!
+                        </Text>
 
-                    <TextAreas/>           
+                        <HStack 
+                            justifyContent="space-between" 
+                            mt={5}
+                        >
+                            <Button
+                                onPress={handleUserPhotoSelected} 
+                                h={24} w={24} 
+                                backgroundColor="gray.300"
+                                alignItems="center"
+                            >
+                                {image ? (
+                                    <Avatar
+                                        source={{ uri: userPhoto }}   
+                                        size={24}                     
+                                    />
+                                ) : (
+                                    <Plus />
+                                )}
+                            </Button>   
 
-                    <Radios/>
+                        </HStack>
 
-                    <Text color="gray.700" mt={5} mb={5} fontFamily="heading" fontSize="md">
-                        Venda
-                    </Text>
+                        <Text color="gray.700" mt={5} mb={5} fontFamily="heading" fontSize="md">
+                            Sobre o produto
+                        </Text>
 
-                    <Input placeholder='R$ Valor do produto'/>
+                        <Input placeholder='Título do anúncio'/>
 
-                    <Text color="gray.700" fontFamily="heading" fontSize="md">
-                        Aceita troca?
-                    </Text>
+                        <TextAreas/>           
 
-                    <Switchs/>
+                        <Radios/>
 
-                    <Text color="gray.700" mb={5}>
-                        Meios de pagamentos aceitos:
-                    </Text>
+                        <Text color="gray.700" mt={5} mb={5} fontFamily="heading" fontSize="md">
+                            Venda
+                        </Text>
 
-                    <Checkboxs/>      
-                </VStack>
+                        <Input placeholder='R$ Valor do produto'/>
 
-                <HStack justifyContent="space-between" space={2} mt={5}>
+                        <Text color="gray.700" fontFamily="heading" fontSize="md">
+                            Aceita troca?
+                        </Text>
 
-                    <ButtonDefault 
-                        title="Cancelar" 
-                        size="half"                             
-                        variant="default"  
-                        onPress={handleGoHome}                            
-                    />          
+                        <Switchs/>
 
-                    <ButtonDefault 
-                        title="Avançar" 
-                        size="half"                             
-                        variant="base2" 
-                        onPress={handleOpenPreview}                                       
-                    />                    
-                </HStack>  
-            </VStack> 
-        </ScrollView>       
+                        <Text color="gray.700" mb={5}>
+                            Meios de pagamentos aceitos:
+                        </Text>
+
+                        <Checkboxs/>      
+                    </VStack>                    
+                </VStack> 
+            </ScrollView> 
+
+            <HStack 
+                justifyContent="space-between" 
+                pr={8} pl={8}
+                space={2} 
+                bg="white" 
+                pt={5} pb={5}
+                position="absolute" 
+                bottom={0}
+                flex={1}
+                w='full'
+                h='12%'
+            >
+                <ButtonDefault 
+                    title="Cancelar" 
+                    size="half"                             
+                    variant="default"  
+                    onPress={handleGoHome}                            
+                />          
+
+                <ButtonDefault 
+                    title="Avançar" 
+                    size="half"                             
+                    variant="base2" 
+                    onPress={handleOpenPreview}                                       
+                />                    
+            </HStack>  
+        </VStack>      
     )        
 }

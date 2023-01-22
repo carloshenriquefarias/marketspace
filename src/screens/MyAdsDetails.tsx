@@ -1,21 +1,19 @@
-import { Text, HStack, Icon, VStack, ScrollView, Image, Avatar, Box, IconButton, View } from 'native-base';
-import { useTheme } from 'native-base';
-
-import { AppNavigatorRoutesProps } from '@routes/app.routes';
-import { useNavigation, useFocusEffect } from '@react-navigation/native';
-
-import { Header } from '@components/Header';
-
-import { ArrowLeft, ArrowRight, Bank, Barcode, CreditCard, PencilSimpleLine, Power, TrashSimple,
-    Money, QrCode, MagnifyingGlass, Plus, Sliders, Tag, X } from 'phosphor-react-native'
+import { Text, useTheme, HStack, VStack, ScrollView, Image, 
+    Avatar, IconButton, View } from 'native-base'
 ;
-
-import { ButtonDefault } from '@components/Button'
-
 import React, { useState } from "react";
 
-import BackgroundImg from '@assets/produto_1.png';
+import { AppNavigatorRoutesProps } from '@routes/app.routes';
+import { useNavigation } from '@react-navigation/native';
+
+import { ArrowLeft, Bank, Barcode, CreditCard, PencilSimpleLine, Power, 
+    TrashSimple, Money, QrCode } from 'phosphor-react-native'
+;
+
+import { ButtonDefault } from '@components/Button';
 import { Status } from '@components/Status';
+
+import BackgroundImg from '@assets/produto_1.png';
 
 export function MyAdsDetails(){
 

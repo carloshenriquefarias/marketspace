@@ -1,9 +1,11 @@
 import { createNativeStackNavigator, NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { Tab } from './app.tab.routes';
+
 import { NewAd } from '@screens/NewAd';
 import { Preview } from '@screens/Preview';
 import { ProductDetails } from '@screens/ProductDetails';
 import { MyAdsDetails } from '@screens/MyAdsDetails';
-import { Tab } from './app.tab.routes';
+import { MyAds } from '@screens/MyAds';
 
 type AppRoutes = {
   newad: undefined;
@@ -11,6 +13,7 @@ type AppRoutes = {
   preview: undefined;
   productdetails: undefined;
   myadsdetails: undefined;
+  myads: undefined;
 }
 
 export type AppNavigatorRoutesProps = NativeStackNavigationProp<AppRoutes>;
@@ -25,7 +28,7 @@ export function AppRoutes() {
       <Screen name='preview' component={Preview}/>
       <Screen name='productdetails' component={ProductDetails}/>
       <Screen name='myadsdetails' component={MyAdsDetails}/>  
-
+      <Screen name='myads' component={MyAds}/>  
     </Navigator>
   )
 }

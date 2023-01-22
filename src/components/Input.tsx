@@ -1,7 +1,5 @@
 import { Input as NativeBaseInput, IInputProps, FormControl, Pressable, Icon } from 'native-base';
-import { Text, View } from 'react-native';
-
-import { useState } from "react";
+import { View } from 'react-native';
 import React from "react";
 
 import { MaterialIcons } from "@expo/vector-icons";
@@ -9,7 +7,6 @@ import { MaterialIcons } from "@expo/vector-icons";
 type Props = IInputProps & {
   errorMessage?: string | null; 
   typeInput?: null | 'password';
-//   iconInput?: null | 'icon';
 }
 
 export function Input({ typeInput = null, errorMessage = null, isInvalid, size, ...rest }: Props) {
