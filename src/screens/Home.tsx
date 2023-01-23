@@ -22,9 +22,7 @@ export function Home(){
     const {colors, sizes} = useTheme();
     const [visibleModal, setVisibleModal] = useState(false)
     const [userPhoto, setUserPhoto] = useState('https://github.com/JRSparrowII.png');
-    const [product, setProduct] = useState<string[]>([
-        
-    ]);
+    const [product, setProduct] = useState<string[]>([]);
     const toast = useToast();
 
     function handleProductDetails() {
@@ -49,21 +47,21 @@ export function Home(){
 
 
     async function fetchProduct() {
-        // try {
-        //   const response = await api.get('a/docs');
-        //   setProduct(response.data);
-        //   // console.log(response.data);
+        try {
+          const response = await api.get('/sessions');
+          setProduct(response.data);
+          // console.log(response.data);
     
-        // } catch (error) {
-        //   const isAppError = error instanceof AppError;
-        //   const title = isAppError ? error.message : 'Não foi possível carregar os produtos';
+        } catch (error) {
+          const isAppError = error instanceof AppError;
+          const title = isAppError ? error.message : 'Não foi possível carregar os produtos';
     
-        //   toast.show({
-        //     title,
-        //     placement: 'top',
-        //     bgColor: 'red.500'
-        //   })
-        // }
+          toast.show({
+            title,
+            placement: 'top',
+            bgColor: 'red.500'
+          })
+        }
     }
 
     useEffect(() => {
@@ -154,7 +152,7 @@ export function Home(){
                     Compre produtos variados
                 </Text>
 
-                <HStack justifyContent="space-between" space={2}>
+                {/* <HStack justifyContent="space-between" space={2}>
                     <ButtonDefault 
                         variant="base1" size="half" title='teste'
                         onPress={handleProductDetails}
@@ -164,7 +162,7 @@ export function Home(){
                         variant="base2" size="half" title='Meus anuncios'
                         onPress={handleMyAds}
                     />
-                </HStack>
+                </HStack> */}
                 
                 <InputFilter
                     typeInput={"filter"}
