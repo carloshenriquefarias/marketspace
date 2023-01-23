@@ -89,8 +89,8 @@ export function SignUp() {
           const photoSelected = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
             quality: 1,
-            aspect: [4, 4], //Tamanho da imagem
-            allowsEditing: true, //Deixa o usuario editar a imagem
+            aspect: [4, 4], 
+            allowsEditing: true,
           });
       
           if(photoSelected.canceled) {
@@ -180,7 +180,7 @@ export function SignUp() {
                             alignItems="center"
                             >
                                 <Icon  
-                                    as={MaterialIcons} // No Icone passa a biblioteca e as propriedades
+                                    as={MaterialIcons}
                                     name="edit" 
                                     color="gray.700"
                                     size={10}                                
