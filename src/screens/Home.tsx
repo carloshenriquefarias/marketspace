@@ -16,6 +16,8 @@ import { InputFilter } from '@components/InputFilter'
 import { AppError } from '@utils/AppError';
 import { api } from '@services/api';
 
+import { useAuth } from '@hooks/useAuth'
+
 export function Home(){
 
     const navigation = useNavigation<AppNavigatorRoutesProps>();
@@ -24,7 +26,8 @@ export function Home(){
     const [userPhoto, setUserPhoto] = useState('https://github.com/JRSparrowII.png');
     const [product, setProduct] = useState<string[]>([]);
     const toast = useToast();
-
+    const { user } = useAuth();
+ 
     function handleProductDetails() {
         navigation.navigate('productdetails');
     } 
@@ -92,7 +95,7 @@ export function Home(){
 
                         <VStack>
                             <Text color="black">Boas Vindas, </Text>  
-                            <Text color="black" fontWeight="bold">Prisco </Text> 
+                            <Text color="black" fontWeight="bold"> {user.name} </Text> 
                         </VStack>
                                         
                     </HStack>               
