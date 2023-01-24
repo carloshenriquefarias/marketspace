@@ -8,20 +8,26 @@ import {useAuth} from '@hooks/useAuth';
 import { AuthRoutes } from "./auth.routes";
 import { AppRoutes } from "./app.routes";
 
+import { Loading } from '@components/Loading';
+
 export function Routes() {
 
   const {colors} = useTheme();
-  const {user} = useAuth();
-
-  console.log ("usuario logado =>", user);
+  const {user, isLoadingUserStorageData} = useAuth();
+  // console.log ("usuario logado =>", user);
 
   const theme = DefaultTheme;
   theme.colors.background = colors.gray[200];
 
+  if(isLoadingUserStorageData){
+    return <Loading/>;
+  }
+
   return (
     <Box flex={1} bg="gray.200"> 
         <NavigationContainer theme={theme}>
-          <AppRoutes/>          
+          {user.id ? <AppRoutes/> : <AuthRoutes/>}
+          {/* <AppRoutes/>           */}
         </NavigationContainer>
     </Box>
   );

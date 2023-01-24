@@ -1,15 +1,20 @@
 import { Input } from '@components/Input'
-import { Button } from '@components/Button'
-import { VStack, Text, Center, Heading, ScrollView} from "native-base";
+import { ButtonDefault } from '@components/Button'
+import { Loading } from '@components/Loading'
+import { VStack, Text, Center, Heading, ScrollView, useToast} from "native-base";
 
 import { AuthNavigatorRoutesProps } from '@routes/auth.routes';
 import { useNavigation } from "@react-navigation/native";
+import { useAuth } from '@hooks/useAuth'
 
 import { useForm, Controller } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import LogoSvg from '@assets/logo.svg';
+import { AppError } from '@utils/AppError';
+
+import { useState } from 'react';
 
 type FormDataProps = {    
     email: string;    
@@ -21,22 +26,40 @@ const signInSchema = yup.object({
     password: yup.string().required('Informe a senha').min(6, 'A senha deve ter pelo menos 6 dígitos.'),
 });  
 
-
 export function SignIn() {
 
     const { control, handleSubmit, formState: { errors } } = useForm<FormDataProps>({
         resolver: yupResolver(signInSchema),
     });
+    const { signIn } = useAuth();
+    const toast = useToast();
+    const [isLoading, setIsLoading] = useState(false);
 
     const navigation = useNavigation<AuthNavigatorRoutesProps>();
 
     function handleNewAccount() {
         navigation.navigate('signUp');
     }
+    
+    async function handleSignIn({ email, password}: FormDataProps) {
+        try {
+            setIsLoading(true)
+            await signIn(email, password);   
 
-    async function handleSignIn({email, password }: FormDataProps) {
-        // console.log(handleSignUp)
-    }  
+        } catch (error) {
+
+            const isAppError = error instanceof AppError
+            const title = isAppError ? error.message : 'Não foi possível entrar agora! Tente mais tarde!'
+           
+            setIsLoading(false)
+
+            toast.show({
+                title,
+                placement: 'top',
+                bgColor: 'red.500',
+            });           
+        }         
+    }    
 
     return (
         <ScrollView 
@@ -99,11 +122,12 @@ export function SignIn() {
                             )}
                         />
                         
-                        <Button 
+                        <ButtonDefault
                             title="Entrar" 
                             size="total"  
                             variant="base1" 
-                            onPress={handleSubmit(handleSignIn)}                      
+                            onPress={handleSubmit(handleSignIn)} 
+                            isLoading={isLoading}                     
                         />
                         
                     </Center>
@@ -121,7 +145,7 @@ export function SignIn() {
                             Ainda não tem acesso?
                         </Text>
 
-                        <Button 
+                        <ButtonDefault 
                             title="Criar uma conta" 
                             size="total"   
                             variant="default"  
