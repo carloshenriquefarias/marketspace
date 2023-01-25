@@ -5,9 +5,13 @@ import { useNavigation } from '@react-navigation/native';
 import React from "react";
 import { useState } from 'react';
 
-import { Text, HStack, VStack, Button, Radio, Stack, TextArea, Box, useTheme,
-    Switch, Checkbox, ScrollView, IconButton, Avatar } from 'native-base'
+import { Text, HStack, VStack, Button, Radio, Stack, TextArea, Box, useTheme, Center,
+    Switch, Checkbox, ScrollView, IconButton, Avatar, useToast, Alert } from 'native-base'
 ;
+
+import { useForm, Controller } from 'react-hook-form';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 import { ButtonDefault } from '@components/Button';
 import { Input } from '@components/Input'
@@ -15,7 +19,29 @@ import { Input } from '@components/Input'
 import { ArrowLeft, Plus } from 'phosphor-react-native';
 
 import * as ImagePicker from 'expo-image-picker';
+import { api } from '@services/api';
+import { AppError } from '@utils/AppError';
 // import * as FileSystem from 'expo-file-system';
+
+type NewAdData = {
+    image: string;
+    title: string;
+    description: string;
+    product_status: string;
+    price: string;
+    swap?: string; //troca
+    method_payment: string;
+}
+
+const NewAdSchema = yup.object({
+    image: yup.string().required('Informe o nome.'), //Ver isso com Prisco
+    title: yup.string().required('Informe o título do produto'),
+    description: yup.string().required('Descreva como é o seu produto'),
+    product_status: yup.string().required('Escolha o estado do seu produto'),
+    price: yup.string().required('Digite o preço do seu produto'),
+    swap: yup.string().required('Escolha se aceita a troca ou não'),
+    method_payment: yup.string().required('Escolha seu metodo de pagamento'),
+});  
 
 const TextAreas = () => {
     return <Box alignItems="center" w="100%">
@@ -30,6 +56,22 @@ const TextAreas = () => {
             />
         </Box>
     ;
+};
+
+const Toasts = () => {
+  const toast = useToast();
+  return <Center>
+        <VStack space={2}>           
+
+            <Button onPress={() => toast.show({
+                title: "Hello world",
+                placement: "top"
+            })}>
+                Top
+            </Button>
+           
+        </VStack>
+    </Center>;
 };
 
 const Radios = () => {
@@ -64,7 +106,7 @@ const Switchs = () => {
     return <HStack alignItems="center" space={0}>
         <Text></Text>
         <Switch size="lg" color="blue" bg="blue"/>
-      </HStack>;
+    </HStack>;
 };
 
 const Checkboxs = () => {
@@ -76,13 +118,20 @@ const Checkboxs = () => {
         <Checkbox value="four" mt={2}>Cartão de crédito</Checkbox>
         <Checkbox value="five" mt={2}>Depósito Bancário</Checkbox>
     </Checkbox.Group>;
-};
-  
+};  
 
 export function NewAd(){
 
+    const { control, handleSubmit, formState: { errors } } = useForm<NewAdData>({
+        resolver: yupResolver(NewAdSchema),
+    });
+    const [imageUpload, setImageUpload] = useState<any>(null);
+
     const navigation = useNavigation<AppNavigatorRoutesProps>(); 
     const navigationTab = useNavigation<AppTabNavigatorRoutesProps>(); 
+
+    const [isLoading, setIsLoading] = useState(false);
+    const toast= useToast();
 
     const {colors, sizes} = useTheme(); 
 
@@ -122,6 +171,68 @@ export function NewAd(){
           setImage(false)
         }
     }
+
+    async function handleNewAd({ image, title, description, product_status, 
+        price, swap, method_payment}: NewAdData) {
+        try {
+            setIsLoading(true)        
+      
+           await api.post('/products', { image, title, description, product_status, 
+            price, swap, method_payment });            
+      
+        } catch (error) {
+            setIsLoading(false);
+        
+            const isAppError = error instanceof AppError;
+            const title = isAppError ? error.message : 'Não foi possível enviar os dados. Tente novamente mais tarde';
+        
+            toast.show({    
+                title,
+                placement: 'top',
+                bgColor: 'red.500'
+            })
+        }        
+    }  
+
+    // async function upload() {
+    
+    //     if ( !imageUpload ) {
+
+    //         <Toasts />
+    //         // Alert.alert ('Atenção!', 'Por favor, escolha uma imagem.')
+    //         return
+    //     }
+    
+    //     let formData = new FormData();
+    //     // const idCompany = await AsyncStorage.getItem('@PCAuth:idCompany')
+            
+    //     formData.append("image", {
+    //       uri: imageUpload,
+    //       name: "image.jpg",
+    //       type: "image/jpg",
+    //     });
+    
+    //     formData.append('title', title)
+    //     formData.append('description', description)
+    //     formData.append('product_status', product_status)
+    //     formData.append('price', price)
+    //     formData.append('swap', swap)
+    //     formData.append('method_payment', method_payment)
+    
+    //     const response = await api.post('/products', formData, {
+    //         headers: {
+    //             'Content-Type': 'multipart/form-data',
+    //         },
+    //         transformRequest: (data, headers) => {            
+    //             return formData;
+    //         },
+    //     });
+
+    //     if (response.data.success) {
+    //     //   Alert.alert("", "Adicionado com sucesso.");  
+    //       navigation.navigate("preview")
+    //     }   
+    // }
 
     return(
         <VStack>
@@ -180,9 +291,31 @@ export function NewAd(){
                             Sobre o produto
                         </Text>
 
-                        <Input placeholder='Título do anúncio'/>
+                        <Controller 
+                            control={control}
+                            name="title"
+                            render={({ field: { onChange, value } }) => (
+                            <Input 
+                                placeholder="Título do anúncio"
+                                onChangeText={onChange}
+                                value={value}          
+                                keyboardType="default"
+                                autoCapitalize="none"     
+                                secureTextEntry={false}               
+                                errorMessage={errors.title?.message}
+                            />
+                            )}
+                        />
 
-                        <TextAreas/>           
+                        <Controller //PRECISA DO CONTROLER
+                            control={control}
+                            name="title"
+                            render={({ field: { onChange, value } }) => (
+                                <TextAreas/> 
+                            )}
+                        />
+
+                        {/* <TextAreas/>            */}
 
                         <Radios/>
 
@@ -190,7 +323,21 @@ export function NewAd(){
                             Venda
                         </Text>
 
-                        <Input placeholder='R$ Valor do produto'/>
+                        <Controller 
+                            control={control}
+                            name="price"
+                            render={({ field: { onChange, value } }) => (
+                            <Input 
+                                placeholder="R$ Valor do produto"
+                                onChangeText={onChange}
+                                value={value}          
+                                keyboardType="default"
+                                autoCapitalize="none"     
+                                secureTextEntry={false}               
+                                errorMessage={errors.price?.message}
+                            />
+                            )}
+                        />
 
                         <Text color="gray.700" fontFamily="heading" fontSize="md">
                             Aceita troca?
@@ -202,7 +349,7 @@ export function NewAd(){
                             Meios de pagamentos aceitos:
                         </Text>
 
-                        <Checkboxs/>      
+                        <Checkboxs/>     
                     </VStack>                    
                 </VStack> 
             </ScrollView> 
@@ -230,7 +377,8 @@ export function NewAd(){
                     title="Avançar" 
                     size="half"                             
                     variant="base2" 
-                    onPress={handleOpenPreview}                                       
+                    // onPress={upload}   
+                    onPress={handleSubmit(handleNewAd)}                                     
                 />                    
             </HStack>  
         </VStack>      

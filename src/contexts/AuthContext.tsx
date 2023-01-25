@@ -1,7 +1,7 @@
 import { createContext, ReactNode, useEffect, useState } from "react";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import { storageUserGet, storageUserSave } from '@storage/storageUser';
+import { storageUserGet, storageUserSave, storageUserRemove } from '@storage/storageUser';
 
 import { UserDTO } from "@dtos/UserDTO";
 import { api } from "@services/api";
@@ -9,6 +9,7 @@ import { api } from "@services/api";
 export type AuthContextDataProps = {
     user: UserDTO;
     signIn: (email: string, password: string) => Promise<void>;
+    signOut: () => Promise<void>;
     isLoadingUserStorageData: boolean;
 }
 
@@ -24,35 +25,51 @@ export function AuthContextProvider({children} : AuthContextProviderProps){
 
     async function signIn(email: string, password: string) {     
       
-        try {
-          const { data } = await api.post('/sessions', { email, password });       
-          
-          if(data.user) {
-            setUser (data.user);
-            storageUserSave(data.user);
-          }
-    
-        } catch (error) {
-            throw error
+      try {
+        const { data } = await api.post('/sessions', { email, password });       
+        
+        if(data.user) {
+          setUser (data.user);
+          storageUserSave(data.user);
         }
-    }
+  
+      } catch (error) {
+          throw error
+      }
+  }
 
     async function loadUserData() {
 
-        try {
-          setIsLoadingUserStorageData(true);    
-          const userLogged = await storageUserGet();
-    
-          if(userLogged) {
-            setUser(userLogged);
-          }
-    
-        } catch (error) {
-          throw error
-    
-        } finally {
-          setIsLoadingUserStorageData(false);
+      try {
+        setIsLoadingUserStorageData(true);    
+        const userLogged = await storageUserGet();
+  
+        if(userLogged) {
+          setUser(userLogged);
         }
+  
+      } catch (error) {
+        throw error
+  
+      } finally {
+        setIsLoadingUserStorageData(false);
+      }
+    }
+
+    async function signOut () { // USAR ESTA FUNÇÃO NO BOTAO DA TAB-BAR
+  
+      try {
+        setIsLoadingUserStorageData(true);
+        setUser({} as UserDTO);
+
+        await storageUserRemove();
+  
+      } catch (error) {
+        throw error;
+  
+      } finally {
+        setIsLoadingUserStorageData(false);
+      }
     }
 
     useEffect(() => {
@@ -64,6 +81,7 @@ export function AuthContextProvider({children} : AuthContextProviderProps){
           value={{
             user,             
             signIn,
+            signOut,
             isLoadingUserStorageData,
           }}
         >
