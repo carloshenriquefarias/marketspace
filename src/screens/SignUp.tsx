@@ -1,5 +1,6 @@
-import { Input } from '@components/Input'
-import { ButtonDefault } from '@components/Button'
+import { Input } from '@components/Input';
+import { ButtonDefault } from '@components/Button';
+import { UserPhoto } from '@components/UserPhoto';
 
 import { useState } from "react";
 import React from "react";
@@ -23,9 +24,12 @@ import * as FileSystem from 'expo-file-system';
 import { useNavigation } from "@react-navigation/native";
 
 import { VStack, Text, Center, Heading, ScrollView, Image, Stack, 
-    Icon, Pressable, HStack, View, useToast, Skeleton} from "native-base";
-import { UserPhoto } from '@components/UserPhoto';
+    Icon, Pressable, HStack, View, useToast, Skeleton} from "native-base"
+;
+
 import { TouchableOpacity } from 'react-native';
+
+import { useAuth } from '@hooks/useAuth';
 
 type FormDataProps = {
     name: string;
@@ -49,6 +53,7 @@ export function SignUp() {
 
     const navigation = useNavigation();  
     const toast = useToast();
+    const {signIn} = useAuth();
     const [isLoading, setIsLoading] = useState(false);
     const [photoIsLoading, setPhotoIsLoading] = useState(false);
     const [userPhoto, setUserPhoto] = useState('https://github.com/JRSparrowII.png');
@@ -65,8 +70,8 @@ export function SignUp() {
         try {
             setIsLoading(true)        
       
-           await api.post('/users', { name, email, telefone, password });            
-            // await singIn(email, password)
+            await api.post('/users', { name, email, telefone, password });  
+            await signIn (email, password)
       
         } catch (error) {
             setIsLoading(false);

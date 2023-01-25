@@ -6,21 +6,26 @@ import HomeSvg from '@assets/home.svg';
 import HistorySvg from '@assets/history.svg';
 import ProfileSvg from '@assets/profile.svg';
 
+import { Tag, House, SignOut } from 'phosphor-react-native';
+
 import { Home } from '@screens/Home';
 import { MyAds } from '@screens/MyAds';
+import { SignIn } from '@screens/SignIn';
 
 import { ProductDetails } from '@screens/ProductDetails';
 
 import { AntDesign, FontAwesome5} from '@expo/vector-icons';
+import { useAuth } from '@hooks/useAuth';
 
 type AppRoutes = {
-  home: undefined;
-  productdetails: undefined;
-  exit: undefined;
-  newad: undefined;
-  myadsdetails: undefined;
-  myads: undefined;
-  preview: undefined;
+    signIn: undefined;
+    home: undefined;
+    productdetails: undefined;
+    exit: undefined;
+    newad: undefined;
+    myadsdetails: undefined;
+    myads: undefined;
+    preview: undefined;
 }
 
 export type AppTabNavigatorRoutesProps = BottomTabNavigationProp<AppRoutes>;
@@ -31,7 +36,7 @@ const { Navigator, Screen } = createBottomTabNavigator<AppRoutes>();
 export function Tab() {
 
   const { sizes, colors } = useTheme();
-
+  const { signOut } = useAuth();
   const iconSize = sizes[6];
 
   return (
@@ -53,9 +58,7 @@ export function Tab() {
             name='home'
             component={Home}
             options={{
-                tabBarIcon: ({ color,  }) => (
-                    <HomeSvg fill={color} width={iconSize} height={iconSize} />
-                )
+                tabBarIcon: ({ color }) => <House color={color} size={iconSize} />
             }}
         />
 
@@ -63,27 +66,27 @@ export function Tab() {
             name='myads'
             component={MyAds}
             options={{
-                tabBarIcon: ({ color }) => (
-                    <Icon 
-                        as={AntDesign}
-                        name="tago"
-                        color="gray.400"
-                        fill={color}
-                        size={6}
-                    />
-                    // O icone do meio nao esta funcionado
-                )
+                tabBarIcon: ({ color }) => <Tag color={color} size={iconSize} />
             }}
         />
-        
-        <Screen 
-            name='exit'
-            component={ProductDetails} //Esse aqui e o botao de sair!
+
+        <Screen
+            name="signIn"
+            component={SignIn}
             options={{
-                tabBarIcon: ({ color }) => (
-                <HistorySvg fill={color} width={iconSize} height={iconSize} />
-                )
-            }}            
+                tabBarIcon: ({color}) => (
+                    <SignOut color={color} size={iconSize} />
+                ),
+            }}
+
+            listeners={{
+                tabPress: (e) => {
+                    e.preventDefault();
+
+                    //COLOCAR O MODAL: QUER MESMO SAIR DO APP? SIM OU NAO
+                    signOut();
+                },
+            }}
         />
 
     </Navigator>

@@ -3,7 +3,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useEffect, useState } from 'react'; 
 
 import { useTheme } from 'native-base';
-import { ArrowRight, Plus, Tag} from 'phosphor-react-native';
+import { ArrowRight, Plus, Tag } from 'phosphor-react-native';
 
 import { Text, HStack, ScrollView, VStack, Box, useToast, FlatList} from 'native-base';
 
@@ -87,7 +87,10 @@ export function Home(){
 
                     <HStack justifyContent="space-between">
                         <UserPhoto 
-                            source={{ uri: userPhoto }}
+                            source={
+                                user.avatar ? {uri: user.avatar} : { uri: userPhoto } 
+                            } //Colocar o icone
+
                             alt="Foto do usuário"
                             size={10}
                             mr={2}
