@@ -15,54 +15,61 @@ import { yupResolver } from '@hookform/resolvers/yup';
 
 import { ButtonDefault } from '@components/Button';
 import { Input } from '@components/Input'
+import { Images } from '@components/Image';
+import { TextAreaAtual } from '@components/TextArea';
+import { RadiosAtual } from '@components/Radios';
 
 import { ArrowLeft, Plus } from 'phosphor-react-native';
 
 import * as ImagePicker from 'expo-image-picker';
-import { api } from '@services/api';
-import { AppError } from '@utils/AppError';
 // import * as FileSystem from 'expo-file-system';
 
+import { api } from '@services/api';
+import { AppError } from '@utils/AppError';
+
 type NewAdData = {
-    image: string;
+    image: [ImageGroup] //O image É UM ARRAY DE STING (3 FOTOS)
     title: string;
     description: string;
     product_status: string;
-    price: string;
+    amount: string;
     swap?: string; //troca
     method_payment: string;
 }
 
+type ImageGroup = {
+    //AQUI ESTAO INSERIDAS AS 3 IMAGENS
+};
+
 const NewAdSchema = yup.object({
-    image: yup.string().required('Informe o nome.'), //Ver isso com Prisco
+    // image: yup.string().required('Informe o nome.'), //Ver isso com Prisco
     title: yup.string().required('Informe o título do produto'),
-    description: yup.string().required('Descreva como é o seu produto'),
-    product_status: yup.string().required('Escolha o estado do seu produto'),
-    price: yup.string().required('Digite o preço do seu produto'),
-    swap: yup.string().required('Escolha se aceita a troca ou não'),
-    method_payment: yup.string().required('Escolha seu metodo de pagamento'),
+    //description: yup.string().required('Descreva como é o seu produto'),
+    // product_status: yup.string().required('Escolha o estado do seuR produto'),
+    amount: yup.string().required('Digite o preço do seu produto'),
+    //swap: yup.string().required('Escolha se aceita a troca ou não'),
+    //method_payment: yup.string().required('Escolha seu metodo de pagamento'),
 });  
 
-const TextAreas = () => {
-    return <Box alignItems="center" w="100%">
-            <TextArea 
-                h={40} 
-                w="full" maxW="full"
-                placeholder="Descrição do produto"
-                backgroundColor="white"
-                fontSize="md"
-                borderColor="blue.500"
-                size={14}
-            />
-        </Box>
-    ;
-};
+// const TextAreas = () => {
+//     return <Box alignItems="center" w="100%">
+//             <TextArea 
+//                 h={40} 
+//                 w="full" maxW="full"
+//                 placeholder="Descrição do produto"
+//                 backgroundColor="white"
+//                 fontSize="md"
+//                 borderColor="blue.500"
+//                 size={14}
+//             />
+//         </Box>
+//     ;
+// };
 
 const Toasts = () => {
   const toast = useToast();
   return <Center>
-        <VStack space={2}>           
-
+        <VStack space={2}>
             <Button onPress={() => toast.show({
                 title: "Hello world",
                 placement: "top"
@@ -112,11 +119,11 @@ const Switchs = () => {
 const Checkboxs = () => {
     const [groupValues, setGroupValues] = React.useState([]);
     return <Checkbox.Group onChange={setGroupValues} value={groupValues} accessibilityLabel="choose numbers">
-        <Checkbox value="one">Boleto</Checkbox>
-        <Checkbox value="two" mt={2} >Pix</Checkbox>
-        <Checkbox value="three" mt={2}>Dinheiro</Checkbox>
-        <Checkbox value="four" mt={2}>Cartão de crédito</Checkbox>
-        <Checkbox value="five" mt={2}>Depósito Bancário</Checkbox>
+        <Checkbox value="1">Boleto</Checkbox>
+        <Checkbox value="2" mt={2} >Pix</Checkbox>
+        <Checkbox value="3" mt={2}>Dinheiro</Checkbox>
+        <Checkbox value="4" mt={2}>Cartão de crédito</Checkbox>
+        <Checkbox value="5" mt={2}>Depósito Bancário</Checkbox>
     </Checkbox.Group>;
 };  
 
@@ -125,7 +132,8 @@ export function NewAd(){
     const { control, handleSubmit, formState: { errors } } = useForm<NewAdData>({
         resolver: yupResolver(NewAdSchema),
     });
-    const [imageUpload, setImageUpload] = useState<any>(null);
+    const [ imageUpload, setImageUpload] = useState<any>(null);
+    const [ valueRadio, setValueRadio] = useState('1'); //Valor do radio no console log
 
     const navigation = useNavigation<AppNavigatorRoutesProps>(); 
     const navigationTab = useNavigation<AppTabNavigatorRoutesProps>(); 
@@ -135,7 +143,7 @@ export function NewAd(){
 
     const {colors, sizes} = useTheme(); 
 
-    const [userPhoto, setUserPhoto] = useState('https://github.com/JRSparrowII.png');  
+    const [userPhoto, setUserPhoto] = useState<string | null>(null);  
     const [image, setImage] = useState(false);    
     const PHOTO_SIZE = 24;
 
@@ -165,26 +173,79 @@ export function NewAd(){
             setUserPhoto(photoSelected.assets[0].uri);
       
         } catch (error) {
-          console.log(error)
-          
-        } finally {
-          setImage(false)
-        }
+          console.log(error)  // trocar por toast informando que n foi possivel pegar a imagem        
+        } 
     }
 
-    async function handleNewAd({ image, title, description, product_status, 
-        price, swap, method_payment}: NewAdData) {
+    function setPrice(amount : string) {
+        return parseFloat(amount);
+    }
+
+    async function handleNewAd({ title, amount }: NewAdData) {
         try {
-            setIsLoading(true)        
-      
-           await api.post('/products', { image, title, description, product_status, 
-            price, swap, method_payment });            
+            setIsLoading(true)   
+
+            if ( !userPhoto ) {
+                const title = 'Atenção! Por favor, escolha uma imagem.';
+
+                toast.show({    
+                    title,
+                    placement: 'top',
+                    bgColor: 'blue.500'
+                })           
+                return
+            }
+
+            const name = title
+            const description =  "Essa é a melhor luminária do mundo. Você não vai se arrepender";
+            const is_new =  true;
+            const price = setPrice(amount)
+            const accept_trade =  true;
+            const payment_methods =  ["pix"];  
+
+            const response_product = await api.post('/products', 
+                { image, name , description, is_new,  price : setPrice(amount)  , accept_trade, payment_methods },
+                {
+                    headers: {          
+                        "Authorization": `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2NzQ3Njg5MzgsImV4cCI6MTY3NDg1NTMzOCwic3ViIjoiMzY2NjU3ODEtN2I3NC00YzQzLWJlYzEtYjcwMmQ1ZjlhNmNiIn0.FH30l07dunRaOjgU3dx7PlvDmK5S78JUxgIBp_NCTBc`
+                    } 
+                }
+            );  
+                        
+            if (response_product.data.id) {
+            
+                let formData = new FormData();
+                        
+                formData.append("images", {
+                    uri: userPhoto,
+                    name: "image.jpg",
+                    type: "image/jpg",
+                });
+    
+                formData.append('product_id', response_product.data.id)
+               
+                const response = await api.post('/products/images', formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                        "Authorization": `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2NzQ3Njg5MzgsImV4cCI6MTY3NDg1NTMzOCwic3ViIjoiMzY2NjU3ODEtN2I3NC00YzQzLWJlYzEtYjcwMmQ1ZjlhNmNiIn0.FH30l07dunRaOjgU3dx7PlvDmK5S78JUxgIBp_NCTBc`
+                    },
+                    transformRequest: (data, headers) => {                        
+                        return formData;
+                    },
+                });
+
+                alert('salvo com sucesso') // trocar pelo toast
+
+            } else {
+                throw new Error();
+            }  
       
         } catch (error) {
             setIsLoading(false);
         
             const isAppError = error instanceof AppError;
-            const title = isAppError ? error.message : 'Não foi possível enviar os dados. Tente novamente mais tarde';
+            const title = isAppError ? error.message : 
+            'Não foi possível enviar os dados. Tente novamente mais tarde';
         
             toast.show({    
                 title,
@@ -193,47 +254,7 @@ export function NewAd(){
             })
         }        
     }  
-
-    // async function upload() {
-    
-    //     if ( !imageUpload ) {
-
-    //         <Toasts />
-    //         // Alert.alert ('Atenção!', 'Por favor, escolha uma imagem.')
-    //         return
-    //     }
-    
-    //     let formData = new FormData();
-    //     // const idCompany = await AsyncStorage.getItem('@PCAuth:idCompany')
-            
-    //     formData.append("image", {
-    //       uri: imageUpload,
-    //       name: "image.jpg",
-    //       type: "image/jpg",
-    //     });
-    
-    //     formData.append('title', title)
-    //     formData.append('description', description)
-    //     formData.append('product_status', product_status)
-    //     formData.append('price', price)
-    //     formData.append('swap', swap)
-    //     formData.append('method_payment', method_payment)
-    
-    //     const response = await api.post('/products', formData, {
-    //         headers: {
-    //             'Content-Type': 'multipart/form-data',
-    //         },
-    //         transformRequest: (data, headers) => {            
-    //             return formData;
-    //         },
-    //     });
-
-    //     if (response.data.success) {
-    //     //   Alert.alert("", "Adicionado com sucesso.");  
-    //       navigation.navigate("preview")
-    //     }   
-    // }
-
+   
     return(
         <VStack>
         
@@ -266,24 +287,29 @@ export function NewAd(){
                         </Text>
 
                         <HStack 
-                            justifyContent="space-between" 
+                            justifyContent="flex-start" 
                             mt={5}
+                            space={5}
                         >
-                            <Button
-                                onPress={handleUserPhotoSelected} 
-                                h={24} w={24} 
-                                backgroundColor="gray.300"
-                                alignItems="center"
-                            >
-                                {image ? (
-                                    <Avatar
-                                        source={{ uri: userPhoto }}   
-                                        size={24}                     
-                                    />
-                                ) : (
+                            {image ? (
+                                <Images
+                                    source={{ uri: userPhoto }}   
+                                    size={24}  
+                                    alt="photo"                  
+                                />
+                            ) : null}
+                            
+                            <HStack>
+                                <Button
+                                    onPress={handleUserPhotoSelected} 
+                                    h={24} w={24} 
+                                    backgroundColor="gray.300"
+                                    alignItems="center"
+                                >
                                     <Plus />
-                                )}
-                            </Button>   
+                                </Button> 
+                            </HStack>
+                             
 
                         </HStack>
 
@@ -307,17 +333,25 @@ export function NewAd(){
                             )}
                         />
 
-                        <Controller //PRECISA DO CONTROLER
+                        <Controller
                             control={control}
-                            name="title"
+                            name="description"
                             render={({ field: { onChange, value } }) => (
-                                <TextAreas/> 
+                                <TextAreaAtual
+                                    placeholder="Descrição do anúncio"
+                                    onChangeText={onChange}
+                                    value={value}          
+                                    keyboardType="default"
+                                    autoCapitalize="none"     
+                                    secureTextEntry={false}               
+                                    errorMessage={errors.description?.message}
+                                /> 
                             )}
                         />
 
                         {/* <TextAreas/>            */}
 
-                        <Radios/>
+                        <RadiosAtual/>
 
                         <Text color="gray.700" mt={5} mb={5} fontFamily="heading" fontSize="md">
                             Venda
@@ -325,7 +359,7 @@ export function NewAd(){
 
                         <Controller 
                             control={control}
-                            name="price"
+                            name="amount"
                             render={({ field: { onChange, value } }) => (
                             <Input 
                                 placeholder="R$ Valor do produto"
@@ -334,7 +368,7 @@ export function NewAd(){
                                 keyboardType="default"
                                 autoCapitalize="none"     
                                 secureTextEntry={false}               
-                                errorMessage={errors.price?.message}
+                                errorMessage={errors.amount?.message}
                             />
                             )}
                         />
@@ -343,7 +377,7 @@ export function NewAd(){
                             Aceita troca?
                         </Text>
 
-                        <Switchs/>
+                        <Switchs />
 
                         <Text color="gray.700" mb={5}>
                             Meios de pagamentos aceitos:
@@ -378,7 +412,8 @@ export function NewAd(){
                     size="half"                             
                     variant="base2" 
                     // onPress={upload}   
-                    onPress={handleSubmit(handleNewAd)}                                     
+                    onPress={handleSubmit(handleNewAd)}        
+                                                   
                 />                    
             </HStack>  
         </VStack>      

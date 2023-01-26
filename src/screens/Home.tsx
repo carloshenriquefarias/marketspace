@@ -2,7 +2,7 @@ import { AppNavigatorRoutesProps } from '@routes/app.routes';
 import { useNavigation } from '@react-navigation/native';
 import { useEffect, useState } from 'react'; 
 
-import { useTheme } from 'native-base';
+import { Pressable, useTheme } from 'native-base';
 import { ArrowRight, Plus, Tag } from 'phosphor-react-native';
 
 import { Text, HStack, ScrollView, VStack, Box, useToast, FlatList} from 'native-base';
@@ -48,12 +48,11 @@ export function Home(){
         setVisibleModal(false);
     }
 
-
     async function fetchProduct() {
         try {
           const response = await api.get('/sessions');
-          setProduct(response.data);
-          // console.log(response.data);
+        //   setProduct(response.data);
+          console.log(response.data);
     
         } catch (error) {
           const isAppError = error instanceof AppError;
@@ -133,21 +132,24 @@ export function Home(){
                             <Tag color={colors.blue[500]} size={sizes[7]} />
 
                             <VStack ml={4}>
-                                <Text color="gray.600" fontSize={20} fontWeight="bold" 
-                                    lineHeight={'2xl'}>
+                                <Text color="gray.600" fontSize={20} fontWeight="bold" lineHeight={'2xl'}>
                                     4
                                 </Text>  
                                 <Text color="black" fontSize={12}>anuncios ativos</Text> 
                             </VStack>
                         </HStack>
 
-                        <HStack 
-                            justifyContent="space-between" 
-                            alignItems="center"                       
-                        >
-                            <Text color="blue.700" fontWeight="bold" fontSize={13}>Meus anuncios </Text>
-                            <ArrowRight color={colors.blue[500]} size={sizes[5]} />
-                        </HStack>                         
+                        <Pressable onPress={handleMyAds}>
+                            <HStack 
+                                justifyContent="space-between" 
+                                alignItems="center" 
+                                space={1}                      
+                            >
+                                <Text color="blue.700" fontWeight="bold" fontSize={13}>Meus anuncios </Text>
+                                <ArrowRight color={colors.blue[500]} size={sizes[5]}/>
+                            </HStack>   
+                        </Pressable>
+                                              
                     </HStack>                    
                 </Box>
 
@@ -157,8 +159,8 @@ export function Home(){
                 >
                     Compre produtos variados
                 </Text>
-
-                {/* <HStack justifyContent="space-between" space={2}>
+                
+                {/* <HStack justifyContent="space-between" space={2}> //EXCLUIR ISSO DEPOIS DE PRONTO
                     <ButtonDefault 
                         variant="base1" size="half" title='teste'
                         onPress={handleProductDetails}
@@ -195,6 +197,7 @@ export function Home(){
                     }}
                 /> */}
 
+               
                 {(visibleModal) ?
                     <FilterModal />
                 :null}
@@ -204,3 +207,43 @@ export function Home(){
         </ScrollView>
     )
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ {/* <FlatList
+    pt={4}
+    mb={10}
+    data={product}
+    keyExtractor={(item) => item.id}
+    
+    renderItem={({ item }) => (
+        <Product                    
+            image='source={{ uri: userPhoto }}'
+            title='Tenis vermelho'
+            price={50}
+            status='NOVO'
+            avatar='source={{ uri: userPhoto }}'
+            item={item}
+            onPress={() => handleProductDetails(item.id)}
+        /> 
+    )}
+    
+    numColumns={2}
+    columnWrapperStyle={{ flex: 1, justifyContent: 'space-between' }}
+    showsVerticalScrollIndicator={false}
+    ItemSeparatorComponent={() => <Box py={3} />}
+    ListFooterComponent={<Box my={10} />}
+/> */}
