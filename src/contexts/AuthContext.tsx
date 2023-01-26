@@ -29,7 +29,7 @@ export function AuthContextProvider({children} : AuthContextProviderProps){
         const { data } = await api.post('/sessions', { email, password });       
         
         if(data.user) {
-          setUser (data.user);
+          setUser(data.user);
           storageUserSave(data.user);
         }
   
