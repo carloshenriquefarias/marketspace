@@ -6,8 +6,10 @@ import React from "react";
 import { useState } from 'react';
 
 import { Text, HStack, VStack, Button, Box, useTheme, Center,
-   ScrollView, IconButton, Avatar, useToast, Alert } from 'native-base'
+   ScrollView, IconButton, Avatar, useToast, Alert , Radio, Checkbox } from 'native-base'
 ;
+
+import { Switch, View, SafeAreaView, StyleSheet } from 'react-native';
 
 import { useForm, Controller } from 'react-hook-form';
 import * as yup from 'yup';
@@ -17,7 +19,7 @@ import { ButtonDefault } from '@components/Button';
 import { Input } from '@components/Input'
 import { Images } from '@components/Image';
 import { TextAreaAtual } from '@components/TextArea';
-import { RadiosAtual } from '@components/Radios';
+import { Loading } from '@components/Loading';
 
 import { ArrowLeft, Plus } from 'phosphor-react-native';
 
@@ -52,7 +54,7 @@ const NewAdSchema = yup.object({
     amount: yup.string().required('Digite o preço do seu produto'),
     //swap: yup.string().required('Escolha se aceita a troca ou não'),
     //method_payment: yup.string().required('Escolha seu metodo de pagamento'),
-});   
+});  
 
 export function NewAd(){
 
@@ -73,6 +75,58 @@ export function NewAd(){
     const [userPhoto, setUserPhoto] = useState<string | null>(null);  
     const [image, setImage] = useState(false);    
     const PHOTO_SIZE = 24;
+
+    const [switchValue, setSwitchValue] = useState(false);
+    const [statusProduto, setStatusProduto] = useState<string | undefined>(undefined);
+    const [groupValues, setGroupValues] = React.useState([]);
+
+    const RadioStatusProduct = () => {
+        return <Radio.Group name="radioGroupStatusProduto" 
+            accessibilityLabel="favorite number" 
+            value={statusProduto} 
+            onChange={nextValue => {
+                setStatusProduto(nextValue);
+            }
+        }>
+            <Radio value="new" my={1}>
+              Produto novo
+            </Radio>
+            <Radio value="used" my={1}>
+              Produto usado
+            </Radio>
+          </Radio.Group>;
+    };
+
+    const Switches = () => {
+      
+        const toggleSwitch = (value) => {
+          setSwitchValue(value);
+        };
+      
+        return (
+            <VStack alignItems='flex-start'>
+                <Switch
+                    onValueChange={toggleSwitch}
+                    value={switchValue}
+                />
+            </VStack>
+        );
+    };
+
+    const Checkboxes = () => {
+
+        // const [groupValues, setGroupValues] = React.useState([]);
+    
+        return(
+            <Checkbox.Group onChange={setGroupValues} value={groupValues} accessibilityLabel="choose numbers">
+                <Checkbox value="boleto">Boleto</Checkbox>
+                <Checkbox value="pix" mt={2} >Pix</Checkbox>
+                <Checkbox value="dinheiro" mt={2}>Dinheiro</Checkbox>
+                <Checkbox value="cartão de crédito" mt={2}>Cartão de crédito</Checkbox>
+                <Checkbox value="depósito bancário" mt={2}>Depósito Bancário</Checkbox>
+            </Checkbox.Group>
+        );
+    }
 
     function handleOpenPreview() { 
         navigation.navigate('preview');
@@ -108,9 +162,29 @@ export function NewAd(){
         return parseFloat(amount);
     }
 
+    function getConverteStatusProdutoBoolean(status : string): boolean {
+        if (statusProduto == "new") {
+            return true;
+        } else {
+            return false;
+        }
+    }    
+
     async function handleNewAd({ title, amount }: NewAdData) {
+
         try {
             setIsLoading(true)   
+
+            if ( !statusProduto ) {
+                const title = 'Atenção! Por favor, informe se o produto novo ou usado.';
+
+                toast.show({    
+                    title,
+                    placement: 'top',
+                    bgColor: 'blue.500'
+                })           
+                return
+            }
 
             if ( !userPhoto ) {
                 const title = 'Atenção! Por favor, escolha uma imagem.';
@@ -125,7 +199,7 @@ export function NewAd(){
 
             const name = title
             const description =  "Essa é a melhor luminária do mundo. Você não vai se arrepender";
-            const is_new =  true;
+            const is_new =  getConverteStatusProdutoBoolean(statusProduto);
             const price = setPrice(amount)
             const accept_trade =  true;
             const payment_methods =  ["pix"];  
@@ -162,13 +236,16 @@ export function NewAd(){
                     title,
                     placement: 'top',
                     bgColor: 'green.500'
-                })           
+                })   
+                
+                handleOpenPreview();
+
                 return
 
             } else {
                 throw new Error();
-            }  
-      
+            }         
+                  
         } catch (error) {
             setIsLoading(false);
         
@@ -182,7 +259,7 @@ export function NewAd(){
                 bgColor: 'red.500'
             })
         }        
-    }  
+    }
    
     return(
         <VStack>
@@ -237,9 +314,7 @@ export function NewAd(){
                                 >
                                     <Plus />
                                 </Button> 
-                            </HStack>
-                             
-
+                            </HStack>                         
                         </HStack>
 
                         <Text color="gray.700" mt={5} mb={5} fontFamily="heading" fontSize="md">
@@ -250,15 +325,15 @@ export function NewAd(){
                             control={control}
                             name="title"
                             render={({ field: { onChange, value } }) => (
-                            <Input 
-                                placeholder="Título do anúncio"
-                                onChangeText={onChange}
-                                value={value}          
-                                keyboardType="default"
-                                autoCapitalize="none"     
-                                secureTextEntry={false}               
-                                errorMessage={errors.title?.message}
-                            />
+                                <Input 
+                                    placeholder="Título do anúncio"
+                                    onChangeText={onChange}
+                                    value={value}          
+                                    keyboardType="default"
+                                    autoCapitalize="none"     
+                                    secureTextEntry={false}               
+                                    errorMessage={errors.title?.message}
+                                />
                             )}
                         />
 
@@ -278,7 +353,7 @@ export function NewAd(){
                             )}
                         />
 
-                        <RadiosAtual/>
+                        <RadioStatusProduct />
 
                         <Text color="gray.700" mt={5} mb={5} fontFamily="heading" fontSize="md">
                             Venda
@@ -304,13 +379,13 @@ export function NewAd(){
                             Aceita troca?
                         </Text>
 
-                        <SwitchsAtual/>
+                        <Switches/>
 
-                        <Text color="gray.700" mb={5}>
+                        <Text color="gray.700" fontFamily="heading" fontSize="md" mb={5}>
                             Meios de pagamentos aceitos:
                         </Text>
 
-                        <CheckBoxAtual/>   
+                        <Checkboxes/>   
                     </VStack>                    
                 </VStack> 
             </ScrollView> 
@@ -338,9 +413,8 @@ export function NewAd(){
                     title="Avançar" 
                     size="half"                             
                     variant="base2" 
-                    // onPress={upload}   
-                    onPress={handleSubmit(handleNewAd)}        
-                                                   
+                    isLoading={isLoading}  
+                    onPress={handleSubmit(handleNewAd)}                                 
                 />                    
             </HStack>  
         </VStack>      

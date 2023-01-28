@@ -21,8 +21,11 @@ export function ButtonDefault({ title, icon, variant = 'default', size = 'half',
       rounded="md"
 
       _pressed={{
-          bg: variant === 'default' ? 'gray.400' : 'blue.700'  
-      }}
+        bg: variant === 'default' ? 'gray.400' :  
+          variant === 'base1' ? 'lightblue' : 'gray.500'
+        }
+      }
+      
       {...rest}
     >
       {icon}
