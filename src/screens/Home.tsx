@@ -17,6 +17,7 @@ import { AppError } from '@utils/AppError';
 import { api } from '@services/api';
 
 import { useAuth } from '@hooks/useAuth'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export function Home(){
 
@@ -49,6 +50,7 @@ export function Home(){
     }
 
     async function fetchProduct() {
+       
         try {
           const response = await api.get('/sessions');
         //   setProduct(response.data);
@@ -67,7 +69,10 @@ export function Home(){
     }
 
     useEffect(() => {
+        
+
         fetchProduct();
+
     },[])
 
     return(
@@ -87,7 +92,10 @@ export function Home(){
                     <HStack justifyContent="space-between">
                         <UserPhoto 
                             source={
-                                user.avatar ? {uri: user.avatar} : { uri: userPhoto } 
+                                user.avatar ? {uri: 'http://192.168.1.4:3333/images/' + user.avatar} 
+                                : { 
+                                    uri: userPhoto 
+                                } 
                             } //Colocar o icone
 
                             alt="Foto do usuário"

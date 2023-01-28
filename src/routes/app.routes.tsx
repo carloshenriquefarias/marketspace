@@ -9,7 +9,7 @@ import { MyAds } from '@screens/MyAds';
 
 type AppRoutes = {
   newad: undefined;
-  tab: undefined;
+  hometab: undefined;
   preview: undefined;
   productdetails: undefined;
   myadsdetails: undefined;
@@ -23,7 +23,7 @@ const { Navigator, Screen } = createNativeStackNavigator<AppRoutes>();
 export function AppRoutes() {
   return (
     <Navigator screenOptions={{ headerShown: false }}> 
-      <Screen name='tab' component={Tab} />
+      <Screen name='hometab' component={Tab} />
       <Screen name='newad' component={NewAd} />
       <Screen name='preview' component={Preview}/>
       <Screen name='productdetails' component={ProductDetails}/>

@@ -5,8 +5,8 @@ import { useNavigation } from '@react-navigation/native';
 import React from "react";
 import { useState } from 'react';
 
-import { Text, HStack, VStack, Button, Radio, Stack, TextArea, Box, useTheme, Center,
-    Switch, Checkbox, ScrollView, IconButton, Avatar, useToast, Alert } from 'native-base'
+import { Text, HStack, VStack, Button, Box, useTheme, Center,
+   ScrollView, IconButton, Avatar, useToast, Alert } from 'native-base'
 ;
 
 import { useForm, Controller } from 'react-hook-form';
@@ -26,6 +26,9 @@ import * as ImagePicker from 'expo-image-picker';
 
 import { api } from '@services/api';
 import { AppError } from '@utils/AppError';
+import { SwitchsAtual } from './Switchs';
+import { CheckBoxAtual } from '@components/Checkboxes';
+import { InputNewAd } from '@components/InputNewAd';
 
 type NewAdData = {
     image: [ImageGroup] //O image É UM ARRAY DE STING (3 FOTOS)
@@ -49,83 +52,7 @@ const NewAdSchema = yup.object({
     amount: yup.string().required('Digite o preço do seu produto'),
     //swap: yup.string().required('Escolha se aceita a troca ou não'),
     //method_payment: yup.string().required('Escolha seu metodo de pagamento'),
-});  
-
-// const TextAreas = () => {
-//     return <Box alignItems="center" w="100%">
-//             <TextArea 
-//                 h={40} 
-//                 w="full" maxW="full"
-//                 placeholder="Descrição do produto"
-//                 backgroundColor="white"
-//                 fontSize="md"
-//                 borderColor="blue.500"
-//                 size={14}
-//             />
-//         </Box>
-//     ;
-// };
-
-const Toasts = () => {
-  const toast = useToast();
-  return <Center>
-        <VStack space={2}>
-            <Button onPress={() => toast.show({
-                title: "Hello world",
-                placement: "top"
-            })}>
-                Top
-            </Button>
-           
-        </VStack>
-    </Center>;
-};
-
-const Radios = () => {
-    return <Radio.Group name="exampleGroup" defaultValue="1" accessibilityLabel="pick a size">
-        <Stack 
-            mt={5}
-            direction={{
-                base: "row",
-                md: "row"
-            }} 
-            alignItems={{
-            base: "space-between",
-            md: "space-between"
-            }} 
-            space={10} 
-            w="100%" maxW="300px"
-        >
-            
-            <Radio value="1" colorScheme="blue" size="md" my={1}>
-                Produto Novo
-            </Radio>
-
-            <Radio value="2" colorScheme="blue" size="md" my={1}>
-                Produto Usado
-            </Radio>
-            
-        </Stack>
-    </Radio.Group>;
-};
-
-const Switchs = () => {
-    return <HStack alignItems="center" space={0}>
-        <Text></Text>
-        <Switch size="lg" color="blue" bg="blue"/>
-    </HStack>;
-};
-
-const Checkboxs = () => {
-    const [groupValues, setGroupValues] = React.useState([]);
-    return <Checkbox.Group onChange={setGroupValues} value={groupValues} accessibilityLabel="choose numbers">
-        <Checkbox value="1">Boleto</Checkbox>
-        <Checkbox value="2" mt={2} >Pix</Checkbox>
-        <Checkbox value="3" mt={2}>Dinheiro</Checkbox>
-        <Checkbox value="4" mt={2}>Cartão de crédito</Checkbox>
-        <Checkbox value="5" mt={2}>Depósito Bancário</Checkbox>
-    </Checkbox.Group>;
-};  
+});   
 
 export function NewAd(){
 
@@ -204,18 +131,15 @@ export function NewAd(){
             const payment_methods =  ["pix"];  
 
             const response_product = await api.post('/products', 
-                { image, name , description, is_new,  price : setPrice(amount)  , accept_trade, payment_methods },
-                {
-                    headers: {          
-                        "Authorization": `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2NzQ3Njg5MzgsImV4cCI6MTY3NDg1NTMzOCwic3ViIjoiMzY2NjU3ODEtN2I3NC00YzQzLWJlYzEtYjcwMmQ1ZjlhNmNiIn0.FH30l07dunRaOjgU3dx7PlvDmK5S78JUxgIBp_NCTBc`
-                    } 
-                }
+                { image, name , description, is_new,  price : setPrice(amount)  ,
+                accept_trade, payment_methods },
+                
             );  
                         
-            if (response_product.data.id) {
-            
-                let formData = new FormData();
-                        
+            if (response_product.data.id) {   
+
+                let formData = new FormData(); 
+
                 formData.append("images", {
                     uri: userPhoto,
                     name: "image.jpg",
@@ -227,14 +151,19 @@ export function NewAd(){
                 const response = await api.post('/products/images', formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
-                        "Authorization": `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2NzQ3Njg5MzgsImV4cCI6MTY3NDg1NTMzOCwic3ViIjoiMzY2NjU3ODEtN2I3NC00YzQzLWJlYzEtYjcwMmQ1ZjlhNmNiIn0.FH30l07dunRaOjgU3dx7PlvDmK5S78JUxgIBp_NCTBc`
                     },
                     transformRequest: (data, headers) => {                        
                         return formData;
                     },
                 });
 
-                alert('salvo com sucesso') // trocar pelo toast
+                const title = 'Salvo com sucesso';
+                toast.show({    
+                    title,
+                    placement: 'top',
+                    bgColor: 'green.500'
+                })           
+                return
 
             } else {
                 throw new Error();
@@ -349,8 +278,6 @@ export function NewAd(){
                             )}
                         />
 
-                        {/* <TextAreas/>            */}
-
                         <RadiosAtual/>
 
                         <Text color="gray.700" mt={5} mb={5} fontFamily="heading" fontSize="md">
@@ -361,15 +288,15 @@ export function NewAd(){
                             control={control}
                             name="amount"
                             render={({ field: { onChange, value } }) => (
-                            <Input 
-                                placeholder="R$ Valor do produto"
-                                onChangeText={onChange}
-                                value={value}          
-                                keyboardType="default"
-                                autoCapitalize="none"     
-                                secureTextEntry={false}               
-                                errorMessage={errors.amount?.message}
-                            />
+                                <InputNewAd 
+                                    placeholder="Valor do produto"
+                                    onChangeText={onChange}
+                                    value={value}          
+                                    keyboardType="default"
+                                    autoCapitalize="none"     
+                                    secureTextEntry={false}               
+                                    errorMessage={errors.amount?.message}
+                                />
                             )}
                         />
 
@@ -377,13 +304,13 @@ export function NewAd(){
                             Aceita troca?
                         </Text>
 
-                        <Switchs />
+                        <SwitchsAtual/>
 
                         <Text color="gray.700" mb={5}>
                             Meios de pagamentos aceitos:
                         </Text>
 
-                        <Checkboxs/>     
+                        <CheckBoxAtual/>   
                     </VStack>                    
                 </VStack> 
             </ScrollView> 
