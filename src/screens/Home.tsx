@@ -25,7 +25,7 @@ export function Home(){
     const {colors, sizes} = useTheme();
     const [visibleModal, setVisibleModal] = useState(false)
     const [userPhoto, setUserPhoto] = useState('https://github.com/JRSparrowII.png');
-    const [product, setProduct] = useState<string[]>([]);
+    const [product, setProduct] = useState([]);
     const toast = useToast();
     const { user } = useAuth();
  
@@ -52,9 +52,9 @@ export function Home(){
     async function fetchProduct() {
        
         try {
-          const response = await api.get('/sessions');
-        //   setProduct(response.data);
-          console.log(response.data);
+          const response = await api.get('/products');
+          setProduct(response.data);
+            //   console.log(response.data);
     
         } catch (error) {
           const isAppError = error instanceof AppError;
@@ -69,10 +69,7 @@ export function Home(){
     }
 
     useEffect(() => {
-        
-
         fetchProduct();
-
     },[])
 
     return(
@@ -105,7 +102,7 @@ export function Home(){
 
                         <VStack>
                             <Text color="black">Boas Vindas, </Text>  
-                            <Text color="black" fontWeight="bold"> {user.name} </Text> 
+                            <Text color="black" fontWeight="bold">{user.name}</Text> 
                         </VStack>
                                         
                     </HStack>               
@@ -168,24 +165,12 @@ export function Home(){
                     Compre produtos variados
                 </Text>
                 
-                {/* <HStack justifyContent="space-between" space={2}> //EXCLUIR ISSO DEPOIS DE PRONTO
-                    <ButtonDefault 
-                        variant="base1" size="half" title='teste'
-                        onPress={handleProductDetails}
-                    />
-
-                    <ButtonDefault 
-                        variant="base2" size="half" title='Meus anuncios'
-                        onPress={handleMyAds}
-                    />
-                </HStack> */}
-                
                 <InputFilter
                     typeInput={"filter"}
                     fulanodetal={handleOpenModal}
                 />
 
-                {/* <FlatList 
+                <FlatList //VER ERRO DE ID NA FLATLIST
                     data={product}
                     keyExtractor={item => item.id}
                     numColumns={2}
@@ -203,15 +188,13 @@ export function Home(){
                     _contentContainerStyle={{
                         paddingBottom: 20
                     }}
-                /> */}
-
+                />
                
                 {(visibleModal) ?
                     <FilterModal />
                 :null}
 
-            </VStack>                         
-
+            </VStack>                        
         </ScrollView>
     )
 }

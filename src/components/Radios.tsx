@@ -3,10 +3,10 @@ import { Radio, Center, NativeBaseProvider, Stack } from "native-base";
 
 export function RadiosAtual(){
 
-    const [valueRadio, setValueRadio] = useState('1'); //Deixar o radio vazio
+    const [valueRadio, setValueRadio] = useState(1); //Deixar o radio vazio
 
     function handleSelectRadio (defaultValue: '1' | '2') {
-        setValueRadio(defaultValue)
+        // setValueRadio(defaultValue)
     }
 
     return (
