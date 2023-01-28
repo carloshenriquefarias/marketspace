@@ -9,10 +9,14 @@ export function UserPhoto({ size, ...rest }: Props) {
     <Image 
       w={size} 
       h={size} 
-      rounded="full"
+      // rounded="full"
       borderWidth={2}
-      borderColor="gray.400"
+      // borderColor="gray.300"
       {...rest} 
+
+      borderColor="blue.500"
+      rounded="full"
+      bg="gray.300"
     />
   );
 }

@@ -66,7 +66,7 @@ export function SignIn() {
             contentContainerStyle={{ flexGrow: 1 }} 
             showsVerticalScrollIndicator={false}>
             
-            <VStack backgroundColor="gray.200" flex={1}>
+            <VStack backgroundColor="gray.100" flex={1} >
 
                 <VStack                     
                     px={10}                       
@@ -87,7 +87,7 @@ export function SignIn() {
 
                     </Center>
 
-                    <Center>
+                    <Center >
                         <Heading color="gray.400" fontSize="md" mb={6}>
                             Acesse sua conta
                         </Heading>
@@ -97,7 +97,7 @@ export function SignIn() {
                             name="email"
                             render={({ field: { onChange, value } }) => (
                             <Input 
-                                placeholder="Nome"
+                                placeholder="Email"
                                 onChangeText={onChange}
                                 keyboardType="email-address"
                                 autoCapitalize="none" 
@@ -141,7 +141,7 @@ export function SignIn() {
                     mt={60}
                 >
                     <Center>
-                        <Text color="gray.700" fontSize="sm" mb={3} fontFamily="body" mt={5}>
+                        <Text color="gray.700" fontSize="sm" mb={3} fontFamily="body" mt={10}>
                             Ainda não tem acesso?
                         </Text>
 

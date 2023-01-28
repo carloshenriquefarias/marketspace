@@ -6,6 +6,7 @@ import { useState } from "react";
 import React from "react";
 
 import { MaterialIcons } from "@expo/vector-icons";
+import DefaultAvatarImg from '@assets/default-avatar.png';
 
 import { useForm, Controller } from 'react-hook-form';
 import * as yup from 'yup';
@@ -23,13 +24,14 @@ import * as FileSystem from 'expo-file-system';
 
 import { useNavigation } from "@react-navigation/native";
 
-import { VStack, Text, Center, Heading, ScrollView, Image, Stack, 
+import { VStack, Text, Center, Heading, ScrollView, Image, Stack, useTheme,
     Icon, Pressable, HStack, View, useToast, Skeleton} from "native-base"
 ;
 
 import { TouchableOpacity } from 'react-native';
 
 import { useAuth } from '@hooks/useAuth';
+import { PencilSimpleLine } from 'phosphor-react-native';
 
 type FormDataProps = {
     name: string;
@@ -52,6 +54,7 @@ const PHOTO_SIZE = 20;
 export function SignUp() {
 
     const navigation = useNavigation();  
+    const {colors, sizes} = useTheme();
     const toast = useToast();
     const {signIn} = useAuth();
     const [isLoading, setIsLoading] = useState(false);
@@ -131,11 +134,11 @@ export function SignUp() {
             showsVerticalScrollIndicator={false}>
 
             <VStack 
-                flex={1} 
-                px={10}   
-                backgroundColor="gray.200"              
+                // flex={1} 
+                px={8}   
+                backgroundColor="gray.100"              
             >                  
-                <Center mt={20} mb={8}>
+                <Center mt={10} mb={8}>
                     <LogoSvg />
 
                     <Text color="gray.700" fontSize="25px" fontFamily="heading">
@@ -149,12 +152,16 @@ export function SignUp() {
 
                 </Center>
 
-                <Center>                    
-                   
-                    <HStack alignItems="center">
+                <Center>   
 
-                        { //Mudando a foto de perfil
-                            photoIsLoading ?
+                    <Center
+                        mb={5}
+                        borderWidth={3}
+                        borderColor="blue.500"
+                        rounded="full"
+                        bg="gray.300"
+                    >
+                        {photoIsLoading ?
                             <Skeleton 
                                 w={PHOTO_SIZE}
                                 h={PHOTO_SIZE}
@@ -162,38 +169,31 @@ export function SignUp() {
                                 startColor="gray.700"
                                 endColor="gray.400"
                             />
-                            :
-                            <UserPhoto 
-                                source={{ uri: userPhoto }}
-                                alt="Foto do usuário"
-                                size={PHOTO_SIZE}
-                                mr={-4}
-                                mb={5}
-                                ml={5}
-                            />
-                        }                       
+                        :
+                        <UserPhoto 
+                            source={{ uri: userPhoto }}
+                            alt="Foto do usuário"
+                            size={PHOTO_SIZE}
+                            // mr={-4}
+                            // mb={5}
+                            // ml={5}
+                        />}
 
-                        <TouchableOpacity  
-                            onPress={handleUserPhotoSelected}                           
+                        <Center
+                            position="absolute"
+                            bottom={0}
+                            right={-20}
+                            bg="blue.500"
+                            rounded={50}
+                            p={2}
+                            color="white"
                         >
-                            <View 
-                            mt={3} 
-                            w={12} 
-                            h={12} 
-                            rounded={24} 
-                            backgroundColor="white" 
-                            alignItems="center"
-                            >
-                                <Icon  
-                                    as={MaterialIcons}
-                                    name="edit" 
-                                    color="gray.700"
-                                    size={10}                                
-                                />
-                            </View>                        
-                        </TouchableOpacity>
 
-                    </HStack>
+                            <TouchableOpacity onPress={handleUserPhotoSelected}>
+                                <PencilSimpleLine size={sizes[7]} color={colors.gray[100]} />
+                            </TouchableOpacity>
+                        </Center>
+                    </Center>                 
 
                     <Controller 
                         control={control}
@@ -274,7 +274,7 @@ export function SignUp() {
                     />  
                   
                     <ButtonDefault 
-                        title="Entrar" 
+                        title="Criar" 
                         size="total"  
                         onPress={handleSubmit(handleSignUp)}  
                         isLoading={isLoading}                     
@@ -302,3 +302,50 @@ export function SignUp() {
 
     );
 }
+
+//caso nao precise elimine
+
+
+{/* <HStack alignItems="center">
+
+    { //Mudando a foto de perfil
+        photoIsLoading ?
+            <Skeleton 
+                w={PHOTO_SIZE}
+                h={PHOTO_SIZE}
+                rounded="full"
+                startColor="gray.700"
+                endColor="gray.400"
+            />
+        :
+        <UserPhoto 
+            // source={{ uri: userPhoto }}
+            // alt="Foto do usuário"
+            // size={PHOTO_SIZE}
+            // mr={-4}
+            // mb={5}
+            // ml={5}
+        />
+    }                       
+
+    <TouchableOpacity  
+        onPress={handleUserPhotoSelected}                           
+    >
+        <View 
+        mt={3} 
+        w={12} 
+        h={12} 
+        rounded={24} 
+        backgroundColor="white" 
+        alignItems="center"
+        >
+            <Icon  
+                as={MaterialIcons}
+                name="edit" 
+                color="gray.700"
+                size={10}                                
+            />
+        </View>                        
+    </TouchableOpacity>
+
+</HStack> */}
