@@ -3,10 +3,13 @@ import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 
 import { useContext } from 'react';
 
+import { Preview } from '@screens/Preview';
+
 import {useAuth} from '@hooks/useAuth';
+import {useAds} from '@hooks/useAds';
 
 import { AuthRoutes } from "./auth.routes";
-import { AppRoutes } from "./app.routes";
+import { AppRoutes } from "./app.routes"
 
 import { Loading } from '@components/Loading';
 
@@ -26,7 +29,8 @@ export function Routes() {
   return (
     <Box flex={1} bg="gray.200"> 
         <NavigationContainer theme={theme}>
-          {user.id ? <AppRoutes/> : <AuthRoutes/>}
+          <Preview/>
+          {/* {user.id ? <AppRoutes/> : <AuthRoutes/>} */}
           {/* <AppRoutes/>           */}
         </NavigationContainer>
     </Box>

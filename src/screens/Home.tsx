@@ -17,6 +17,7 @@ import { AppError } from '@utils/AppError';
 import { api } from '@services/api';
 
 import { useAuth } from '@hooks/useAuth'
+import { useAds } from '@hooks/useAds'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export function Home(){
@@ -170,7 +171,7 @@ export function Home(){
                     fulanodetal={handleOpenModal}
                 />
 
-                <FlatList //VER ERRO DE ID NA FLATLIST
+                {/* <FlatList //VER ERRO DE ID NA FLATLIST
                     data={product}
                     keyExtractor={item => item.id}
                     numColumns={2}
@@ -188,7 +189,7 @@ export function Home(){
                     _contentContainerStyle={{
                         paddingBottom: 20
                     }}
-                />
+                /> */}
                
                 {(visibleModal) ?
                     <FilterModal />
