@@ -1,10 +1,15 @@
 import { AppNavigatorRoutesProps } from '@routes/app.routes';
 import { useNavigation } from '@react-navigation/native';
-import React, { useState } from "react";
+import { AppTabNavigatorRoutesProps } from '@routes/app.tab.routes';
+
+import React, { useEffect, useState } from "react";
 
 import { Text, HStack, VStack, ScrollView, Image, useTheme, Avatar, 
-    Center, Heading, View } from 'native-base'
+    Center, Heading, View, useToast } from 'native-base'
 ;
+
+import {useAds} from '@hooks/useAds';
+import { AdsDTO } from "@dtos/AdsDTO";
 
 import { ButtonDefault } from '@components/Button'
 import { Status } from '@components/Status'
@@ -12,15 +17,26 @@ import { Status } from '@components/Status'
 import BackgroundImg from '@assets/produto_2.png';
 
 import { ArrowLeft, Bank, Barcode, CreditCard, Money, QrCode, Tag} from 'phosphor-react-native';
+import { AppError } from '@utils/AppError';
+import { storageUserGet } from '@storage/storageUser';
+import { storageAdsGet } from '@storage/storageAds';
+
 
 export function Preview(){
 
+    const { createNewAd } = useAds();
+    const toast= useToast();
+    const [isLoading, setIsLoading] = useState(false);
+    const [ adData, setAdData ] = useState();
+
     const navigation = useNavigation<AppNavigatorRoutesProps>(); 
+    const navigationTab = useNavigation<AppTabNavigatorRoutesProps>(); 
+    
     const {colors, sizes} = useTheme();  
     const [userPhoto, setUserPhoto] = useState('https://github.com/JRSparrowII.png');
 
-    function handleOpenPreview() { 
-        navigation.navigate('preview');
+    function handleGoHome() { 
+        navigationTab.navigate('home');
     } 
 
     function handleOpenMyAdsDetails() { 
@@ -30,6 +46,57 @@ export function Preview(){
     function handleOpenNewAd() { 
         navigation.navigate('newad');
     }
+
+    async function handleCreateNewAd (image: string, name: string, description: string, price: number,
+        is_new: boolean, accept_trade: boolean, payment_methods: string[]) { 
+            
+        try {
+            setIsLoading(true);
+
+            await createNewAd(image, name, description, price,
+            is_new, accept_trade, payment_methods);
+
+            handleGoHome();
+
+        } catch(error){
+
+            const isAppError = error instanceof AppError;
+            const title = isAppError ? error.message : 
+            'Não foi possível enviar os dados. Tente novamente mais tarde';
+
+            setIsLoading(false);
+        
+            toast.show({    
+                title,
+                placement: 'top',
+                bgColor: 'red.500'
+            })
+        }
+    }
+
+    async function fetchAds() {
+       
+        try {
+            const adLoad = await storageAdsGet();
+            // setAdData(adLoad);
+            // console.log(adLoad);
+        
+        }   catch (error) {
+
+            const isAppError = error instanceof AppError;
+            const title = isAppError ? error.message : 'Não foi possível carregar os produtos';
+        
+            toast.show({
+                title,
+                placement: 'top',
+                bgColor: 'red.500'
+            })
+        }
+    }
+
+    useEffect(() => {
+        fetchAds();
+    },[])
 
     return(
         <HStack>      
@@ -85,7 +152,7 @@ export function Preview(){
 
                         <HStack justifyContent="space-between" mt={3}>
                             <Text color="gray.700" fontFamily="heading" fontSize="lg">
-                                Luminaria Pendente
+                                {/* {adLoad.name} */}
                             </Text>
 
                             <Text color="blue.700" fontWeight="bold" fontSize="lg">
@@ -187,6 +254,8 @@ export function Preview(){
                     size="half"                             
                     variant="base1" 
                     onPress={handleOpenMyAdsDetails}
+                    isLoading={isLoading}
+                    // onPress={handleCreateNewAd}
                     leftIcon={<Tag color={colors.gray[200]} size={sizes[5]} /> }                                         
                 />                    
             </HStack>  

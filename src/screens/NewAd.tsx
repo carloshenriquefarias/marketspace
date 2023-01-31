@@ -5,11 +5,9 @@ import { useNavigation } from '@react-navigation/native';
 import React from "react";
 import { useState } from 'react';
 
-import { Text, HStack, VStack, Button, Box, useTheme, Center,
+import { Text, HStack, VStack, Button, Box, useTheme, Switch, 
    ScrollView, IconButton, Avatar, useToast, Alert , Radio, Checkbox } from 'native-base'
 ;
-
-import { Switch, View, SafeAreaView, StyleSheet } from 'react-native';
 
 import { useForm, Controller } from 'react-hook-form';
 import * as yup from 'yup';
@@ -31,6 +29,7 @@ import { AppError } from '@utils/AppError';
 import { SwitchsAtual } from './Switchs';
 import { CheckBoxAtual } from '@components/Checkboxes';
 import { InputNewAd } from '@components/InputNewAd';
+import { storageAdsGet, storageAdsSave } from '@storage/storageAds';
 
 type NewAdData = {
     image: [ImageGroup] //O image É UM ARRAY DE STING (3 FOTOS)
@@ -47,10 +46,8 @@ type ImageGroup = {
 };
 
 const NewAdSchema = yup.object({
-    // image: yup.string().required('Informe o nome.'), //Ver isso com Prisco
     title: yup.string().required('Informe o título do produto'),
     //description: yup.string().required('Descreva como é o seu produto'),
-    // product_status: yup.string().required('Escolha o estado do seuR produto'),
     amount: yup.string().required('Digite o preço do seu produto'),
     //swap: yup.string().required('Escolha se aceita a troca ou não'),
     //method_payment: yup.string().required('Escolha seu metodo de pagamento'),
@@ -87,14 +84,14 @@ export function NewAd(){
             onChange={nextValue => {
                 setStatusProduto(nextValue);
             }
-        }>
-            <Radio value="new" my={1}>
-              Produto novo
-            </Radio>
-            <Radio value="used" my={1}>
-              Produto usado
-            </Radio>
-          </Radio.Group>;
+            }>
+                <Radio value="new" my={1}>
+                Produto novo
+                </Radio>
+                <Radio value="used" my={1}>
+                Produto usado
+                </Radio>
+        </Radio.Group>;
     };
 
     const Switches = () => {
@@ -114,8 +111,6 @@ export function NewAd(){
     };
 
     const Checkboxes = () => {
-
-        // const [groupValues, setGroupValues] = React.useState([]);
     
         return(
             <Checkbox.Group onChange={setGroupValues} value={groupValues} accessibilityLabel="choose numbers">
@@ -171,7 +166,6 @@ export function NewAd(){
     }    
 
     async function handleNewAd({ title, amount }: NewAdData) {
-
         try {
             setIsLoading(true)   
 
@@ -195,56 +189,65 @@ export function NewAd(){
                     bgColor: 'blue.500'
                 })           
                 return
+            }            
+
+            const data = {
+                name: title,
+                description:  "Essa é a melhor luminária do mundo. Você não vai se arrepender",
+                is_new:  getConverteStatusProdutoBoolean(statusProduto),
+                price: setPrice(amount),
+                accept_trade:  true,
+                payment_methods: ["pix"],
+                images: [{uri: "qualquercoisa", type: "image"}]
             }
 
-            const name = title
-            const description =  "Essa é a melhor luminária do mundo. Você não vai se arrepender";
-            const is_new =  getConverteStatusProdutoBoolean(statusProduto);
-            const price = setPrice(amount)
-            const accept_trade =  true;
-            const payment_methods =  ["pix"];  
+            await storageAdsSave (data);
+            // const adLoad = await storageAdsGet();
+            // console.log(adLoad);
+        
+            handleOpenPreview();
 
-            const response_product = await api.post('/products', 
-                { image, name , description, is_new,  price : setPrice(amount)  ,
-                accept_trade, payment_methods },
+            // const response_product = await api.post('/products', 
+            //     { image, name , description, is_new,  price : setPrice(amount),
+            //     accept_trade, payment_methods },
                 
-            );  
+            // );  
                         
-            if (response_product.data.id) {   
+            // if (response_product.data.id) {   
 
-                let formData = new FormData(); 
+            //     let formData = new FormData(); 
 
-                formData.append("images", {
-                    uri: userPhoto,
-                    name: "image.jpg",
-                    type: "image/jpg",
-                });
+            //     formData.append("images", {
+            //         uri: userPhoto,
+            //         name: "image.jpg",
+            //         type: "image/jpg",
+            //     });
     
-                formData.append('product_id', response_product.data.id)
+            //     formData.append('product_id', response_product.data.id)
                
-                const response = await api.post('/products/images', formData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                    },
-                    transformRequest: (data, headers) => {                        
-                        return formData;
-                    },
-                });
+            //     const response = await api.post('/products/images', formData, {
+            //         headers: {
+            //             'Content-Type': 'multipart/form-data',
+            //         },
+            //         transformRequest: (data, headers) => {                        
+            //             return formData;
+            //         },
+            //     });
 
-                const title = 'Salvo com sucesso';
-                toast.show({    
-                    title,
-                    placement: 'top',
-                    bgColor: 'green.500'
-                })   
+            //     const title = 'Salvo com sucesso';
+            //     toast.show({    
+            //         title,
+            //         placement: 'top',
+            //         bgColor: 'green.500'
+            //     })   
                 
-                handleOpenPreview();
+            //     handleOpenPreview();
 
-                return
+            //     return
 
-            } else {
-                throw new Error();
-            }         
+            // } else {
+            //     throw new Error();
+            // }         
                   
         } catch (error) {
             setIsLoading(false);

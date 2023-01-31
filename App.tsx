@@ -5,7 +5,7 @@ import { Loading } from '@components/Loading';
 
 import { Theme } from './src/theme';
 
-import {AuthContext, AuthContextProvider} from '@contexts/AuthContext';
+import { AuthContextProvider} from '@contexts/AuthContext';
 
 import { Routes } from './src/routes';
 
@@ -30,7 +30,6 @@ export default function App() {
       <AuthContextProvider>
         { fontsloaded ? <Routes/> : <Loading/>}
       </AuthContextProvider>
-      
             
     </NativeBaseProvider>
   );

@@ -32,13 +32,12 @@ export type AppTabNavigatorRoutesProps = BottomTabNavigationProp<AppRoutes>;
 
 const { Navigator, Screen } = createBottomTabNavigator<AppRoutes>();
 
-
 export function Tab() {
 
-  const { sizes, colors } = useTheme();
-  const { signOut } = useAuth();
-  const iconSize = sizes[6];
-
+    const { sizes, colors } = useTheme();
+    const { signOut } = useAuth();
+    const iconSize = sizes[6];
+    
   return (
     <Navigator screenOptions={{ 
         headerShown: false,
@@ -77,7 +76,7 @@ export function Tab() {
                 tabBarIcon: ({color}) => (
                     <SignOut color={color} size={iconSize} />
                 ),
-            }}
+            }}           
 
             listeners={{
                 tabPress: (e) => {

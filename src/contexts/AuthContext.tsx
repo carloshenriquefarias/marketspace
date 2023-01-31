@@ -2,11 +2,10 @@ import { createContext, ReactNode, useEffect, useState } from "react";
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { storageUserGet, storageUserSave, storageUserRemove } from '@storage/storageUser';
-import { storageAuthTokenGet, storageAuthTokenRemove, 
-  storageAuthTokenSave } from "@storage/storageAuthToken"
-;
+import { storageAuthTokenGet, storageAuthTokenRemove, storageAuthTokenSave } from "@storage/storageAuthToken";
 import { UserDTO } from "@dtos/UserDTO";
 import { api } from "@services/api";
+// import { SignOutModal } from "@components/SignOutModal";
 
 export type AuthContextDataProps = {
   user: UserDTO;
@@ -25,6 +24,12 @@ export function AuthContextProvider({children} : AuthContextProviderProps){
 
   const [user, setUser] = useState<UserDTO>({} as UserDTO);
   const [isLoadingUserStorageData, setIsLoadingUserStorageData] = useState(true);
+  const [visibleModal, setVisibleModal] = useState(false);
+
+
+  function handleOpenModal() {
+    setVisibleModal(true);
+  }
 
   async function storageUserAndTokenSave(userData: UserDTO, token: string) {
 
@@ -84,7 +89,20 @@ export function AuthContextProvider({children} : AuthContextProviderProps){
   }
 
   async function signOut () {  
+
+    //QUANDO ESTA FUNÇÃO FOR CHAMADA ABRA O MODAL PERGUNTANDO: SIM OU NAO.
+    //SE SIM, EXECUTE A FUNÇÃO SIGNOUT, SE NÃO VOLTE PARA TELA ONDE ESTAVA
+
+    // handleOpenModal();
+
     try {
+
+      // handleOpenModal();
+
+      // {(visibleModal) ?
+      //   <SignOutModal />
+      // :null}
+
       setIsLoadingUserStorageData(true);
       setUser({} as UserDTO);
       await storageUserRemove();
@@ -113,5 +131,6 @@ export function AuthContextProvider({children} : AuthContextProviderProps){
     >
       {children}
     </AuthContext.Provider>
+    
   )
 }
