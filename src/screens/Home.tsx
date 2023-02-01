@@ -78,12 +78,12 @@ export function Home(){
         <ScrollView 
             contentContainerStyle={{ flexGrow: 1 }} 
             showsVerticalScrollIndicator={false}
+            backgroundColor="gray.100"
         >
             <VStack  
                 mt={50}                         
                 flex={1}                        
                 px={6}                         
-                backgroundColor="gray.200" 
             >
                 <HStack justifyContent="space-between">
 
@@ -170,11 +170,14 @@ export function Home(){
                     typeInput={"filter"}
                     fulanodetal={handleOpenModal}
                 />
+            </VStack>
 
-                {/* <FlatList //VER ERRO DE ID NA FLATLIST
+            <VStack pr={4} pl={6} backgroundColor="gray.100">
+                <FlatList //VER ERRO DE ID NA FLATLIST
                     data={product}
                     keyExtractor={item => item.id}
                     numColumns={2}
+
                     renderItem={({ item }) => (
                         <Product                    
                             image='source={{ uri: userPhoto }}'
@@ -184,58 +187,19 @@ export function Home(){
                             avatar='source={{ uri: userPhoto }}'
                         />                      
                     )}
+
                     w='full' 
                     showsVerticalScrollIndicator={false}
                     _contentContainerStyle={{
                         paddingBottom: 20
                     }}
-                /> */}
-               
-                {(visibleModal) ?
-                    <FilterModal />
-                :null}
-
-            </VStack>                        
+                />
+            </VStack>
+            
+            {(visibleModal) ?
+                <FilterModal title='NOVO'/>
+            :null}
+                                    
         </ScrollView>
     )
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- {/* <FlatList
-    pt={4}
-    mb={10}
-    data={product}
-    keyExtractor={(item) => item.id}
-    
-    renderItem={({ item }) => (
-        <Product                    
-            image='source={{ uri: userPhoto }}'
-            title='Tenis vermelho'
-            price={50}
-            status='NOVO'
-            avatar='source={{ uri: userPhoto }}'
-            item={item}
-            onPress={() => handleProductDetails(item.id)}
-        /> 
-    )}
-    
-    numColumns={2}
-    columnWrapperStyle={{ flex: 1, justifyContent: 'space-between' }}
-    showsVerticalScrollIndicator={false}
-    ItemSeparatorComponent={() => <Box py={3} />}
-    ListFooterComponent={<Box my={10} />}
-/> */}
