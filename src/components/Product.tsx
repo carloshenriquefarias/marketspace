@@ -3,16 +3,10 @@ import { useState } from 'react';
 
 import BackgroundImg from '@assets/produto_1.png';
 import { Status } from './Status';
+import { ProductDTO } from '@dtos/ProductDTO'
+import { baseURL } from "@services/api"
 
-type PropsProduct = {
-    image: string;
-    status: 'NOVO' | 'USADO';
-    avatar: string;
-    title: string;
-    price: number;
-};
-
-export function Product({image, status = 'NOVO', avatar, title, price, ...rest}: PropsProduct){
+export function Product({product_images, status = 'NOVO', avatar, title, price, ...rest}: ProductDTO){
 
     const [userPhoto, setUserPhoto] = useState('https://github.com/JRSparrowII.png');
 
@@ -37,7 +31,7 @@ export function Product({image, status = 'NOVO', avatar, title, price, ...rest}:
                             w='full'
                             h='full' 
                             rounded="lg"                       
-                            source={BackgroundImg}
+                            source={{ uri: baseURL()+ '/images/'+  product_images[0].path}}
                             alt="Tenis vermelho"              
                             resizeMode="cover"         
                         />
