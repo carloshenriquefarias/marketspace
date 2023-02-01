@@ -58,7 +58,7 @@ export function Preview(){
 
             handleGoHome();
 
-        } catch(error){
+        } catch(error) {
 
             const isAppError = error instanceof AppError;
             const title = isAppError ? error.message : 
@@ -74,29 +74,29 @@ export function Preview(){
         }
     }
 
-    async function fetchAds() {
+    // async function fetchAds() {
        
-        try {
-            const adLoad = await storageAdsGet();
-            // setAdData(adLoad);
-            // console.log(adLoad);
+    //     try {
+    //         const adLoad = await storageAdsGet();
+    //         // setAdData(adLoad);
+    //         // console.log(adLoad);
         
-        }   catch (error) {
+    //     }   catch (error) {
 
-            const isAppError = error instanceof AppError;
-            const title = isAppError ? error.message : 'Não foi possível carregar os produtos';
+    //         const isAppError = error instanceof AppError;
+    //         const title = isAppError ? error.message : 'Não foi possível carregar os produtos';
         
-            toast.show({
-                title,
-                placement: 'top',
-                bgColor: 'red.500'
-            })
-        }
-    }
+    //         toast.show({
+    //             title,
+    //             placement: 'top',
+    //             bgColor: 'red.500'
+    //         })
+    //     }
+    // }
 
-    useEffect(() => {
-        fetchAds();
-    },[])
+    // useEffect(() => {
+    //     fetchAds();
+    // },[])
 
     return(
         <HStack>      

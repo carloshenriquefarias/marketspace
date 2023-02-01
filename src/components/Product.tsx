@@ -20,7 +20,8 @@ export function Product({image, status = 'NOVO', avatar, title, price, ...rest}:
                
         <VStack
            w={'50%'}
-           pr={3}
+           pr={2}
+           backgroundColor="gray.100"
         >        
             <Pressable>
                 
@@ -41,6 +42,7 @@ export function Product({image, status = 'NOVO', avatar, title, price, ...rest}:
                             resizeMode="cover"         
                         />
                     </VStack>
+
                     <HStack 
                         justifyContent="space-between" 
                         mt={0} 

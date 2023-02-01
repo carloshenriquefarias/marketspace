@@ -3,14 +3,16 @@ import { AppTabNavigatorRoutesProps } from '@routes/app.tab.routes';
 import { useNavigation} from '@react-navigation/native';
 
 import { Text, HStack, VStack, ScrollView, CheckIcon, useTheme, Box, Select, 
-    Center, FlatList, IconButton } from 'native-base'
+    Center, FlatList, IconButton, useToast } from 'native-base'
 ;
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { Plus } from 'phosphor-react-native';
 
 import { Product } from '@components/Product';
+import { api } from '@services/api';
+import { AppError } from '@utils/AppError';
 
 type ActiveTypes = 'todos' | 'ativos' | 'inativos';
 
@@ -46,6 +48,8 @@ export function MyAds(){
     const navigation = useNavigation<AppNavigatorRoutesProps>();  
     const navigationTab = useNavigation<AppTabNavigatorRoutesProps>(); 
     const {colors, sizes} = useTheme();
+    const toast = useToast();
+
     const [active, setActive] = useState<ActiveTypes>('todos');
     const [userPhoto, setUserPhoto] = useState('https://github.com/JRSparrowII.png'); 
     const [product, setProduct] = useState<string[]>([
@@ -75,13 +79,36 @@ export function MyAds(){
         navigation.navigate('newad');
     } 
 
+    async function fetchMyAds() {
+       
+        try {
+          const response = await api.get('/products');
+          setProduct(response.data);
+            //   console.log(response.data);
+    
+        } catch (error) {
+          const isAppError = error instanceof AppError;
+          const title = isAppError ? error.message : 'Não foi possível carregar os produtos';
+    
+          toast.show({
+            title,
+            placement: 'top',
+            bgColor: 'red.500'
+          })
+        }
+    }
+
+    useEffect(() => {
+        fetchMyAds();
+    },[])
+
     return(
         <ScrollView 
             contentContainerStyle={{ flexGrow: 1 }} 
-            showsVerticalScrollIndicator={false}>
-
-            
-            <VStack padding={8} >
+            showsVerticalScrollIndicator={false}
+            backgroundColor="gray.100"
+        >            
+            <VStack padding={6} backgroundColor="gray.100">
 
                 <HStack 
                     justifyContent="space-between" 
@@ -114,7 +141,7 @@ export function MyAds(){
                 </HStack>              
             </VStack> 
 
-            {/* <VStack>            
+            <VStack pr={4} pl={6} backgroundColor="gray.100">            
                 <FlatList 
                     data={product}
                     keyExtractor={item => item.id}
@@ -134,7 +161,7 @@ export function MyAds(){
                         paddingBottom: 20
                     }}
                 /> 
-            </VStack> */}
+            </VStack>
         </ScrollView>       
     )        
 }

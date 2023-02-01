@@ -29,8 +29,8 @@ export function Routes() {
   return (
     <Box flex={1} bg="gray.200"> 
         <NavigationContainer theme={theme}>
-          <Preview/>
-          {/* {user.id ? <AppRoutes/> : <AuthRoutes/>} */}
+          {/* <Preview/> */}
+          {user.id ? <AppRoutes/> : <AuthRoutes/>}
           {/* <AppRoutes/>           */}
         </NavigationContainer>
     </Box>

@@ -26,8 +26,7 @@ import * as ImagePicker from 'expo-image-picker';
 
 import { api } from '@services/api';
 import { AppError } from '@utils/AppError';
-import { SwitchsAtual } from './Switchs';
-import { CheckBoxAtual } from '@components/Checkboxes';
+
 import { InputNewAd } from '@components/InputNewAd';
 import { storageAdsGet, storageAdsSave } from '@storage/storageAds';
 
