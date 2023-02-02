@@ -7,9 +7,10 @@ import { MaterialIcons } from "@expo/vector-icons";
 type Props = IInputProps & {
   errorMessage?: string | null; 
   typeInput?: null | 'password';
+  size?: 'normal' | 'high';
 }
 
-export function Input({ typeInput = null, errorMessage = null, isInvalid, size, ...rest }: Props) {
+export function Input({ typeInput = null, errorMessage = null, isInvalid, size = 'normal', ...rest }: Props) {
   
     const invalid = !!errorMessage || isInvalid;
     const [noShow, setNoShow] = React.useState(false);
@@ -19,7 +20,8 @@ export function Input({ typeInput = null, errorMessage = null, isInvalid, size, 
 
             <NativeBaseInput 
                 bg="white"                
-                h={14}
+                // h={14}
+                h={size === "normal" ? '14' : '40'}  
                 px={4}
                 borderWidth={0}
                 fontSize="md"

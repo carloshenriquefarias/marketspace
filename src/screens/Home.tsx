@@ -74,7 +74,6 @@ export function Home(){
     },[])
 
     return(
-
         <ScrollView 
             contentContainerStyle={{ flexGrow: 1 }} 
             showsVerticalScrollIndicator={false}
@@ -117,12 +116,7 @@ export function Home(){
                     />                    
                 </HStack>  
 
-                <Text 
-                    color="gray.500"
-                    mt={10}
-                >
-                    Seus produtos anunciados para vendas
-                </Text>
+                <Text color="gray.500" mt={10}>Seus produtos anunciados para vendas</Text>
 
                 <Box
                     bg="blue.100" 
@@ -159,12 +153,7 @@ export function Home(){
                     </HStack>                    
                 </Box>
 
-                <Text 
-                    color="gray.500"
-                    mt={10}
-                >
-                    Compre produtos variados
-                </Text>
+                <Text color="gray.500" mt={10}>Compre produtos variados</Text>
                 
                 <InputFilter
                     typeInput={"filter"}

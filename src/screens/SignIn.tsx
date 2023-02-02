@@ -1,7 +1,7 @@
 import { Input } from '@components/Input'
 import { ButtonDefault } from '@components/Button'
 import { Loading } from '@components/Loading'
-import { VStack, Text, Center, Heading, ScrollView, useToast} from "native-base";
+import { VStack, Text, Center, Heading, ScrollView, useToast, Button, HStack} from "native-base";
 
 import { AuthNavigatorRoutesProps } from '@routes/auth.routes';
 import { useNavigation } from "@react-navigation/native";
@@ -12,9 +12,13 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import LogoSvg from '@assets/logo.svg';
+import GoogleSvg from '@assets/google.svg';
+import AppleSvg from '@assets/apple.svg';
+
 import { AppError } from '@utils/AppError';
 
 import { useState } from 'react';
+import { Platform } from 'react-native';
 
 type FormDataProps = {    
     email: string;    
@@ -31,7 +35,11 @@ export function SignIn() {
     const { control, handleSubmit, formState: { errors } } = useForm<FormDataProps>({
         resolver: yupResolver(signInSchema),
     });
-    const { signIn } = useAuth();
+
+    const { signIn, 
+        signInWithGoogle,  signInWithApple,
+    } = useAuth();
+
     const toast = useToast();
     const [isLoading, setIsLoading] = useState(false);
 
@@ -59,7 +67,47 @@ export function SignIn() {
                 bgColor: 'red.500',
             });           
         }         
-    }    
+    }   
+    
+    async function handleSignInWithGoogle() {
+        try {
+          setIsLoading(true);
+          return await signInWithGoogle();
+
+        } catch (error) {
+
+            const isAppError = error instanceof AppError
+            const title = isAppError ? error.message : 'Não foi possível conectar a conta Google'
+           
+            setIsLoading(false)
+
+            toast.show({
+                title,
+                placement: 'top',
+                bgColor: 'red.500',
+            });           
+        }
+    }
+
+    async function handleSignInWithApple() {
+        try {
+          setIsLoading(true);
+          return await signInWithApple();
+
+        } catch (error) {
+
+            const isAppError = error instanceof AppError
+            const title = isAppError ? error.message : 'Não foi possível conectar a conta Apple'
+           
+            setIsLoading(false)
+
+            toast.show({
+                title,
+                placement: 'top',
+                bgColor: 'red.500',
+            });           
+        }
+    }
 
     return (
         <ScrollView 
@@ -73,8 +121,7 @@ export function SignIn() {
                     rounded={50}
                     mt={60}
                 >                  
-                    <Center mb={16}>
-
+                    <Center mb={5}>
                         <LogoSvg />
 
                         <Text color="gray.700" fontSize="35px" fontFamily="heading">
@@ -84,7 +131,6 @@ export function SignIn() {
                         <Text color="gray.400" fontSize="sm">
                             Seu espaço de compra e venda
                         </Text>
-
                     </Center>
 
                     <Center >
@@ -101,7 +147,6 @@ export function SignIn() {
                                 onChangeText={onChange}
                                 keyboardType="email-address"
                                 autoCapitalize="none" 
-                                // iconInput="icon"
                                 value={value}                             
                                 errorMessage={errors.email?.message}
                             />
@@ -128,11 +173,62 @@ export function SignIn() {
                             variant="base1" 
                             onPress={handleSubmit(handleSignIn)} 
                             isLoading={isLoading}                     
-                        />
-                        
-                    </Center>
-                
+                        />                        
+                    </Center>                
                 </VStack>
+
+                <VStack 
+                    flex={1} 
+                    px={10}  
+                    backgroundColor="gray.100"
+                    mt={5}
+                >
+                    <Center>  
+                        <Text color="gray.700" fontSize="md" mb={3} fontFamily="body" mt={3}>
+                            Ou entrar com
+                        </Text>  
+
+                        <Button
+                            w={'100%'}
+                            h={16}
+                            bg="gray.300"
+                            rounded={30}
+                            onPress={handleSignInWithGoogle}
+                            _pressed={{bg:'gray.400' }}
+                        >
+                            <HStack 
+                                justifyContent="space-between" 
+                                alignItems="center" 
+                                space={4}                      
+                            >
+                                <GoogleSvg />
+                                <Text color="gray.700" fontWeight="bold" fontSize={14}>Minha conta Google</Text>
+                            </HStack>       
+                        </Button>                
+
+                        {   
+                            Platform.OS === 'ios' &&          
+                            <Button
+                                w={'100%'}
+                                h={16}
+                                bg="gray.300"
+                                rounded={30}
+                                onPress={handleSignInWithApple} 
+                                mt={5}
+                                _pressed={{bg:'gray.400' }}
+                            >
+                                <HStack 
+                                    justifyContent="space-between" 
+                                    alignItems="center" 
+                                    space={4}                      
+                                >
+                                    <AppleSvg />
+                                    <Text color="gray.700" fontWeight="bold" fontSize={14}>Minha conta Apple</Text>
+                                </HStack>       
+                            </Button>    
+                        }   
+                    </Center>
+                </VStack> 
 
                 <VStack 
                     flex={1} 
@@ -140,8 +236,8 @@ export function SignIn() {
                     backgroundColor="white"
                     mt={60}
                 >
-                    <Center>
-                        <Text color="gray.700" fontSize="sm" mb={3} fontFamily="body" mt={10}>
+                    <Center mb={10}>
+                        <Text color="gray.700" fontSize="sm" mb={3} fontFamily="body" mt={5}>
                             Ainda não tem acesso?
                         </Text>
 
@@ -150,14 +246,10 @@ export function SignIn() {
                             size="total"   
                             variant="default"  
                             onPress={handleNewAccount}                
-                        />
+                        />                        
                     </Center>
-
                 </VStack>  
-
-            </VStack>          
-
+            </VStack>       
         </ScrollView>
-
     );
 }

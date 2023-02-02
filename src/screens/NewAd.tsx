@@ -46,7 +46,7 @@ type ImageGroup = {
 
 const NewAdSchema = yup.object({
     title: yup.string().required('Informe o título do produto'),
-    //description: yup.string().required('Descreva como é o seu produto'),
+    description: yup.string().required('Descreva como é o seu produto'),
     amount: yup.string().required('Digite o preço do seu produto'),
     //swap: yup.string().required('Escolha se aceita a troca ou não'),
     //method_payment: yup.string().required('Escolha seu metodo de pagamento'),
@@ -57,8 +57,9 @@ export function NewAd(){
     const { control, handleSubmit, formState: { errors } } = useForm<NewAdData>({
         resolver: yupResolver(NewAdSchema),
     });
-    const [ imageUpload, setImageUpload] = useState<any>(null);
-    const [ valueRadio, setValueRadio] = useState('1'); //Valor do radio no console log
+
+    // const [ imageUpload, setImageUpload] = useState<any>(null);
+    // const [ valueRadio, setValueRadio] = useState('1'); //Valor do radio no console log
 
     const navigation = useNavigation<AppNavigatorRoutesProps>(); 
     const navigationTab = useNavigation<AppTabNavigatorRoutesProps>(); 
@@ -179,6 +180,17 @@ export function NewAd(){
                 return
             }
 
+            // if ( !statusProduto ) { //PERGUNTAR DO PRISCO COMO E UM VAZIO
+            //     const title = 'Atenção! Por favor, escolha um método de pagamento.';
+
+            //     toast.show({    
+            //         title,
+            //         placement: 'top',
+            //         bgColor: 'blue.500'
+            //     })           
+            //     return
+            // }
+
             if ( !userPhoto ) {
                 const title = 'Atenção! Por favor, escolha uma imagem.';
 
@@ -268,8 +280,8 @@ export function NewAd(){
         
             <ScrollView 
                 contentContainerStyle={{ flexGrow: 1 }} 
-                showsVerticalScrollIndicator={false}>
-                                
+                showsVerticalScrollIndicator={false}
+            >                                
                 <VStack padding={8} backgroundColor='gray.100' flex={1}  pb='28%'>
                     <HStack justifyContent="space-between" pt={5}>
                         <IconButton
@@ -343,7 +355,7 @@ export function NewAd(){
                             control={control}
                             name="description"
                             render={({ field: { onChange, value } }) => (
-                                <TextAreaAtual
+                                <Input 
                                     placeholder="Descrição do anúncio"
                                     onChangeText={onChange}
                                     value={value}          
@@ -351,7 +363,17 @@ export function NewAd(){
                                     autoCapitalize="none"     
                                     secureTextEntry={false}               
                                     errorMessage={errors.description?.message}
-                                /> 
+                                    size="high"
+                                />
+                                // <TextAreaAtual
+                                //     placeholder="Descrição do anúncio"
+                                //     onChangeText={onChange}
+                                //     value={value}          
+                                //     keyboardType="default"
+                                //     autoCapitalize="none"     
+                                //     secureTextEntry={false}               
+                                //     errorMessage={errors.description?.message}
+                                // /> 
                             )}
                         />
 
