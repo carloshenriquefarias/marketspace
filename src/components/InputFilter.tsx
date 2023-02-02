@@ -1,12 +1,9 @@
-import { Input as NativeBaseInput, IInputProps, FormControl, Pressable, Icon, HStack } from 'native-base';
+import { Input as NativeBaseInput, IInputProps, Pressable, Icon, HStack } from 'native-base';
 import { View } from 'react-native';
-import { useState } from "react";
-import { Feather } from '@expo/vector-icons';
 
 import React from "react";
 
-import { MaterialIcons } from "@expo/vector-icons";
-import { Entypo, FontAwesome5, Octicons} from '@expo/vector-icons'; 
+import { Entypo, Octicons} from '@expo/vector-icons'; 
 
 type Props = IInputProps & {
     typeInput?: null | 'filter';
@@ -41,15 +38,15 @@ export function InputFilter({ typeInput = null, fulanodetal }: Props) {
                     <Pressable>
                         <Icon 
                             as={<Octicons name="search" size={24} color="gray.700" />}  
-                            size={6} 
+                            size={5} 
                             mr="2" 
                             color="gray.700" 
                         />
                     </Pressable>
 
                     <View
-                        style={{height:22, width:3, backgroundColor:'lightgray'}}
-                    />           
+                        style={{height:22, width:1, backgroundColor:'lightgray'}}
+                    />            
 
                     <Pressable 
                         onPress={() => fulanodetal()}
@@ -58,7 +55,7 @@ export function InputFilter({ typeInput = null, fulanodetal }: Props) {
                             as={<Entypo name="sound-mix" size={24} color="gray.700" />}
                             ml="2"
                             color="gray.700"
-                            size={6}
+                            size={5}
                         />
                     </Pressable>
                 </HStack>        

@@ -14,19 +14,24 @@ import { UserPhoto } from '@components/UserPhoto';
 import { InputFilter } from '@components/InputFilter' 
 
 import { AppError } from '@utils/AppError';
-import { api } from '@services/api';
+import { api , baseURL } from '@services/api';
 
 import { useAuth } from '@hooks/useAuth'
-import { useAds } from '@hooks/useAds'
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { RFValue } from 'react-native-responsive-fontsize';
+import { SafeAreaView } from 'react-native';
+import { Loading } from '@components/Loading';
+
+import { ProductDTO } from '@dtos/ProductDTO';
 
 export function Home(){
 
     const navigation = useNavigation<AppNavigatorRoutesProps>();
     const {colors, sizes} = useTheme();
     const [visibleModal, setVisibleModal] = useState(false)
+    const [loading, setLoading] = useState(true)
     const [userPhoto, setUserPhoto] = useState('https://github.com/JRSparrowII.png');
-    const [product, setProduct] = useState([]);
+    const [product, setProduct] = useState<ProductDTO[]>([]);
+
     const toast = useToast();
     const { user } = useAuth();
  
@@ -55,7 +60,10 @@ export function Home(){
         try {
           const response = await api.get('/products');
           setProduct(response.data);
-            //   console.log(response.data);
+          setLoading(false)
+
+          console.log(response.data)
+           
     
         } catch (error) {
           const isAppError = error instanceof AppError;
@@ -74,121 +82,140 @@ export function Home(){
     },[])
 
     return(
+        
         <ScrollView 
             contentContainerStyle={{ flexGrow: 1 }} 
             showsVerticalScrollIndicator={false}
             backgroundColor="gray.100"
         >
-            <VStack  
-                mt={50}                         
-                flex={1}                        
-                px={6}                         
-            >
-                <HStack justifyContent="space-between">
-
-                    <HStack justifyContent="space-between">
-                        <UserPhoto 
-                            source={
-                                user.avatar ? {uri: 'http://192.168.1.4:3333/images/' + user.avatar} 
-                                : { 
-                                    uri: userPhoto 
-                                } 
-                            } //Colocar o icone
-
-                            alt="Foto do usuário"
-                            size={10}
-                            mr={2}
-                        />
-
-                        <VStack>
-                            <Text color="black">Boas Vindas, </Text>  
-                            <Text color="black" fontWeight="bold">{user.name}</Text> 
-                        </VStack>
-                                        
-                    </HStack>               
-
-                    <ButtonDefault 
-                        title="Criar Anúncio" 
-                        size="half"                             
-                        variant="base2" 
-                        onPress={handleNewAd}
-                        leftIcon={<Plus size={sizes[5]} color={colors.gray[200]} />}                 
-                    />                    
-                </HStack>  
-
-                <Text color="gray.500" mt={10}>Seus produtos anunciados para vendas</Text>
-
-                <Box
-                    bg="blue.100" 
-                    mt={5}          
-                    rounded={5}   
-                    h={20}                          
+            <SafeAreaView>
+                <VStack  
+                    mt={50}                         
+                    flex={1}                        
+                    px={6}                         
                 >
-                    <HStack justifyContent="space-between" alignItems="center" padding={3}>
-                        <HStack 
-                            justifyContent="space-between" 
-                            alignItems="center"                                                
-                        >
-                            <Tag color={colors.blue[500]} size={sizes[7]} />
+                    <HStack justifyContent="space-between">
 
-                            <VStack ml={4}>
-                                <Text color="gray.600" fontSize={20} fontWeight="bold" lineHeight={'2xl'}>
-                                    4
-                                </Text>  
-                                <Text color="black" fontSize={12}>anuncios ativos</Text> 
+                        <HStack justifyContent="space-between">
+                            <UserPhoto 
+                                source={
+                                    user.avatar ? {uri: baseURL() + '/images/' + user.avatar} 
+                                    : { 
+                                        uri: userPhoto 
+                                    } 
+                                } //Colocar o icone
+
+                                alt="Foto do usuário"
+                                size={12}
+                                mr={2}
+                            />
+
+                            <VStack>
+                                <Text color="black" fontSize={RFValue(13)}>Boas Vindas, </Text>  
+                                <Text color="black" fontFamily="heading" fontSize={RFValue(14)} fontWeight="700">{user.name}</Text> 
                             </VStack>
-                        </HStack>
+                                            
+                        </HStack>               
 
-                        <Pressable onPress={handleMyAds}>
+                        <ButtonDefault 
+                            title="Criar Anúncio" 
+                            size="half"                             
+                            variant="base2" 
+                            onPress={handleNewAd}
+                            leftIcon={<Plus size={sizes[5]} color={colors.gray[200]} />}                 
+                        />                    
+                    </HStack>  
+
+                    <Text 
+                        color="gray.500"
+                        mt={10}
+                    >
+                        Seus produtos anunciados para vendas
+                    </Text>
+
+                    <Box
+                        bg="blue.100" 
+                        mt={5}          
+                        rounded={5}   
+                        h={20}                          
+                    >
+                        <HStack justifyContent="space-between" alignItems="center" padding={3}>
                             <HStack 
                                 justifyContent="space-between" 
-                                alignItems="center" 
-                                space={1}                      
+                                alignItems="center"                                                
                             >
-                                <Text color="blue.700" fontWeight="bold" fontSize={13}>Meus anuncios </Text>
-                                <ArrowRight color={colors.blue[500]} size={sizes[5]}/>
-                            </HStack>   
-                        </Pressable>
-                                              
-                    </HStack>                    
-                </Box>
+                                <Tag color={colors.blue[500]} size={sizes[7]} />
 
-                <Text color="gray.500" mt={10}>Compre produtos variados</Text>
+                                <VStack ml={4}>
+                                    <Text color="gray.600" fontFamily={'heading'} fontSize={RFValue(20)} fontWeight="bold" lineHeight={'md'}>
+                                        4
+                                    </Text>  
+                                    <Text color="black" fontSize={RFValue(12)}>anúncios ativos</Text> 
+                                </VStack>
+                            </HStack>
+
+                            <Pressable onPress={handleMyAds}>
+                                <HStack 
+                                    justifyContent="space-between" 
+                                    alignItems="center" 
+                                    space={1}                      
+                                >
+                                    <Text color="blue.700" fontFamily={'heading'} fontWeight="bold" fontSize={RFValue(13)}>Meus anúncios </Text>
+                                    <ArrowRight color={colors.blue[500]} size={sizes[5]}/>
+                                </HStack>   
+                            </Pressable>
+                                                
+                        </HStack>                    
+                    </Box>
+
+                    <Text 
+                        color="gray.500"
+                        mt={10}
+                    >
+                        Compre produtos variados
+                    </Text>
+                    
+                    <InputFilter
+                        typeInput={"filter"}
+                        fulanodetal={handleOpenModal}
+                    />
+                </VStack>
+
+                <VStack pr={4} pl={6} backgroundColor="gray.100">
+                    {(loading) ?
+                    <Loading 
+                        bgColor='white'                      
+                    />    
+                    :
+                    <FlatList //VER ERRO DE ID NA FLATLIST
+                        data={product}
+                        keyExtractor={item => item.id}
+                        numColumns={2}
+
+                        renderItem={({ item }) => (
+                            <Product                    
+                                product_images={item.product_images}
+                                title='Tenis vermelho'
+                                price={50}
+                                status='NOVO'
+                                avatar='source={{ uri: userPhoto }}'
+                            />                      
+                        )}
+
+                        w='full' 
+                        showsVerticalScrollIndicator={false}
+                        _contentContainerStyle={{
+                            paddingBottom: 20
+                        }}
+                    /> 
+                    }
+                </VStack>
                 
-                <InputFilter
-                    typeInput={"filter"}
-                    fulanodetal={handleOpenModal}
-                />
-            </VStack>
-
-            <VStack pr={4} pl={6} backgroundColor="gray.100">
-                <FlatList //VER ERRO DE ID NA FLATLIST
-                    data={product}
-                    keyExtractor={item => item.id}
-                    numColumns={2}
-
-                    renderItem={({ item }) => (
-                        <Product                    
-                            image='source={{ uri: userPhoto }}'
-                            title='Tenis vermelho'
-                            price={50}
-                            status='NOVO'
-                            avatar='source={{ uri: userPhoto }}'
-                        />                      
-                    )}
-
-                    w='full' 
-                    showsVerticalScrollIndicator={false}
-                    _contentContainerStyle={{
-                        paddingBottom: 20
-                    }}
-                />
-            </VStack>
-            
             {(visibleModal) ?
                 <FilterModal title='NOVO'/>
             :null}
-                                    
+        </SafeAreaView>                            
         </ScrollView>
+        
     )
 }

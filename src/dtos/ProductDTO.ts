@@ -1,4 +1,4 @@
-export type AdsDTO = {
+export type ProductDTO = {
     id?: string;
     name: string;
     description: string;
@@ -6,11 +6,15 @@ export type AdsDTO = {
     is_new: boolean;
     accept_trade: boolean;
     payment_methods: string[];
-    images: ImageStyleProps[]; 
+    product_images: ImageStyleProps[]; 
+    user: UserProps;
 };
 
 export type ImageStyleProps = {
-    uri: string;
-    type: string;
+    id: string;
+    path: string;
 };
-  
+
+export type UserProps = {
+    avatar: string;
+};

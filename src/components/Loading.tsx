@@ -1,8 +1,12 @@
-import {Spinner, Center} from 'native-base'
+import { Spinner, Center } from 'native-base'
 
-export function Loading(){
+type IProps = {
+    bgColor?: string;
+}
+
+export function Loading( { bgColor } : IProps ){
     return (
-        <Center flex={1} bg="gray.700">
+        <Center flex={1} bg={(bgColor) ? bgColor : "gray.700" } >
             <Spinner color="blue.500"/>
         </Center>
         
