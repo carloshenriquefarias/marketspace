@@ -60,10 +60,8 @@ export function Home(){
         try {
           const response = await api.get('/products');
           setProduct(response.data);
-          setLoading(false)
-
+          setLoading(false) 
           console.log(response.data)
-           
     
         } catch (error) {
           const isAppError = error instanceof AppError;
@@ -178,36 +176,37 @@ export function Home(){
                     <InputFilter
                         typeInput={"filter"}
                         fulanodetal={handleOpenModal}
+                           
                     />
                 </VStack>
 
                 <VStack pr={4} pl={6} backgroundColor="gray.100">
                     {(loading) ?
-                    <Loading 
-                        bgColor='white'                      
-                    />    
-                    :
-                    <FlatList //VER ERRO DE ID NA FLATLIST
-                        data={product}
-                        keyExtractor={item => item.id}
-                        numColumns={2}
+                        <Loading 
+                            bgColor='white'                      
+                        />    
+                        :
+                        <FlatList //VER ERRO DE ID NA FLATLIST
+                            data={product}
+                            keyExtractor={item => item.id}
+                            numColumns={2}
 
-                        renderItem={({ item }) => (
-                            <Product                    
-                                product_images={item.product_images}
-                                title='Tenis vermelho'
-                                price={50}
-                                status='NOVO'
-                                avatar='source={{ uri: userPhoto }}'
-                            />                      
-                        )}
+                            renderItem={({ item }) => (
+                                <Product                    
+                                    product_images={item.product_images}
+                                    name='Tenis vermelho'
+                                    price={50}
+                                    is_new={item.is_new}
+                                    user={item.user}
+                                />                      
+                            )}
 
-                        w='full' 
-                        showsVerticalScrollIndicator={false}
-                        _contentContainerStyle={{
-                            paddingBottom: 20
-                        }}
-                    /> 
+                            w='full' 
+                            showsVerticalScrollIndicator={false}
+                            _contentContainerStyle={{
+                                paddingBottom: 20
+                            }}
+                        /> 
                     }
                 </VStack>
                 

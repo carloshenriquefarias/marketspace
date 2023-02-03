@@ -6,7 +6,7 @@ import { Status } from './Status';
 import { ProductDTO } from '@dtos/ProductDTO'
 import { baseURL } from "@services/api"
 
-export function Product({product_images, status = 'NOVO', avatar, title, price, ...rest}: ProductDTO){
+export function Product({product_images, is_new, user, name, price, ...rest}: ProductDTO){
 
     const [userPhoto, setUserPhoto] = useState('https://github.com/JRSparrowII.png');
 
@@ -31,7 +31,8 @@ export function Product({product_images, status = 'NOVO', avatar, title, price, 
                             w='full'
                             h='full' 
                             rounded="lg"                       
-                            source={{ uri: baseURL()+ '/images/'+  product_images[0].path}}
+                            source={{ uri: (product_images[0]) 
+                                ? baseURL()+ '/images/'+  product_images[0].path : userPhoto }}
                             alt="Tenis vermelho"              
                             resizeMode="cover"         
                         />
@@ -44,18 +45,18 @@ export function Product({product_images, status = 'NOVO', avatar, title, price, 
                         padding={2}
                         top={-120}
                     >
-                        <Avatar h={6} w={6} rounded="full" bg="gray.100" source={{ uri: userPhoto }}>
-                            {avatar}
+                        <Avatar h={6} w={6} rounded="full" bg="gray.100" 
+                            source={{ uri: baseURL() + '/images/'+ user.avatar }}
+                        >
+                            
                         </Avatar>
 
-                        <Status variant='New' title='Novo'/>
-
-                    </HStack>   
-                    
+                        <Status variant={is_new ? 'New' : 'Used'} name={is_new} />
+                    </HStack>                       
                 </VStack>
             </Pressable>
 
-            <Text fontSize={15} mt={2}>{title}</Text>  
+            <Text fontSize={15} mt={2}>{name}</Text>  
 
             <Text fontSize={20} fontWeight="bold"> {price} </Text> 
         </VStack>        

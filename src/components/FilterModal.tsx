@@ -33,14 +33,20 @@ export function FilterModal({ title, variant = 'New'}: Props) {
     const {colors, sizes} = useTheme();
     
     return <>
-        <Modal isOpen={modalVisible} onClose={() => setModalVisible(false)} initialFocusRef={initialRef} finalFocusRef={finalRef}>
-            <Modal.Content>
+        <Modal 
+            isOpen={modalVisible} 
+            onClose={() => setModalVisible(false)} 
+            initialFocusRef={initialRef} 
+            finalFocusRef={finalRef}
+          
+        >
+            <Modal.Content w="full" mt={250}>
                 <Modal.CloseButton />
-                <Modal.Header fontWeight="bold" color="gray.700">Filtrar Anúncios</Modal.Header>
+                <Modal.Header borderBottomColor="none" fontWeight="bold" color="gray.700" fontFamily="heading">Filtrar Anúncios</Modal.Header>
 
                 <Modal.Body>
                     <FormControl>
-                        <FormControl.Label fontWeight="bold" colorScheme="gray.700">
+                        <FormControl.Label fontWeight="bold" colorScheme="gray.700" fontFamily="heading">
                             Condição
                         </FormControl.Label>
 
@@ -50,7 +56,7 @@ export function FilterModal({ title, variant = 'New'}: Props) {
                             fontSize={5} 
                             rounded={10}
                             h={6}
-                            w={'26%'} 
+                            w={'22%'} 
                             pl={2} pr={2} pt={.5}
                             justifyContent="space-between"
                         >
@@ -77,7 +83,7 @@ export function FilterModal({ title, variant = 'New'}: Props) {
                         </HStack>
 
                         <VStack>
-                            <FormControl.Label fontWeight="bold" color="gray.700" mt={2}>
+                            <FormControl.Label fontWeight="bold" color="gray.700" mt={2} fontFamily="heading">
                                 Aceita troca?
                             </FormControl.Label>
 
@@ -85,7 +91,7 @@ export function FilterModal({ title, variant = 'New'}: Props) {
                         </VStack>
 
                         <VStack>
-                            <FormControl.Label fontWeight="bold" color="gray.700" mb={3}>
+                            <FormControl.Label fontWeight="bold" color="gray.700" mb={3} fontFamily="heading">
                                 Meios de pagamentos aceitos:
                             </FormControl.Label>
 

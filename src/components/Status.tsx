@@ -3,18 +3,14 @@ import { useTheme } from 'native-base';
 import { X } from 'phosphor-react-native';
 
 type Props = {
-  title: string;
+  name: boolean;
   variant?: 'New' | 'Used';
 }
 
-export function Status({ title, variant = 'New'}: Props) {
+export function Status({ name, variant = 'New'}: Props) {
 
   const {colors, sizes} = useTheme();
-
-  function handleCloseCondition(){
-
-  }
-
+  
   return (
     <HStack
       bg={variant === 'New' ? 'blue.500' :  'gray.300'} 
@@ -33,18 +29,9 @@ export function Status({ title, variant = 'New'}: Props) {
           fontWeight="bold"
           fontSize={14} 
         >
-          {title}
+          {(name) ? 'NOVO' : 'USADO'}
         </Text> 
-      </Box>       
-
-      {/* <Box bg="gray.200" rounded={50} size={3} alignItems="center" mt={1}>
-        <IconButton
-          icon={<X size={sizes[2]} color={colors.gray[600]} weight="bold"/>}
-          onPress={handleCloseCondition}
-          mt={-2}
-          pl={3.5}
-        /> 
-      </Box> */}
+      </Box>
                                   
     </HStack>
   );

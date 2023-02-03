@@ -3,7 +3,7 @@ import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 
 import { useContext } from 'react';
 
-import { Preview } from '@screens/Preview';
+import { ImageSlider} from '@screens/testeslide';
 
 import {useAuth} from '@hooks/useAuth';
 import {useAds} from '@hooks/useAds';
@@ -29,7 +29,7 @@ export function Routes() {
   return (
     <Box flex={1} bg="gray.200"> 
         <NavigationContainer theme={theme}>
-          {/* <Preview/> */}
+          {/* <ImageSlider/> */}
           {user.id ? <AppRoutes/> : <AuthRoutes/>}
           {/* <AppRoutes/>           */}
         </NavigationContainer>
