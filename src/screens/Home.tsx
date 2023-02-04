@@ -181,7 +181,8 @@ export function Home(){
                 </VStack>
 
                 <VStack pr={4} pl={6} backgroundColor="gray.100">
-                    {(loading) ?
+                    { (1===1) ?
+                    //(loading) ?
                         <Loading 
                             bgColor='white'                      
                         />    

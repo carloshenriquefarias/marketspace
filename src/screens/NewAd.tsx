@@ -6,8 +6,10 @@ import React from "react";
 import { useState } from 'react';
 
 import { Text, HStack, VStack, Button, Box, useTheme, Switch, 
-   ScrollView, IconButton, Avatar, useToast, Alert , Radio, Checkbox } from 'native-base'
-;
+   ScrollView, IconButton, Avatar, useToast, Alert , Radio, Checkbox,
+   Container,
+   FormControl, WarningOutlineIcon, Center, NativeBaseProvider
+} from 'native-base';
 
 import { useForm, Controller } from 'react-hook-form';
 import * as yup from 'yup';
@@ -52,6 +54,52 @@ const NewAdSchema = yup.object({
     //method_payment: yup.string().required('Escolha seu metodo de pagamento'),
 });  
 
+const CheckBoxExample = ({setGroupValue , groupValue }) => {
+    return (
+       
+            <FormControl isInvalid>
+                <FormControl.Label _text={{
+                fontSize: "lg",
+                bold: true
+            }}>
+                Preferred contact method
+                </FormControl.Label>
+                <Text fontSize="md">Selected Values: </Text>
+            <Checkbox.Group 
+                mt="2" 
+                colorScheme="green" 
+                defaultValue={groupValue} 
+                accessibilityLabel="choose multiple items" 
+                onChange={values => {
+                    setGroupValue(values || []);
+                }} 
+                alignItems="flex-start"
+            >
+
+                <Checkbox value="Phone" my="1">
+                    Phone
+                </Checkbox>
+                <Checkbox value="Email" my="1">
+                    Email
+                </Checkbox>
+                <Checkbox value="Message" my="1">
+                    Message
+                </Checkbox> 
+                <Checkbox value="Fax" my="1">
+                    Fax
+                </Checkbox>
+                </Checkbox.Group>
+                <FormControl.ErrorMessage _stack={{
+                alignItems: "flex-start"
+            }} leftIcon={<WarningOutlineIcon size="xs" mt={1} />}>
+                You must select at least three methods
+                </FormControl.ErrorMessage>
+            </FormControl>
+ 
+      )
+  };
+
+
 export function NewAd(){
 
     const { control, handleSubmit, formState: { errors } } = useForm<NewAdData>({
@@ -75,7 +123,13 @@ export function NewAd(){
 
     const [switchValue, setSwitchValue] = useState(false);
     const [statusProduto, setStatusProduto] = useState<string | undefined>(undefined);
-    const [groupValues, setGroupValues] = React.useState([]);
+    const [groupValue, setGroupValue] = React.useState([]);
+
+    React.useEffect(() => {
+        alert(groupValue)
+      },[groupValue])
+
+    
 
     const RadioStatusProduct = () => {
         return <Radio.Group name="radioGroupStatusProduto" 
@@ -110,18 +164,18 @@ export function NewAd(){
         );
     };
 
-    const Checkboxes = () => {
+    // const Checkboxes = () => {
     
-        return(
-            <Checkbox.Group onChange={setGroupValues} value={groupValues} accessibilityLabel="choose numbers">
-                <Checkbox value="boleto">Boleto</Checkbox>
-                <Checkbox value="pix" mt={2} >Pix</Checkbox>
-                <Checkbox value="dinheiro" mt={2}>Dinheiro</Checkbox>
-                <Checkbox value="cartão de crédito" mt={2}>Cartão de crédito</Checkbox>
-                <Checkbox value="depósito bancário" mt={2}>Depósito Bancário</Checkbox>
-            </Checkbox.Group>
-        );
-    }
+    //     return(
+    //         <Checkbox.Group onChange={setGroupValues} value={groupValues} accessibilityLabel="choose numbers">
+    //             <Checkbox value="boleto">Boleto</Checkbox>
+    //             <Checkbox value="pix" mt={2} >Pix</Checkbox>
+    //             <Checkbox value="dinheiro" mt={2}>Dinheiro</Checkbox>
+    //             <Checkbox value="cartão de crédito" mt={2}>Cartão de crédito</Checkbox>
+    //             <Checkbox value="depósito bancário" mt={2}>Depósito Bancário</Checkbox>
+    //         </Checkbox.Group>
+    //     );
+    // }
 
     function handleOpenPreview() { 
         navigation.navigate('preview');
@@ -166,8 +220,7 @@ export function NewAd(){
     }    
 
     async function handleNewAd({ title, amount }: NewAdData) {
-        try {
-            setIsLoading(true)   
+        try {  
 
             if ( !statusProduto ) {
                 const title = 'Atenção! Por favor, informe se o produto novo ou usado.';
@@ -200,7 +253,9 @@ export function NewAd(){
                     bgColor: 'blue.500'
                 })           
                 return
-            }            
+            }        
+            
+            setIsLoading(true) 
 
             const data = {
                 name: title,
@@ -209,56 +264,16 @@ export function NewAd(){
                 price: setPrice(amount),
                 accept_trade:  true,
                 payment_methods: ["pix"],
-                images: [{uri: "qualquercoisa", type: "image"}]
+                images: [userPhoto]
+                // images: [{uri: "qualquercoisa", type: "image"}]
             }
 
-            await storageAdsSave (data);
-            // const adLoad = await storageAdsGet();
-            // console.log(adLoad);
-        
+            await storageAdsSave(data);
+            setIsLoading(false)
             handleOpenPreview();
+            
 
-            // const response_product = await api.post('/products', 
-            //     { image, name , description, is_new,  price : setPrice(amount),
-            //     accept_trade, payment_methods },
-                
-            // );  
-                        
-            // if (response_product.data.id) {   
-
-            //     let formData = new FormData(); 
-
-            //     formData.append("images", {
-            //         uri: userPhoto,
-            //         name: "image.jpg",
-            //         type: "image/jpg",
-            //     });
-    
-            //     formData.append('product_id', response_product.data.id)
-               
-            //     const response = await api.post('/products/images', formData, {
-            //         headers: {
-            //             'Content-Type': 'multipart/form-data',
-            //         },
-            //         transformRequest: (data, headers) => {                        
-            //             return formData;
-            //         },
-            //     });
-
-            //     const title = 'Salvo com sucesso';
-            //     toast.show({    
-            //         title,
-            //         placement: 'top',
-            //         bgColor: 'green.500'
-            //     })   
-                
-            //     handleOpenPreview();
-
-            //     return
-
-            // } else {
-            //     throw new Error();
-            // }         
+         
                   
         } catch (error) {
             setIsLoading(false);
@@ -409,7 +424,11 @@ export function NewAd(){
                             Meios de pagamentos aceitos:
                         </Text>
 
-                        <Checkboxes/>   
+                        {/* <Checkboxes/>    */}
+                        <CheckBoxExample 
+                            setGroupValue={setGroupValue}
+                            groupValue={groupValue}
+                        />
                     </VStack>                    
                 </VStack> 
             </ScrollView> 

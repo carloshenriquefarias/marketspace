@@ -18,8 +18,9 @@ import BackgroundImg from '@assets/produto_2.png';
 
 import { ArrowLeft, Bank, Barcode, CreditCard, Money, QrCode, Tag} from 'phosphor-react-native';
 import { AppError } from '@utils/AppError';
-import { storageUserGet } from '@storage/storageUser';
+
 import { storageAdsGet } from '@storage/storageAds';
+import { Loading } from '@components/Loading';
 
 
 export function Preview(){
@@ -27,7 +28,8 @@ export function Preview(){
     const { createNewAd } = useAds();
     const toast= useToast();
     const [isLoading, setIsLoading] = useState(false);
-    const [ adData, setAdData ] = useState();
+    const [ads, setAds] = useState<AdsDTO | undefined>(undefined);
+
 
     const navigation = useNavigation<AppNavigatorRoutesProps>(); 
     const navigationTab = useNavigation<AppTabNavigatorRoutesProps>(); 
@@ -74,31 +76,38 @@ export function Preview(){
         }
     }
 
-    // async function fetchAds() {
+
+
+    useEffect(() => {
+        async function fetchAds() {
        
-    //     try {
-    //         const adLoad = await storageAdsGet();
-    //         // setAdData(adLoad);
-    //         // console.log(adLoad);
-        
-    //     }   catch (error) {
+            try {
+                const adLoad = await storageAdsGet();
+                setAds(adLoad);
+                console.log('aload', adLoad);
+            
+            }   catch (error) {
+    
+                const isAppError = error instanceof AppError;
+                const title = isAppError ? error.message : 'Não foi possível carregar os produtos';
+            
+                toast.show({
+                    title,
+                    placement: 'top',
+                    bgColor: 'red.500'
+                })
+            }
+        }
 
-    //         const isAppError = error instanceof AppError;
-    //         const title = isAppError ? error.message : 'Não foi possível carregar os produtos';
-        
-    //         toast.show({
-    //             title,
-    //             placement: 'top',
-    //             bgColor: 'red.500'
-    //         })
-    //     }
-    // }
+        fetchAds()
+    }, []);
 
-    // useEffect(() => {
-    //     fetchAds();
-    // },[])
+      
 
     return(
+        <>
+        {(!ads) ? <Loading /> :
+    
         <HStack>      
             <ScrollView 
                 contentContainerStyle={{ flexGrow: 1 }} 
@@ -121,7 +130,7 @@ export function Preview(){
                             w='full'
                             h='full'
                             // rounded="lg"                       
-                            source={BackgroundImg}
+                            source={{uri: ads?.images[0]}}
                             alt="Tenis vermelho"              
                             resizeMode="cover"         
                         />
@@ -141,18 +150,15 @@ export function Preview(){
                             />          
                         
                             <Text color="gray.700">
-                                Maria Gomes
+                                Maria Gomes 
                             </Text> 
                         </HStack>
 
-                        <Status
-                            title='Usado'
-                            variant='Used'
-                        />
+                        <Status name={ads.is_new} /> 
 
                         <HStack justifyContent="space-between" mt={3}>
                             <Text color="gray.700" fontFamily="heading" fontSize="lg">
-                                {/* {adLoad.name} */}
+                                {ads.name} 
                             </Text>
 
                             <Text color="blue.700" fontWeight="bold" fontSize="lg">
@@ -260,5 +266,7 @@ export function Preview(){
                 />                    
             </HStack>  
         </HStack>
+        }
+        </>
     )        
 }

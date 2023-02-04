@@ -3,7 +3,7 @@ import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 
 import { useContext } from 'react';
 
-import { ImageSlider} from '@screens/testeslide';
+import { ImageSlider} from '@screens/TesteSlide';
 
 import {useAuth} from '@hooks/useAuth';
 import {useAds} from '@hooks/useAds';

@@ -51,7 +51,7 @@ export function Product({product_images, is_new, user, name, price, ...rest}: Pr
                             
                         </Avatar>
 
-                        <Status variant={is_new ? 'New' : 'Used'} name={is_new} />
+                        <Status name={is_new} />
                     </HStack>                       
                 </VStack>
             </Pressable>
