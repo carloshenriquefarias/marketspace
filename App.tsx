@@ -13,6 +13,12 @@ import { SignIn } from '@screens/SignIn';
 import { SignUp } from '@screens/SignUp';
 // import { Home } from '@screens/Home';
 
+
+import { LogBox } from 'react-native';
+LogBox.ignoreLogs(['We can not support a function callback.']); // Ignore log notification by message
+LogBox.ignoreAllLogs();//Ignore all log notifications
+
+
 export default function App() {
 
   const [fontsloaded] = useFonts({Karla_400Regular, Karla_700Bold})

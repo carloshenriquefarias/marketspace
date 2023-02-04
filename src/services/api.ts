@@ -2,7 +2,7 @@ import axios, { AxiosInstance } from "axios";
 import { AppError } from "@utils/AppError";
 
 const baseURL = () => {
-    return 'http://192.168.1.4:3333'
+    return 'http://192.168.0.2:3333'
 }
 
 
