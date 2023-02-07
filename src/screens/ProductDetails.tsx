@@ -22,6 +22,33 @@ export function ProductDetails(){
         navigation.navigate('home');
     } 
 
+    // async function handleOpenWhats() {
+    //     try {
+    //       const url = `https://wa.me/55${advert.user.tel}`;
+    
+    //       const supported = await Linking.canOpenURL(url);
+    
+    //       if (!supported) {
+    //         throw new AppError('Não foi possível abrir o whatsapp!');
+    //       }
+    
+    //       await Linking.openURL(url);
+    //     } catch (e) {
+    //       console.error(e);
+    //       const isAppError = e instanceof AppError;
+    
+    //       const title = isAppError
+    //         ? e.message
+    //         : 'Não foi possível abrir o whatsapp. Tente novamente mais tarde!';
+    
+    //       toast.show({
+    //         title,
+    //         placement: 'top',
+    //         bgColor: 'red',
+    //       });
+    //     }
+    // }
+
     return(
         <ScrollView 
             contentContainerStyle={{ flexGrow: 1 }} 

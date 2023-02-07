@@ -49,7 +49,7 @@ export function SignIn() {
         navigation.navigate('signUp');
     }
     
-    async function handleSignIn({ email, password}: FormDataProps) {
+    async function handleSignIn({email, password}: FormDataProps) {
         try {
             setIsLoading(true)
             await signIn(email, password);   
@@ -162,6 +162,7 @@ export function SignIn() {
                                     onChangeText={onChange}
                                     value={value}
                                     typeInput={"password"}
+                                    // secureTextEntry
                                     errorMessage={errors.password?.message}                                
                                 />
                             )}

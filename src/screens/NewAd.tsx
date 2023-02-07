@@ -7,8 +7,7 @@ import { useState } from 'react';
 
 import { Text, HStack, VStack, Button, Box, useTheme, Switch, 
    ScrollView, IconButton, Avatar, useToast, Alert , Radio, Checkbox,
-   Container,
-   FormControl, WarningOutlineIcon, Center, NativeBaseProvider
+   Container, FormControl, WarningOutlineIcon, Center, NativeBaseProvider
 } from 'native-base';
 
 import { useForm, Controller } from 'react-hook-form';
@@ -50,55 +49,51 @@ const NewAdSchema = yup.object({
     title: yup.string().required('Informe o título do produto'),
     description: yup.string().required('Descreva como é o seu produto'),
     amount: yup.string().required('Digite o preço do seu produto'),
-    //swap: yup.string().required('Escolha se aceita a troca ou não'),
-    //method_payment: yup.string().required('Escolha seu metodo de pagamento'),
 });  
 
-const CheckBoxExample = ({setGroupValue , groupValue }) => {
-    return (
-       
-            <FormControl isInvalid>
-                <FormControl.Label _text={{
-                fontSize: "lg",
-                bold: true
-            }}>
+const CheckBoxExample = ({isInvalid, setGroupValue, groupValue }) => { //PERGUNTAR PARA O MANO SOBRE O INVALID
+
+    const invalid = isInvalid;
+
+    return (       
+        <FormControl isInvalid={invalid}>
+            {/* <FormControl.Label 
+                _text={{
+                    fontSize: "lg",
+                    bold: true
+                }}
+            >
                 Preferred contact method
-                </FormControl.Label>
-                <Text fontSize="md">Selected Values: </Text>
+            </FormControl.Label> */}
+
+            {/* <Text fontSize="md">Selected Values: </Text> */}
+        
             <Checkbox.Group 
                 mt="2" 
-                colorScheme="green" 
+                colorScheme="blue" 
+                borderColor="gray.300"
                 defaultValue={groupValue} 
                 accessibilityLabel="choose multiple items" 
-                onChange={values => {
-                    setGroupValue(values || []);
-                }} 
+                onChange={values => {setGroupValue( values || []); }} 
                 alignItems="flex-start"
+                isInvalid={invalid}
             >
+                <Checkbox value="card" my="1">Cartão de Crédito</Checkbox>
+                <Checkbox value="pix" my="1">Pix</Checkbox>
+                <Checkbox value="cash" my="1">Dinheiro</Checkbox> 
+                <Checkbox value="bolet" my="1">Boleto</Checkbox> 
+                <Checkbox value="deposit" my="1">Depósito Bancário</Checkbox>
+            </Checkbox.Group>
 
-                <Checkbox value="Phone" my="1">
-                    Phone
-                </Checkbox>
-                <Checkbox value="Email" my="1">
-                    Email
-                </Checkbox>
-                <Checkbox value="Message" my="1">
-                    Message
-                </Checkbox> 
-                <Checkbox value="Fax" my="1">
-                    Fax
-                </Checkbox>
-                </Checkbox.Group>
-                <FormControl.ErrorMessage _stack={{
-                alignItems: "flex-start"
-            }} leftIcon={<WarningOutlineIcon size="xs" mt={1} />}>
-                You must select at least three methods
-                </FormControl.ErrorMessage>
-            </FormControl>
- 
-      )
-  };
-
+            <FormControl.ErrorMessage 
+                _stack={{alignItems: "flex-start"}} 
+                leftIcon={<WarningOutlineIcon size="xs" mt={1} />}
+            >
+                Escolha pelo menos um método de pagamento!
+            </FormControl.ErrorMessage>
+        </FormControl> 
+    )
+};
 
 export function NewAd(){
 
@@ -125,31 +120,31 @@ export function NewAd(){
     const [statusProduto, setStatusProduto] = useState<string | undefined>(undefined);
     const [groupValue, setGroupValue] = React.useState([]);
 
-    React.useEffect(() => {
-        alert(groupValue)
-      },[groupValue])
-
-    
+    // React.useEffect(() => {
+    //     alert(groupValue)
+    // },[groupValue])    
 
     const RadioStatusProduct = () => {
-        return <Radio.Group name="radioGroupStatusProduto" 
-            accessibilityLabel="favorite number" 
-            value={statusProduto} 
-            onChange={nextValue => {
-                setStatusProduto(nextValue);
-            }
-            }>
+        return (
+            <Radio.Group 
+                name="radioGroupStatusProduto" 
+                accessibilityLabel="favorite number" 
+                value={statusProduto} 
+                justifyContent="space-between"
+                onChange={nextValue => {setStatusProduto(nextValue)}}
+            >
                 <Radio value="new" my={1}>
-                Produto novo
+                    Produto novo
                 </Radio>
+
                 <Radio value="used" my={1}>
-                Produto usado
+                    Produto usado
                 </Radio>
-        </Radio.Group>;
+            </Radio.Group>
+        );
     };
 
-    const Switches = () => {
-      
+    const Switches = () => {      
         const toggleSwitch = (value) => {
           setSwitchValue(value);
         };
@@ -233,17 +228,6 @@ export function NewAd(){
                 return
             }
 
-            // if ( !statusProduto ) { //PERGUNTAR DO PRISCO COMO E UM VAZIO
-            //     const title = 'Atenção! Por favor, escolha um método de pagamento.';
-
-            //     toast.show({    
-            //         title,
-            //         placement: 'top',
-            //         bgColor: 'blue.500'
-            //     })           
-            //     return
-            // }
-
             if ( !userPhoto ) {
                 const title = 'Atenção! Por favor, escolha uma imagem.';
 
@@ -270,10 +254,7 @@ export function NewAd(){
 
             await storageAdsSave(data);
             setIsLoading(false)
-            handleOpenPreview();
-            
-
-         
+            handleOpenPreview();               
                   
         } catch (error) {
             setIsLoading(false);
@@ -380,17 +361,12 @@ export function NewAd(){
                                     errorMessage={errors.description?.message}
                                     size="high"
                                 />
-                                // <TextAreaAtual
-                                //     placeholder="Descrição do anúncio"
-                                //     onChangeText={onChange}
-                                //     value={value}          
-                                //     keyboardType="default"
-                                //     autoCapitalize="none"     
-                                //     secureTextEntry={false}               
-                                //     errorMessage={errors.description?.message}
-                                // /> 
                             )}
                         />
+
+                        {/* <Box>
+                            
+                        </Box> */}
 
                         <RadioStatusProduct />
 
@@ -406,7 +382,7 @@ export function NewAd(){
                                     placeholder="Valor do produto"
                                     onChangeText={onChange}
                                     value={value}          
-                                    keyboardType="default"
+                                    keyboardType="numeric" //COLOCAR A MASCARA
                                     autoCapitalize="none"     
                                     secureTextEntry={false}               
                                     errorMessage={errors.amount?.message}
@@ -420,7 +396,7 @@ export function NewAd(){
 
                         <Switches/>
 
-                        <Text color="gray.700" fontFamily="heading" fontSize="md" mb={5}>
+                        <Text color="gray.700" fontFamily="heading" fontSize="md" mb={1}>
                             Meios de pagamentos aceitos:
                         </Text>
 

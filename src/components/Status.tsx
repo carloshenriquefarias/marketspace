@@ -14,11 +14,12 @@ export function Status({ name }: Props) {
     <HStack
       bg={name === true ? 'blue.500' :  'gray.300'} 
       color="white"                       
-      fontSize={5} 
+      fontSize={4} 
       rounded={10}
       h={6}
       w={'16'} 
-      pl={2} pr={2}
+      // pl={2} pr={2}
+      padding={1}
       justifyContent="center"
     >
       <Box>
@@ -26,7 +27,7 @@ export function Status({ name }: Props) {
           textAlign="center" 
           color={name === true ? 'white' : 'gray.700'} 
           fontWeight="bold"
-          fontSize={14} 
+          fontSize={12} 
         >
           {(name) ? 'NOVO' : 'USADO'}
         </Text> 

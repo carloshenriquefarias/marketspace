@@ -13,7 +13,7 @@ type Props = IInputProps & {
 export function Input({ typeInput = null, errorMessage = null, isInvalid, size = 'normal', ...rest }: Props) {
   
     const invalid = !!errorMessage || isInvalid;
-    const [noShow, setNoShow] = React.useState(false);
+    const [noShow, setNoShow] = React.useState(true);
 
     return (
         <FormControl mb={4} isInvalid={invalid}>
@@ -46,7 +46,7 @@ export function Input({ typeInput = null, errorMessage = null, isInvalid, size =
                     (typeInput==="password")?
                     <Pressable onPress={() => setNoShow(!noShow)}>
                         <Icon 
-                            as={<MaterialIcons name={noShow ?  "visibility-off" : "visibility"} />} 
+                            as={<MaterialIcons name={noShow ? "visibility-off" : "visibility"} />} 
                             size={7} 
                             mr="2" 
                             color="muted.400" 

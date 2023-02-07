@@ -90,7 +90,7 @@ export function Home(){
                 <VStack  
                     mt={50}                         
                     flex={1}                        
-                    px={6}                         
+                    px={6}                    
                 >
                     <HStack justifyContent="space-between">
 
@@ -181,8 +181,9 @@ export function Home(){
                 </VStack>
 
                 <VStack pr={4} pl={6} backgroundColor="gray.100">
-                    { (1===1) ?
-                    //(loading) ?
+                    { 
+                        // (1===1) ?
+                        (loading) ?
                         <Loading 
                             bgColor='white'                      
                         />    
