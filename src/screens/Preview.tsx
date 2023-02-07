@@ -8,11 +8,12 @@ import { Text, HStack, VStack, ScrollView, Image, useTheme, Avatar,
     Center, Heading, View, useToast } from 'native-base'
 ;
 
-import {useAds} from '@hooks/useAds';
+import {useAuth} from '@hooks/useAuth';
 import { AdsDTO } from "@dtos/AdsDTO";
 
 import { ButtonDefault } from '@components/Button'
 import { Status } from '@components/Status'
+import { Slider } from '@components/Slider';
 
 import BackgroundImg from '@assets/produto_2.png';
 
@@ -22,14 +23,12 @@ import { AppError } from '@utils/AppError';
 import { storageAdsGet } from '@storage/storageAds';
 import { Loading } from '@components/Loading';
 
-
 export function Preview(){
 
-    const { createNewAd } = useAds();
+    const { user } = useAuth();
     const toast= useToast();
     const [isLoading, setIsLoading] = useState(false);
     const [ads, setAds] = useState<AdsDTO | undefined>(undefined);
-
 
     const navigation = useNavigation<AppNavigatorRoutesProps>(); 
     const navigationTab = useNavigation<AppTabNavigatorRoutesProps>(); 
@@ -49,34 +48,32 @@ export function Preview(){
         navigation.navigate('newad');
     }
 
-    async function handleCreateNewAd (image: string, name: string, description: string, price: number,
-        is_new: boolean, accept_trade: boolean, payment_methods: string[]) { 
+    // async function handleCreateNewAd (image: string, name: string, description: string, price: number,
+    //     is_new: boolean, accept_trade: boolean, payment_methods: string[]) { 
             
-        try {
-            setIsLoading(true);
+    //     try {
+    //         setIsLoading(true);
 
-            await createNewAd(image, name, description, price,
-            is_new, accept_trade, payment_methods);
+    //         await createNewAd(image, name, description, price,
+    //         is_new, accept_trade, payment_methods);
 
-            handleGoHome();
+    //         handleGoHome();
 
-        } catch(error) {
+    //     } catch(error) {
 
-            const isAppError = error instanceof AppError;
-            const title = isAppError ? error.message : 
-            'Não foi possível enviar os dados. Tente novamente mais tarde';
+    //         const isAppError = error instanceof AppError;
+    //         const title = isAppError ? error.message : 
+    //         'Não foi possível enviar os dados. Tente novamente mais tarde';
 
-            setIsLoading(false);
+    //         setIsLoading(false);
         
-            toast.show({    
-                title,
-                placement: 'top',
-                bgColor: 'red.500'
-            })
-        }
-    }
-
-
+    //         toast.show({    
+    //             title,
+    //             placement: 'top',
+    //             bgColor: 'red.500'
+    //         })
+    //     }
+    // }
 
     useEffect(() => {
         async function fetchAds() {
@@ -100,173 +97,176 @@ export function Preview(){
         }
 
         fetchAds()
-    }, []);
-
-      
+    }, []);      
 
     return(
         <>
-        {(!ads) ? <Loading /> :
-    
-        <HStack>      
-            <ScrollView 
-                contentContainerStyle={{ flexGrow: 1 }} 
-                showsVerticalScrollIndicator={false}              
-            >
-                <VStack flex={1}  pb='18%'>
+            {(!ads) ? <Loading /> :        
+                <HStack>      
+                    <ScrollView 
+                        contentContainerStyle={{ flexGrow: 1 }} 
+                        showsVerticalScrollIndicator={false}              
+                    >
+                        <VStack flex={1}  pb='18%'>
 
-                    <Center bg="blue.500" h={32} pt={8}>
-                        <Heading fontSize="md" color="gray.100">
-                            Pré visualização do anúncio
-                        </Heading>
+                            <Center bg="blue.500" h={32} pt={8}>
+                                <Heading fontSize="md" color="gray.100">
+                                    Pré visualização do anúncio
+                                </Heading>
 
-                        <Text fontSize="sm" color="gray.100">
-                            É assim que seu produto vai aparecer!
-                        </Text>
-                    </Center>
-
-                    <View h='300px' >
-                        <Image
-                            w='full'
-                            h='full'
-                            // rounded="lg"                       
-                            source={{uri: ads?.images[0]}}
-                            alt="Tenis vermelho"              
-                            resizeMode="cover"         
-                        />
-                    </View>                
-
-                    <VStack             
-                        flex="1"
-                        padding={8}
-                        backgroundColor='gray.100'
-                    >                    
-                        <HStack space={3} mb={3}>
-                            <Avatar 
-                                h={5} w={5} 
-                                rounded="full" 
-                                bg="gray.100" 
-                                source={{ uri: userPhoto }}
-                            />          
-                        
-                            <Text color="gray.700">
-                                Maria Gomes 
-                            </Text> 
-                        </HStack>
-
-                        <Status name={ads.is_new} /> 
-
-                        <HStack justifyContent="space-between" mt={3}>
-                            <Text color="gray.700" fontFamily="heading" fontSize="lg">
-                                {ads.name} 
-                            </Text>
-
-                            <Text color="blue.700" fontWeight="bold" fontSize="lg">
-                                R$ 45,00
-                            </Text>
-                        </HStack>
-
-                        <Text color="gray.700" mt={3}>
-                            Este e um produto muito legal, pois ele pode ser usado 
-                            em qualquer lugar e em qualqer momento e por qualquer pessoa, 
-                            muito facil e pratico s de ser usado. Aproveite voce tambem!
-                        </Text> 
-
-                        <HStack space={3} mt={5}>
-                            <Text color="gray.700" fontWeight="bold">
-                                Aceita troca?
-                            </Text>         
-                        
-                            <Text color="gray.700" >
-                                Não
-                            </Text> 
-                        </HStack>                                     
-        
-                        <Text color="gray.700" mb={5} fontWeight="bold" mt={3}>
-                            Meios de pagamentos aceitos:
-                        </Text>
-
-                        <VStack mt={2}>
-                            
-                            <HStack space={2}>
-                                <Barcode size={sizes[5]} color={colors.gray[700]} />
-
-                                <Text fontSize="sm" color="gray.700">
-                                    Boleto
+                                <Text fontSize="sm" color="gray.100">
+                                    É assim que seu produto vai aparecer!
                                 </Text>
-                            </HStack>
-                            
-                            <HStack space={2}>
-                                <QrCode size={sizes[5]} color={colors.gray[700]} />
+                            </Center>
 
-                                <Text fontSize="sm" color="gray.700">
-                                    Pix
-                                </Text>
-                            </HStack>                 
-                            
-                            <HStack space={2}>
-                                <Money size={sizes[5]} color={colors.gray[700]} />
+                            <Slider/>
 
-                                <Text fontSize="sm" color="gray.700">
-                                    Dinheiro
-                                </Text>
-                            </HStack>
-                                                    
-                            <HStack space={2}>
-                                <CreditCard size={sizes[5]} color={colors.gray[700]} />
+                            {/* <View h='300px' >
+                                <Image
+                                    w='full'
+                                    h='full'
+                                    // rounded="lg"                       
+                                    source={{uri: ads?.images[0]}}
+                                    alt="Tenis vermelho"              
+                                    resizeMode="cover"         
+                                />
+                            </View>                 */}
 
-                                <Text fontSize="sm" color="gray.700">
-                                    Cartão de crédito
-                                </Text>
-                            </HStack>
-                                                
-                            <HStack space={2}>
-                                <Bank size={sizes[5]} color={colors.gray[700]} />
+                            <VStack             
+                                flex="1"
+                                padding={8}
+                                backgroundColor='gray.100'
+                            >                    
+                                <HStack space={3} mb={3}>
+                                    <Avatar 
+                                        h={6} w={6} 
+                                        rounded="full" 
+                                        bg="gray.100" 
+                                        source={{ uri: userPhoto }}
+                                    />          
+                                
+                                    <Text color="gray.700" fontFamily="body" fontSize="lg">
+                                        {user.name} 
+                                    </Text> 
+                                </HStack>
 
-                                <Text fontSize="sm" color="gray.700">
-                                    Depósito bancário
+                                <Status name={ads.is_new}/> 
+
+                                <HStack justifyContent="space-between" mt={3}>
+                                    <Text color="gray.700" fontFamily="heading" fontSize="2xl">
+                                        {ads.name} 
+                                    </Text>
+
+                                    <HStack space={1} alignItems="baseline">
+                                        <Text color="blue.500" fontWeight="bold" fontSize="md" textAlign="center">
+                                            R$
+                                        </Text>
+
+                                        <Text color="blue.500" fontWeight="bold" fontSize="2xl" textAlign="center">
+                                            {ads.price}
+                                        </Text>
+                                    </HStack>                            
+                                </HStack>
+
+                                <Text color="gray.700" mt={3}>
+                                    {ads.description}
+                                </Text> 
+
+                                <HStack space={3} mt={5}>
+                                    <Text color="gray.700" fontWeight="bold">
+                                        Aceita troca?
+                                    </Text>         
+                                
+                                    <Text color="gray.700" >
+                                        {ads.accept_trade}
+                                    </Text> 
+                                </HStack>                                     
+                
+                                <Text color="gray.700" mb={0} fontWeight="bold" mt={3}>
+                                    Meios de pagamentos aceitos:
                                 </Text>
-                            </HStack>
+
+                                <VStack mt={2}>
+                                    
+                                    <HStack space={2}>
+                                        <Barcode size={sizes[5]} color={colors.gray[700]} />
+
+                                        <Text fontSize="sm" color="gray.700">
+                                            Boleto
+                                        </Text>
+                                    </HStack>
+                                    
+                                    <HStack space={2}>
+                                        <QrCode size={sizes[5]} color={colors.gray[700]} />
+
+                                        <Text fontSize="sm" color="gray.700">
+                                            Pix
+                                        </Text>
+                                    </HStack>                 
+                                    
+                                    <HStack space={2}>
+                                        <Money size={sizes[5]} color={colors.gray[700]} />
+
+                                        <Text fontSize="sm" color="gray.700">
+                                            Dinheiro
+                                        </Text>
+                                    </HStack>
+                                                            
+                                    <HStack space={2}>
+                                        <CreditCard size={sizes[5]} color={colors.gray[700]} />
+
+                                        <Text fontSize="sm" color="gray.700">
+                                            Cartão de crédito
+                                        </Text>
+                                    </HStack>
+                                                        
+                                    <HStack space={2}>
+                                        <Bank size={sizes[5]} color={colors.gray[700]} />
+
+                                        <Text fontSize="sm" color="gray.700">
+                                            Depósito bancário
+                                        </Text>
+                                    </HStack>
+                                    
+                                </VStack>
+                                    
+                            </VStack>
                             
-                        </VStack>
-                            
-                    </VStack>
+                        </VStack> 
+                    </ScrollView>  
                     
-                </VStack> 
-            </ScrollView>  
-            
-            <HStack 
-                justifyContent="space-between" 
-                pr={8} pl={8}
-                space={2} 
-                bg="white" 
-                pt={5} pb={5}
-                position="absolute" 
-                bottom={0}
-                flex={1}
-                w='full'
-                h='12%'
-            >
-                <ButtonDefault 
-                    title="Voltar e Editar" 
-                    size="half"                             
-                    variant="default"  
-                    leftIcon={<ArrowLeft color={colors.gray[500]} size={sizes[5]} />}
-                    onPress={handleOpenNewAd}                    
-                />          
+                    <HStack 
+                        justifyContent="space-between" 
+                        pr={8} pl={8}
+                        space={2} 
+                        bg="white" 
+                        pt={5} pb={5}
+                        position="absolute" 
+                        bottom={0}
+                        flex={1}
+                        w='full'
+                        h='12%'
+                    >
+                        <ButtonDefault 
+                            title="Voltar e Editar" 
+                            size="half"                             
+                            variant="default"  
+                            leftIcon={<ArrowLeft color={colors.gray[500]} size={sizes[5]} />}
+                            onPress={handleOpenNewAd}                    
+                        />          
 
-                <ButtonDefault 
-                    title="Publicar" 
-                    size="half"                             
-                    variant="base1" 
-                    onPress={handleOpenMyAdsDetails}
-                    isLoading={isLoading}
-                    // onPress={handleCreateNewAd}
-                    leftIcon={<Tag color={colors.gray[200]} size={sizes[5]} /> }                                         
-                />                    
-            </HStack>  
-        </HStack>
-        }
+                        <ButtonDefault 
+                            title="Publicar" 
+                            size="half"                             
+                            variant="base1" 
+                            onPress={handleOpenMyAdsDetails}
+                            isLoading={isLoading}
+                            // onPress={handleCreateNewAd}
+                            leftIcon={<Tag color={colors.gray[200]} size={sizes[5]} /> }                                         
+                        />                    
+                    </HStack>  
+                </HStack>
+            }
         </>
     )        
 }
