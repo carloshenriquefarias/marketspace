@@ -54,10 +54,47 @@ export function Preview(){
     //     try {
     //         setIsLoading(true);
 
-    //         await createNewAd(image, name, description, price,
-    //         is_new, accept_trade, payment_methods);
+    //         const response_product = await api.post('/products', 
+    //             { image, name , description, is_new,  price : setPrice(amount),
+    //             accept_trade, payment_methods },
+                
+    //         );  
+                        
+    //         if (response_product.data.id) {   
 
-    //         handleGoHome();
+    //             let formData = new FormData(); 
+
+    //             formData.append("images", {
+    //                 uri: userPhoto,
+    //                 name: "image.jpg",
+    //                 type: "image/jpg",
+    //             });
+    
+    //             formData.append('product_id', response_product.data.id)
+               
+    //             const response = await api.post('/products/images', formData, {
+    //                 headers: {
+    //                     'Content-Type': 'multipart/form-data',
+    //                 },
+    //                 transformRequest: (data, headers) => {                        
+    //                     return formData;
+    //                 },
+    //             });
+
+    //             const title = 'Salvo com sucesso';
+    //             toast.show({    
+    //                 title,
+    //                 placement: 'top',
+    //                 bgColor: 'green.500'
+    //             })   
+                
+    //             handleOpenPreview();
+
+    //             return
+
+    //         } else {
+    //             throw new Error();
+    //         }         
 
     //     } catch(error) {
 

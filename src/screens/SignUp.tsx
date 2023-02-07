@@ -32,6 +32,7 @@ import { TouchableOpacity } from 'react-native';
 
 import { useAuth } from '@hooks/useAuth';
 import { PencilSimpleLine } from 'phosphor-react-native';
+import { Images } from '@components/Image';
 
 type FormDataProps = {
     name: string;
@@ -59,7 +60,7 @@ export function SignUp() {
     const {signIn} = useAuth();
     const [isLoading, setIsLoading] = useState(false);
     const [photoIsLoading, setPhotoIsLoading] = useState(false);
-    const [userPhoto, setUserPhoto] = useState('https://github.com/JRSparrowII.png');
+    const [userPhoto, setUserPhoto] = useState<string | null>(null);
 
     const { control, handleSubmit, formState: { errors } } = useForm<FormDataProps>({
         resolver: yupResolver(signUpSchema),
@@ -73,11 +74,55 @@ export function SignUp() {
         try {
             setIsLoading(true)        
       
-            await api.post('/users', { name, email, telefone, password });  
-            await signIn (email, password)
+            //await api.post('/users', { name, email, telefone, password });  
+            let formData = new FormData(); 
+
+            formData.append("avatar", {
+                uri: userPhoto,
+                name: "image.jpg",
+                type: "image/jpg",
+            });
+
+            formData.append('name', name)
+            formData.append('email', email)
+            formData.append('tel', telefone)
+            formData.append('password', password)
+
+           
+
+            const response = await api.post('/users', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+                transformRequest: (data, headers) => {                        
+                    return formData;
+                },
+            });
+
+            
+
+            // if (response.data.status === "error") {
+            //     const title = response.data.message;
+            //     toast.show({    
+            //         title,
+            //         placement: 'top',
+            //         bgColor: 'red.500'
+            //     })
+            //     return
+            // }
+
+            const title = 'Salvo com sucesso';
+            toast.show({    
+                title,
+                placement: 'top',
+                bgColor: 'green.500'
+            })
+
+            await signIn(email, password)
       
         } catch (error) {
             setIsLoading(false);
+            console.log('deu erro')
         
             const isAppError = error instanceof AppError;
             const title = isAppError ? error.message : 'Não foi possível criar a conta. Tente novamente mais tarde';
@@ -91,8 +136,6 @@ export function SignUp() {
     }  
 
     async function handleUserPhotoSelected(){
-        setPhotoIsLoading(true);
-        
         try {
           const photoSelected = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -104,28 +147,29 @@ export function SignUp() {
           if(photoSelected.canceled) {
             return;
           }
+
+         
     
-            if(photoSelected.uri) {
+            // if(photoSelected.assets[0].uri) {
         
-                const photoInfo = await FileSystem.getInfoAsync(photoSelected.uri);
+            //     const photoInfo = await FileSystem.getInfoAsync(photoSelected.assets[0].uri);
                 
-                if(photoInfo.size && (photoInfo.size  / 1024 / 1024 ) > 2){
+            //     if(photoInfo.size && (photoInfo.size  / 1024 / 1024 ) > 2){
                 
-                    return toast.show({
-                        title: 'Essa imagem é muito grande. Escolha uma de até 5MB.',
-                        placement: 'top',
-                        bgColor: 'red.500'
-                    })
-                }        
+            //         return toast.show({
+            //             title: 'Essa imagem é muito grande. Escolha uma de até 5MB.',
+            //             placement: 'top',
+            //             bgColor: 'red.500'
+            //         })
+            //     }        
                 setUserPhoto(photoSelected.assets[0].uri);
-            }
+                setPhotoIsLoading(true);
+            // }
       
         } catch (error) {
           console.log(error)
           
-        } finally {
-          setPhotoIsLoading(false)
-        }
+        } 
     }
 
     return (
@@ -161,7 +205,7 @@ export function SignUp() {
                         rounded="full"
                         bg="gray.300"
                     >
-                        {photoIsLoading ?
+                        {!userPhoto ?
                             <Skeleton 
                                 w={PHOTO_SIZE}
                                 h={PHOTO_SIZE}
@@ -171,13 +215,18 @@ export function SignUp() {
                             />
                         :
                         <UserPhoto 
-                            source={{ uri: userPhoto }}
+                            source={{ 
+                                uri: userPhoto                                 
+                            }}
                             alt="Foto do usuário"
                             size={PHOTO_SIZE}
                             // mr={-4}
                             // mb={5}
                             // ml={5}
-                        />}
+                        />                
+                        }
+
+
 
                         <Center
                             position="absolute"
