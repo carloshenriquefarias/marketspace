@@ -33,7 +33,7 @@ export function Product({product_images, is_new, user, name, price, ...rest}: Pr
                             rounded="lg"                       
                             source={{ uri: (product_images[0]) 
                                 ? baseURL()+ '/images/'+  product_images[0].path : userPhoto }}
-                            alt="Tenis vermelho"              
+                            alt={name}             
                             resizeMode="cover"         
                         />
                     </VStack>
@@ -56,9 +56,21 @@ export function Product({product_images, is_new, user, name, price, ...rest}: Pr
                 </VStack>
             </Pressable>
 
-            <Text fontSize={15} mt={2}>{name}</Text>  
+            <Text fontSize={15} mt={2}>{name}</Text> 
 
-            <Text fontSize={20} fontWeight="bold"> {price} </Text> 
+            <HStack 
+                justifyContent="flex-start" 
+                bgColor="transparent" 
+                space={1}
+            >
+                <Text fontSize={20} fontWeight="bold">
+                    R$ 
+                </Text> 
+
+                <Text fontSize={20} fontWeight="bold">
+                    {price} 
+                </Text>                
+            </HStack>      
         </VStack>        
     )
 }

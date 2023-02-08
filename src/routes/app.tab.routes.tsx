@@ -81,7 +81,6 @@ export function Tab() {
             listeners={{
                 tabPress: (e) => {
                     e.preventDefault();
-
                     //COLOCAR O MODAL: QUER MESMO SAIR DO APP? SIM OU NAO
                     signOut();
                 },

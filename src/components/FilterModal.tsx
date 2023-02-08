@@ -96,9 +96,7 @@ export function FilterModal({ title, variant = 'New'}: Props) {
                             </FormControl.Label>
 
                             <Checkboxs/>
-                        </VStack>
-                        
-                        
+                        </VStack>                        
                     </FormControl>
                 </Modal.Body>
 
