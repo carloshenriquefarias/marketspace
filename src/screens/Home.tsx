@@ -22,6 +22,11 @@ import { SafeAreaView } from 'react-native';
 import { Loading } from '@components/Loading';
 
 import { ProductDTO } from '@dtos/ProductDTO';
+import { SignOutModal } from '@components/SignOutModal';
+
+import MaskInput from 'react-native-mask-input';
+
+// import { formatCoin } from '@utils/FormatCoin';
 
 export function Home(){
 
@@ -147,6 +152,7 @@ export function Home(){
                                 <VStack ml={4}>
                                     <Text color="gray.600" fontFamily={'heading'} fontSize={RFValue(20)} fontWeight="bold" lineHeight={'md'}>
                                         4
+                                        {/* {ads.length} */}
                                     </Text>  
                                     <Text color="black" fontSize={RFValue(12)}>anúncios ativos</Text> 
                                 </VStack>
@@ -175,32 +181,31 @@ export function Home(){
                     
                     <InputFilter
                         typeInput={"filter"}
-                        fulanodetal={handleOpenModal}
-                           
+                        fulanodetal={handleOpenModal}                           
                     />
                 </VStack>
 
                 <VStack pr={4} pl={6} backgroundColor="gray.100">
                     { 
-                        // (1===1) ?
-                        (loading) ?
-                        <Loading 
-                            bgColor='white'                      
-                        />    
-                        :
+                        
+                        
                         <FlatList //VER ERRO DE ID NA FLATLIST
                             data={product}
                             keyExtractor={item => item.id}
                             numColumns={2}
 
                             renderItem={({ item }) => (
+                                (!loading) ?
                                 <Product                    
                                     product_images={item.product_images}
-                                    name='Tenis vermelho'
-                                    price={50}
+                                    name={item.name}
+                                    price={item.price}
                                     is_new={item.is_new}
                                     user={item.user}
-                                />                      
+                                />    :  
+                                <Loading 
+                                    bgColor='white'                      
+                                />                  
                             )}
 
                             w='full' 
@@ -208,13 +213,61 @@ export function Home(){
                             _contentContainerStyle={{
                                 paddingBottom: 20
                             }}
+                            ListEmptyComponent={() => (
+                                    <VStack alignItems='center' justifyContent='center' flex={1} mt={16}>
+                                        
+                                        <Text fontFamily='body' color='gray.4' fontSize='md'>
+                                        Nenhum anúncio encontrado
+                                        </Text>
+                                    </VStack>
+                                    )}
                         /> 
+
+
+                        // <FlatList
+                        //     data={Products}
+                        //     keyExtractor={item => item.id}
+                        //     numColumns={2}
+                        //     columnWrapperStyle={{ justifyContent: 'space-between' }}
+                        //     contentContainerStyle={{ paddingBottom: 92 }}
+                        //     showsVerticalScrollIndicator={false}
+                        //     //refreshControl={<RefreshControl size={1} refreshing={refreshing} onRefresh={handleResetFilters}/>}
+                        //     renderItem={({item}) => {
+                        //     if(!loadingProducts) {
+                        //         return (
+                        //         <ProductCard
+                        //         onPress={() => handleProductDetails(item.id)}
+                        //         name={item.name}
+                        //         avatar={item.user.avatar}
+                        //         price={item.price}
+                        //         is_new={item.is_new}
+                        //         image={item.product_images[0].path}
+                        //         />
+                        //         )
+                        //     }
+                        //     return <SkeletonCard/>
+                        //     }
+                        //     }
+                        //     ListEmptyComponent={() => (
+                        //     <VStack alignItems='center' justifyContent='center' flex={1} mt={16}>
+                        //         <LogoSvg/>
+                        //         <Text fontFamily='body' color='gray.4' fontSize='md'>
+                        //         Nenhum anúncio encontrado
+                        //         </Text>
+                        //     </VStack>
+                        //     )}
+                        // />
                     }
                 </VStack>
                 
-            {(visibleModal) ?
+            {/* {(visibleModal) ?
                 <FilterModal title='NOVO'/>
+            :null} */}
+
+            {(visibleModal) ?
+                <SignOutModal/>
             :null}
+            
         </SafeAreaView>                            
         </ScrollView>
         

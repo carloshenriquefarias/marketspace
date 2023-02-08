@@ -118,7 +118,6 @@ export function Preview(){
             try {
                 const adLoad = await storageAdsGet();
                 setAds(adLoad);
-                console.log('aload', adLoad);
             
             }   catch (error) {
     
