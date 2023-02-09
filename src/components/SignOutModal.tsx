@@ -12,7 +12,7 @@ export function SignOutModal() {
                 <Modal.Header fontWeight="bold" color="gray.700">ATENÇÃO!</Modal.Header>
 
                 <Modal.Body fontSize="3xl" color="gray.700" fontWeight="bold" >
-                Você REALMENTE deseja sair do Marketspace?
+                    Você REALMENTE deseja sair do Marketspace?
                 </Modal.Body>
 
                 <HStack>
