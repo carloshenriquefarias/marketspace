@@ -7,13 +7,14 @@ import React, { useEffect, useState } from "react";
 import { Text, HStack, VStack, ScrollView, Image, useTheme, Avatar, 
     Center, Heading, View, useToast } from 'native-base'
 ;
-
 import {useAuth} from '@hooks/useAuth';
 import { AdsDTO } from "@dtos/AdsDTO";
 
 import { ButtonDefault } from '@components/Button'
 import { Status } from '@components/Status'
-import { Slider } from '@components/Slider';
+import { ImageCarousel } from '@components/Carousel';
+// import { IndexCarousel } from '@components/Slider';
+import { Loading } from '@components/Loading';
 
 import BackgroundImg from '@assets/produto_2.png';
 
@@ -21,7 +22,6 @@ import { ArrowLeft, Bank, Barcode, CreditCard, Money, QrCode, Tag} from 'phospho
 import { AppError } from '@utils/AppError';
 
 import { storageAdsGet } from '@storage/storageAds';
-import { Loading } from '@components/Loading';
 
 export function Preview(){
 
@@ -153,20 +153,21 @@ export function Preview(){
                                 <Text fontSize="sm" color="gray.100">
                                     É assim que seu produto vai aparecer!
                                 </Text>
-                            </Center>
+                            </Center>                            
 
-                            <Slider/>
+                            <View h='300px' >
 
-                            {/* <View h='300px' >
-                                <Image
+                               {/* <ImageCarousel/>*/}
+
+                                {/* <Image
                                     w='full'
                                     h='full'
                                     // rounded="lg"                       
                                     source={{uri: ads?.images[0]}}
                                     alt="Tenis vermelho"              
                                     resizeMode="cover"         
-                                />
-                            </View>                 */}
+                                /> */}
+                            </View>                
 
                             <VStack             
                                 flex="1"

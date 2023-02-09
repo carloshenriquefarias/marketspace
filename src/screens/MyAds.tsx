@@ -79,8 +79,7 @@ export function MyAds(){
         navigation.navigate('newad');
     } 
 
-    async function fetchMyAds() {
-       
+    async function fetchMyAds() {       
         try {
           const response = await api.get('/products');
           setProduct(response.data);
@@ -108,7 +107,7 @@ export function MyAds(){
             showsVerticalScrollIndicator={false}
             backgroundColor="gray.100"
         >            
-            <VStack padding={6} backgroundColor="gray.100">
+            <VStack padding={6} backgroundColor="gray.100" mt={3}>
 
                 <HStack 
                     justifyContent="space-between" 
@@ -142,7 +141,7 @@ export function MyAds(){
             </VStack> 
 
             <VStack pr={4} pl={6} backgroundColor="gray.100">            
-                <FlatList 
+                {/* <FlatList 
                     data={product}
                     keyExtractor={item => item.id}
                     numColumns={2}
@@ -160,7 +159,7 @@ export function MyAds(){
                     _contentContainerStyle={{
                         paddingBottom: 20
                     }}
-                /> 
+                />  */}
             </VStack>
         </ScrollView>       
     )        

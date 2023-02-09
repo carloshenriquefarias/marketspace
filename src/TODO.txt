@@ -10,6 +10,6 @@ COISAS PRA FAZER NO PROJETO:
 [] 8 - Perguntar ao Prisco por que a description nao ta funcionando, alem da troca e meios de pagamento;
 [] 9 - Ao publicar, CRIAR O ID e voltar a tela home;
 [] 10 - Na tela HOME arrumar a FlatList
-[] 11 - Chamar o modal de SignOut
+[] 11 - Arrumar a mascara dos numeros
 
 

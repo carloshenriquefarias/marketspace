@@ -1,5 +1,5 @@
 import { AppNavigatorRoutesProps } from '@routes/app.routes';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { useEffect, useState } from 'react'; 
 
 import { Pressable, useTheme } from 'native-base';
@@ -24,7 +24,9 @@ import { Loading } from '@components/Loading';
 import { ProductDTO } from '@dtos/ProductDTO';
 import { SignOutModal } from '@components/SignOutModal';
 
-import MaskInput from 'react-native-mask-input';
+type RouteParamsProps = {
+    productId: string;
+}
 
 // import { formatCoin } from '@utils/FormatCoin';
 
@@ -36,6 +38,10 @@ export function Home(){
     const [loading, setLoading] = useState(true)
     const [userPhoto, setUserPhoto] = useState('https://github.com/JRSparrowII.png');
     const [product, setProduct] = useState<ProductDTO[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+
+    const route = useRoute()
+    // const { productId } = route.params as RouteParamsProps;
 
     const toast = useToast();
     const { user } = useAuth();
@@ -60,13 +66,13 @@ export function Home(){
         setVisibleModal(false);
     }
 
-    async function fetchProduct() {
-       
+    async function fetchProduct() {       
         try {
-          const response = await api.get('/products');
-          setProduct(response.data);
-          setLoading(false) 
-          console.log(response.data)
+            // const response = await api.get(`/product/${productId}`);
+            const response = await api.get('/products');
+            setProduct(response.data);
+            setLoading(false) 
+            console.log(response.data)
     
         } catch (error) {
           const isAppError = error instanceof AppError;
@@ -200,7 +206,6 @@ export function Home(){
                                     product_images={item.product_images}
                                     name={item.name}
                                     price={item.price}
-                                    is_new={item.is_new}
                                     user={item.user}
                                 />    :  
                                 <Loading 
