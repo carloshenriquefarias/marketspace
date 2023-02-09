@@ -5,7 +5,7 @@ import { useState } from 'react';
 import BackgroundImg from '@assets/produto_1.png';
 import { Status } from './Status';
 import { ProductDTO } from '@dtos/ProductDTO'
-import { baseURL } from "@services/api"
+import { api } from "@services/api"
 
 type Props = TouchableOpacityProps & {
     data: ProductDTO;
@@ -20,7 +20,7 @@ export function Product({product_images, is_new, user, name, price, ...rest}: Pr
             <VStack
                 w={'50%'}
                 pr={2}
-                backgroundColor="gray.100"
+                
             >        
                 <Pressable>                    
                     <VStack  
@@ -37,7 +37,7 @@ export function Product({product_images, is_new, user, name, price, ...rest}: Pr
                                 rounded="lg" 
                                 // source={{ uri: `${api.defaults.baseURL}/exercise/thumb/${data.thumb}` }}                      
                                 source={{ uri: (product_images[0]) 
-                                    ? baseURL()+ '/images/'+  product_images[0].path : userPhoto }}
+                                    ? api.defaults.baseURL+ '/images/'+  product_images[0].path : userPhoto }}
                                 alt={name}             
                                 resizeMode="cover"         
                             />
@@ -51,7 +51,7 @@ export function Product({product_images, is_new, user, name, price, ...rest}: Pr
                             top={-120}
                         >
                             <Avatar h={6} w={6} rounded="full" bg="gray.100" 
-                                source={{ uri: baseURL() + '/images/'+ user.avatar }}
+                                source={{ uri: api.defaults.baseURL + '/images/'+ user.avatar }}
                             >
                                 
                             </Avatar>

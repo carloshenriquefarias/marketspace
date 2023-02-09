@@ -14,7 +14,7 @@ import { UserPhoto } from '@components/UserPhoto';
 import { InputFilter } from '@components/InputFilter' 
 
 import { AppError } from '@utils/AppError';
-import { api , baseURL } from '@services/api';
+import { api } from '@services/api';
 
 import { useAuth } from '@hooks/useAuth'
 import { RFValue } from 'react-native-responsive-fontsize';
@@ -23,6 +23,7 @@ import { Loading } from '@components/Loading';
 
 import { ProductDTO } from '@dtos/ProductDTO';
 import { SignOutModal } from '@components/SignOutModal';
+
 
 type RouteParamsProps = {
     productId: string;
@@ -38,7 +39,7 @@ export function Home(){
     const [loading, setLoading] = useState(true)
     const [userPhoto, setUserPhoto] = useState('https://github.com/JRSparrowII.png');
     const [product, setProduct] = useState<ProductDTO[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
+    const [ads, setAds] = useState([]);
 
     const route = useRoute()
     // const { productId } = route.params as RouteParamsProps;
@@ -68,9 +69,12 @@ export function Home(){
 
     async function fetchProduct() {       
         try {
-            // const response = await api.get(`/product/${productId}`);
+            const responseUsersProducts = await api.get(`/users/products`);
+
             const response = await api.get('/products');
+
             setProduct(response.data);
+            setAds(responseUsersProducts.data)
             setLoading(false) 
             console.log(response.data)
     
@@ -95,11 +99,11 @@ export function Home(){
         <ScrollView 
             contentContainerStyle={{ flexGrow: 1 }} 
             showsVerticalScrollIndicator={false}
-            backgroundColor="gray.100"
+            backgroundColor="gray.200"
         >
             <SafeAreaView>
                 <VStack  
-                    mt={50}                         
+                    mt={25}                         
                     flex={1}                        
                     px={6}                    
                 >
@@ -108,11 +112,11 @@ export function Home(){
                         <HStack justifyContent="space-between">
                             <UserPhoto 
                                 source={
-                                    user.avatar ? {uri: baseURL() + '/images/' + user.avatar} 
+                                    user.avatar ? {uri: api.defaults.baseURL + '/images/' + user.avatar} 
                                     : { 
                                         uri: userPhoto 
                                     } 
-                                } //Colocar o icone
+                                } 
 
                                 alt="Foto do usuário"
                                 size={12}
@@ -120,15 +124,16 @@ export function Home(){
                             />
 
                             <VStack>
-                                <Text color="black" fontSize={RFValue(13)}>Boas Vindas, </Text>  
-                                <Text color="black" fontFamily="heading" fontSize={RFValue(14)} fontWeight="700">{user.name}</Text> 
+                                <Text color="black" fontSize={RFValue(12)}>Boas Vindas, </Text>  
+                                <Text color="black" fontFamily="heading" fontSize={RFValue(12)} fontWeight="700">{user.name}</Text> 
                             </VStack>
                                             
                         </HStack>               
 
                         <ButtonDefault 
                             title="Criar Anúncio" 
-                            size="half"                             
+                            
+                                                       
                             variant="base2" 
                             onPress={handleNewAd}
                             leftIcon={<Plus size={sizes[5]} color={colors.gray[200]} />}                 
@@ -137,16 +142,16 @@ export function Home(){
 
                     <Text 
                         color="gray.500"
-                        mt={10}
+                        mt={8}
                     >
                         Seus produtos anunciados para vendas
                     </Text>
 
                     <Box
                         bg="blue.100" 
-                        mt={5}          
+                        mt={4}          
                         rounded={5}   
-                        h={20}                          
+                        h={16}                          
                     >
                         <HStack justifyContent="space-between" alignItems="center" padding={3}>
                             <HStack 
@@ -156,11 +161,13 @@ export function Home(){
                                 <Tag color={colors.blue[500]} size={sizes[7]} />
 
                                 <VStack ml={4}>
-                                    <Text color="gray.600" fontFamily={'heading'} fontSize={RFValue(20)} fontWeight="bold" lineHeight={'md'}>
-                                        4
-                                        {/* {ads.length} */}
+                                    <Text color="gray.600" fontFamily={'heading'} 
+                                        fontSize={RFValue(18)} fontWeight="bold" lineHeight={'md'}
+                                    >
+                                        
+                                        {ads.length}
                                     </Text>  
-                                    <Text color="black" fontSize={RFValue(12)}>anúncios ativos</Text> 
+                                    <Text color="black" fontSize={RFValue(10)}>anúncios ativos</Text> 
                                 </VStack>
                             </HStack>
 
@@ -170,7 +177,8 @@ export function Home(){
                                     alignItems="center" 
                                     space={1}                      
                                 >
-                                    <Text color="blue.700" fontFamily={'heading'} fontWeight="bold" fontSize={RFValue(13)}>Meus anúncios </Text>
+                                    <Text color="blue.700" fontFamily={'heading'} 
+                                    fontWeight="bold" fontSize={RFValue(11)}>Meus anúncios </Text>
                                     <ArrowRight color={colors.blue[500]} size={sizes[5]}/>
                                 </HStack>   
                             </Pressable>
@@ -180,7 +188,7 @@ export function Home(){
 
                     <Text 
                         color="gray.500"
-                        mt={10}
+                        mt={8}
                     >
                         Compre produtos variados
                     </Text>
@@ -191,7 +199,7 @@ export function Home(){
                     />
                 </VStack>
 
-                <VStack pr={4} pl={6} backgroundColor="gray.100">
+                <VStack pr={4} pl={6} >
                     { 
                         
                         
@@ -199,18 +207,18 @@ export function Home(){
                             data={product}
                             keyExtractor={item => item.id}
                             numColumns={2}
-
+                            showsHorizontalScrollIndicator={false}
                             renderItem={({ item }) => (
                                 (!loading) ?
                                 <Product                    
-                                    product_images={item.product_images}
                                     name={item.name}
                                     price={item.price}
                                     user={item.user}
-                                />    :  
-                                <Loading 
-                                    bgColor='white'                      
-                                />                  
+                                    product_images={item.product_images}
+                                    is_new={item.is_new}
+                                />    
+                                : <Loading bgColor='white'/>
+                                                 
                             )}
 
                             w='full' 

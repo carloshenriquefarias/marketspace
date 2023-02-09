@@ -1,7 +1,7 @@
 import { Input } from '@components/Input'
 import { ButtonDefault } from '@components/Button'
 import { Loading } from '@components/Loading'
-import { VStack, Text, Center, Heading, ScrollView, useToast, Button, HStack} from "native-base";
+import { VStack, Text, Center, Heading, ScrollView, useToast, Button, HStack, KeyboardAvoidingView} from "native-base";
 
 import { AuthNavigatorRoutesProps } from '@routes/auth.routes';
 import { useNavigation } from "@react-navigation/native";
@@ -110,39 +110,41 @@ export function SignIn() {
     }
 
     return (
-        <ScrollView 
+    <KeyboardAvoidingView behavior="padding">
+        <ScrollView
             contentContainerStyle={{ flexGrow: 1 }} 
-            showsVerticalScrollIndicator={false}>
-            
-            <VStack backgroundColor="gray.100" flex={1} >
-
-                <VStack                     
-                    px={10}                       
-                    rounded={50}
-                    mt={60}
-                >                  
-                    <Center mb={5}>
+            showsVerticalScrollIndicator={false}
+        >
+            <VStack 
+                backgroundColor="gray.200" 
+                px={12}    
+                pb={16}
+                pt={32}     
+                rounded="3xl"
+            >   
+                    <Center >
                         <LogoSvg />
 
-                        <Text color="gray.700" fontSize="35px" fontFamily="heading">
+                        <Text color="gray.700" fontSize="35px" fontFamily="heading" >
                             marketspace
                         </Text>
 
-                        <Text color="gray.400" fontSize="sm">
+                        <Text color="gray.400" fontSize="sm" mt={-2} >
                             Seu espaço de compra e venda
                         </Text>
                     </Center>
 
-                    <Center >
-                        <Heading color="gray.400" fontSize="md" mb={6}>
-                            Acesse sua conta
+                    <Center pt={16}>
+                        <Heading color="gray.600" fontSize="sm" mb={4}>
+                            Entre com sua conta
                         </Heading>
 
                         <Controller 
                             control={control}
                             name="email"
                             render={({ field: { onChange, value } }) => (
-                            <Input 
+                            <Input  
+                                secureTextEntry={false}
                                 placeholder="Email"
                                 onChangeText={onChange}
                                 keyboardType="email-address"
@@ -162,23 +164,25 @@ export function SignIn() {
                                     onChangeText={onChange}
                                     value={value}
                                     typeInput={"password"}
-                                    // secureTextEntry
                                     errorMessage={errors.password?.message}                                
                                 />
                             )}
                         />
                         
                         <ButtonDefault
+                            mt={4}
                             title="Entrar" 
                             size="total"  
                             variant="base1" 
                             onPress={handleSubmit(handleSignIn)} 
                             isLoading={isLoading}                     
-                        />                        
-                    </Center>                
-                </VStack>
+                        />  
+                                              
+                    </Center>     
+                               
+                
 
-                <VStack 
+                {/* <VStack 
                     flex={1} 
                     px={10}  
                     backgroundColor="gray.100"
@@ -229,28 +233,22 @@ export function SignIn() {
                             </Button>    
                         }   
                     </Center>
-                </VStack> 
+                </VStack>  */}
 
-                <VStack 
-                    flex={1} 
-                    px={10}  
-                    backgroundColor="white"
-                    mt={60}
-                >
-                    <Center mb={10}>
-                        <Text color="gray.700" fontSize="sm" mb={3} fontFamily="body" mt={5}>
-                            Ainda não tem acesso?
-                        </Text>
-
-                        <ButtonDefault 
-                            title="Criar uma conta" 
-                            size="total"   
-                            variant="default"  
-                            onPress={handleNewAccount}                
-                        />                        
-                    </Center>
-                </VStack>  
-            </VStack>       
+            
+            </VStack>    
+            <Center pt={12} px={12} pb={"full"} bg="white" >
+                <Text color="gray.700" fontSize="sm" mb={4} fontFamily="body">
+                    Ainda não tem acesso?
+                </Text>
+                <ButtonDefault 
+                    title="Criar uma conta" 
+                    size="total"   
+                    variant="default"  
+                    onPress={handleNewAccount}                
+                />                        
+            </Center>   
         </ScrollView>
+    </KeyboardAvoidingView>
     );
 }

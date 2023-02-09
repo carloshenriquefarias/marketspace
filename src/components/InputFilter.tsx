@@ -16,7 +16,7 @@ export function InputFilter({ typeInput = null, fulanodetal }: Props) {
         
         <NativeBaseInput
             bg="white"                
-                h={14}
+                h={12}
                 px={4}
                 borderWidth={0}
                 fontSize="md"
@@ -25,7 +25,7 @@ export function InputFilter({ typeInput = null, fulanodetal }: Props) {
                 placeholderTextColor="gray.400"  
                 placeholder='Buscar anúncio'
                 rounded={8} 
-                mt={4}         
+                mt={2}         
                 
                 _focus={{
                 bgColor: 'white',

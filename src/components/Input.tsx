@@ -10,7 +10,7 @@ type Props = IInputProps & {
   size?: 'normal' | 'high';
 }
 
-export function Input({ typeInput = null, errorMessage = null, isInvalid, size = 'normal', ...rest }: Props) {
+export function Input({ typeInput = null, errorMessage = null, isInvalid, ...rest }: Props) {
   
     const invalid = !!errorMessage || isInvalid;
     const [noShow, setNoShow] = React.useState(true);
@@ -19,10 +19,11 @@ export function Input({ typeInput = null, errorMessage = null, isInvalid, size =
         <FormControl mb={4} isInvalid={invalid}>
 
             <NativeBaseInput 
+                
                 bg="white"                
-                // h={14}
-                h={size === "normal" ? '14' : '40'}  
+                size="lg"
                 px={4}
+                py={3}
                 borderWidth={0}
                 fontSize="md"
                 color="gray.700"
@@ -36,9 +37,9 @@ export function Input({ typeInput = null, errorMessage = null, isInvalid, size =
                 }}
                 
                 _focus={{
-                bgColor: 'gray.100',
-                borderWidth: 1,
-                borderColor: 'blue.500'
+                    bgColor: 'gray.100',
+                    borderWidth: 1,
+                    borderColor: 'blue.500'
                 }}                             
                 
                 type={noShow ? "password" : "text" }             
@@ -46,8 +47,8 @@ export function Input({ typeInput = null, errorMessage = null, isInvalid, size =
                     (typeInput==="password")?
                     <Pressable onPress={() => setNoShow(!noShow)}>
                         <Icon 
-                            as={<MaterialIcons name={noShow ? "visibility-off" : "visibility"} />} 
-                            size={7} 
+                            as={<MaterialIcons name={!noShow ? "visibility-off" : "visibility"} />} 
+                            size={6} 
                             mr="2" 
                             color="muted.400" 
                         />

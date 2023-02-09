@@ -17,21 +17,18 @@ export function Routes() {
 
   const {colors} = useTheme();
   const {user, isLoadingUserStorageData} = useAuth();
-  // console.log ("usuario logado =>", user);
 
   const theme = DefaultTheme;
-  theme.colors.background = colors.gray[200];
+  theme.colors.background = colors.white;
 
   if(isLoadingUserStorageData){
     return <Loading/>;
   }
 
   return (
-    <Box flex={1} bg="gray.200"> 
+    <Box flex={1} bg="white"> 
         <NavigationContainer theme={theme}>
-          {/* <ImageSlider/> */}
           {user.id ? <AppRoutes/> : <AuthRoutes/>}
-          {/* <AppRoutes/>           */}
         </NavigationContainer>
     </Box>
   );

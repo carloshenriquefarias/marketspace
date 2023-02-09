@@ -9,11 +9,6 @@ import { AuthContextProvider} from '@contexts/AuthContext';
 
 import { Routes } from './src/routes';
 
-import { SignIn } from '@screens/SignIn';
-import { SignUp } from '@screens/SignUp';
-// import { Home } from '@screens/Home';
-
-
 import { LogBox } from 'react-native';
 LogBox.ignoreLogs(['We can not support a function callback.']); // Ignore log notification by message
 LogBox.ignoreAllLogs();//Ignore all log notifications
