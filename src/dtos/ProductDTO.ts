@@ -8,6 +8,7 @@ export type ProductDTO = {
     payment_methods: string[];
     product_images: ImageStyleProps[]; 
     user: UserProps;
+    onPress?: (id: string) => Promise<void>;
 };
 
 export type ImageStyleProps = {
@@ -16,5 +17,5 @@ export type ImageStyleProps = {
 };
 
 export type UserProps = {
-    avatar: string;
+    avatar?: string;
 };

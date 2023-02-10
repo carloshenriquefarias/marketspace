@@ -7,7 +7,7 @@ import { useState } from 'react';
 
 import { Text, HStack, VStack, Button, Box, useTheme, Switch, 
    ScrollView, IconButton, Avatar, useToast, Alert , Radio, Checkbox,
-   Container, FormControl, WarningOutlineIcon, Center, NativeBaseProvider
+   Container, FormControl, WarningOutlineIcon, Center, NativeBaseProvider, Icon
 } from 'native-base';
 
 import { useForm, Controller } from 'react-hook-form';
@@ -28,89 +28,32 @@ import * as ImagePicker from 'expo-image-picker';
 import { api } from '@services/api';
 import { AppError } from '@utils/AppError';
 
+import { AdsDTO } from '@dtos/AdsDTO';
+
 import { InputNewAd } from '@components/InputNewAd';
 import { storageAdsGet, storageAdsSave } from '@storage/storageAds';
-
-type NewAdData = {
-    image: [ImageGroup] //O image É UM ARRAY DE STING (3 FOTOS)
-    title: string;
-    description: string;
-    product_status: string;
-    amount: string;
-    swap?: string; //troca
-    method_payment: string;
-}
-
-type ImageGroup = {
-    //AQUI ESTAO INSERIDAS AS 3 IMAGENS
-};
+import { TouchableOpacity } from 'react-native';
 
 const NewAdSchema = yup.object({
-    title: yup.string().required('Informe o título do produto'),
+    name: yup.string().required('Informe o nome do produto'),
     description: yup.string().required('Descreva como é o seu produto'),
-    amount: yup.string().required('Digite o preço do seu produto'),
-});  
-
-const CheckBoxExample = ({isInvalid, setGroupValue, groupValue }) => { //PERGUNTAR PARA O MANO SOBRE O INVALID
-
-    const invalid = isInvalid;
-
-    return (       
-        <FormControl isInvalid={invalid}>
-            {/* <FormControl.Label 
-                _text={{
-                    fontSize: "lg",
-                    bold: true
-                }}
-            >
-                Preferred contact method
-            </FormControl.Label> */}
-
-            {/* <Text fontSize="md">Selected Values: </Text> */}
-        
-            <Checkbox.Group 
-                mt="2" 
-                colorScheme="blue" 
-                borderColor="gray.300"
-                defaultValue={groupValue} 
-                accessibilityLabel="choose multiple items" 
-                onChange={values => {setGroupValue( values || []); }} 
-                alignItems="flex-start"
-                isInvalid={invalid}
-            >
-                <Checkbox value="card" my="1">Cartão de Crédito</Checkbox>
-                <Checkbox value="pix" my="1">Pix</Checkbox>
-                <Checkbox value="cash" my="1">Dinheiro</Checkbox> 
-                <Checkbox value="bolet" my="1">Boleto</Checkbox> 
-                <Checkbox value="deposit" my="1">Depósito Bancário</Checkbox>
-            </Checkbox.Group>
-
-            <FormControl.ErrorMessage 
-                _stack={{alignItems: "flex-start"}} 
-                leftIcon={<WarningOutlineIcon size="xs" mt={1} />}
-            >
-                Escolha pelo menos um método de pagamento!
-            </FormControl.ErrorMessage>
-        </FormControl> 
-    )
-};
+    price: yup.string().required('Digite o preço do seu produto'),
+});
 
 export function NewAd(){
 
-    const { control, handleSubmit, formState: { errors } } = useForm<NewAdData>({
+    const { control, handleSubmit, formState: { errors } } = useForm<AdsDTO>({
         resolver: yupResolver(NewAdSchema),
     });
-
-    // const [ imageUpload, setImageUpload] = useState<any>(null);
-    // const [ valueRadio, setValueRadio] = useState('1'); //Valor do radio no console log
 
     const navigation = useNavigation<AppNavigatorRoutesProps>(); 
     const navigationTab = useNavigation<AppTabNavigatorRoutesProps>(); 
 
     const [isLoading, setIsLoading] = useState(false);
+    const [paymentMethods, setPaymentMethods] = useState<string[]>([])
+    
     const toast= useToast();
-
-    const {colors, sizes} = useTheme(); 
+    const {colors, sizes} = useTheme();    
 
     const [userPhoto, setUserPhoto] = useState<string | null>(null);  
     const [image, setImage] = useState(false);    
@@ -118,7 +61,8 @@ export function NewAd(){
 
     const [switchValue, setSwitchValue] = useState(false);
     const [statusProduto, setStatusProduto] = useState<string | undefined>(undefined);
-    const [groupValue, setGroupValue] = React.useState([]);
+
+    // const [groupValue, setGroupValue] = React.useState([]);
 
     // React.useEffect(() => {
     //     alert(groupValue)
@@ -159,19 +103,6 @@ export function NewAd(){
         );
     };
 
-    // const Checkboxes = () => {
-    
-    //     return(
-    //         <Checkbox.Group onChange={setGroupValues} value={groupValues} accessibilityLabel="choose numbers">
-    //             <Checkbox value="boleto">Boleto</Checkbox>
-    //             <Checkbox value="pix" mt={2} >Pix</Checkbox>
-    //             <Checkbox value="dinheiro" mt={2}>Dinheiro</Checkbox>
-    //             <Checkbox value="cartão de crédito" mt={2}>Cartão de crédito</Checkbox>
-    //             <Checkbox value="depósito bancário" mt={2}>Depósito Bancário</Checkbox>
-    //         </Checkbox.Group>
-    //     );
-    // }
-
     function handleOpenPreview() { 
         navigation.navigate('preview');
     } 
@@ -181,6 +112,16 @@ export function NewAd(){
     } 
 
     async function handleUserPhotoSelected(){
+
+        // if(image.length > 3) {
+        //     return toast.show({
+        //       title: 'Seu produto pode ter somente 3 imagens',
+        //       bg: 'yellow.500',
+        //       placement: 'top',
+        //       mx: 4
+        //     })
+        // } //Perguntar ao Prisco
+
         setImage(true);
         
         try {
@@ -214,8 +155,17 @@ export function NewAd(){
         }
     }    
 
-    async function handleNewAd({ title, amount }: NewAdData) {
+    async function handleNewAd({ name, price, description }: AdsDTO) {
         try {  
+
+            if(paymentMethods.length === 0) {
+                return toast.show({
+                  title: 'Atenção! Por favor, escolha pelo menos um método de pagamento',
+                  bgColor: 'yellow.500',
+                  placement: 'top',
+                //   mx: 4,
+                })
+            }
 
             if ( !statusProduto ) {
                 const title = 'Atenção! Por favor, informe se o produto novo ou usado.';
@@ -242,15 +192,16 @@ export function NewAd(){
             setIsLoading(true) 
 
             const data = {
-                name: title,
-                description:  "Essa é a melhor luminária do mundo. Você não vai se arrepender",
+                name: name,
+                description: description,
                 is_new:  getConverteStatusProdutoBoolean(statusProduto),
-                price: setPrice(amount),
+                price: setPrice(price),
                 accept_trade:  true,
-                payment_methods: ["pix"],
+                payment_methods: paymentMethods,
                 images: [userPhoto]
                 // images: [{uri: "qualquercoisa", type: "image"}]
             }
+            console.log(data)
 
             await storageAdsSave(data);
             setIsLoading(false)
@@ -302,6 +253,15 @@ export function NewAd(){
                             Escolha até 3 imagens para mostrar o quanto seu produto é incrivel!
                         </Text>
 
+                        {/* <ScrollView mb={8} horizontal showsHorizontalScrollIndicator={false}>
+                            {image.map (image => <Images source={{uri: image}} key={image} />)}
+                            <TouchableOpacity onPress={handleUserPhotoSelected}>
+                                <Center h='100px' w='100px' bg='gray.5' rounded='md'>
+                                <Icon/>
+                                </Center>
+                            </TouchableOpacity>
+                        </ScrollView> */}
+
                         <HStack 
                             justifyContent="flex-start" 
                             mt={5}
@@ -333,7 +293,7 @@ export function NewAd(){
 
                         <Controller 
                             control={control}
-                            name="title"
+                            name="name"
                             render={({ field: { onChange, value } }) => (
                                 <Input 
                                     placeholder="Título do anúncio"
@@ -342,7 +302,7 @@ export function NewAd(){
                                     keyboardType="default"
                                     autoCapitalize="none"     
                                     secureTextEntry={false}               
-                                    errorMessage={errors.title?.message}
+                                    errorMessage={errors.name?.message}
                                 />
                             )}
                         />
@@ -364,10 +324,6 @@ export function NewAd(){
                             )}
                         />
 
-                        {/* <Box>
-                            
-                        </Box> */}
-
                         <RadioStatusProduct />
 
                         <Text color="gray.700" mt={5} mb={5} fontFamily="heading" fontSize="md">
@@ -376,7 +332,7 @@ export function NewAd(){
 
                         <Controller 
                             control={control}
-                            name="amount"
+                            name="price"
                             render={({ field: { onChange, value } }) => (
                                 <InputNewAd 
                                     placeholder="Valor do produto"
@@ -385,7 +341,7 @@ export function NewAd(){
                                     keyboardType="numeric" //COLOCAR A MASCARA
                                     autoCapitalize="none"     
                                     secureTextEntry={false}               
-                                    errorMessage={errors.amount?.message}
+                                    errorMessage={errors.price?.message}
                                 />
                             )}
                         />
@@ -400,11 +356,17 @@ export function NewAd(){
                             Meios de pagamentos aceitos:
                         </Text>
 
-                        {/* <Checkboxes/>    */}
-                        <CheckBoxExample 
-                            setGroupValue={setGroupValue}
-                            groupValue={groupValue}
-                        />
+                        <Checkbox.Group 
+                            onChange={setPaymentMethods} 
+                            value={paymentMethods} 
+                            accessibilityLabel="choose numbers"
+                        >
+                            <Checkbox value='boleto' mb={1}>Boleto</Checkbox>
+                            <Checkbox value='pix' mb={1}>Pix</Checkbox>
+                            <Checkbox value='cash' mb={1}>Dinheiro</Checkbox>
+                            <Checkbox value='card' mb={1}>Cartão Crédito</Checkbox>
+                            <Checkbox value='deposit' mb={1}>Depósito Bancário</Checkbox>
+                        </Checkbox.Group>                           
                     </VStack>                    
                 </VStack> 
             </ScrollView> 

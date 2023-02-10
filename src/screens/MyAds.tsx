@@ -1,18 +1,20 @@
 import { AppNavigatorRoutesProps } from '@routes/app.routes';
 import { AppTabNavigatorRoutesProps } from '@routes/app.tab.routes';
-import { useNavigation} from '@react-navigation/native';
+import { useFocusEffect, useNavigation} from '@react-navigation/native';
 
 import { Text, HStack, VStack, ScrollView, CheckIcon, useTheme, Box, Select, 
     Center, FlatList, IconButton, useToast } from 'native-base'
 ;
 
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 import { Plus } from 'phosphor-react-native';
 
 import { Product } from '@components/Product';
 import { api } from '@services/api';
 import { AppError } from '@utils/AppError';
+import { ProductDTO } from '@dtos/ProductDTO';
+import { Pressable } from 'react-native';
 
 type ActiveTypes = 'todos' | 'ativos' | 'inativos';
 
@@ -49,23 +51,11 @@ export function MyAds(){
     const navigationTab = useNavigation<AppTabNavigatorRoutesProps>(); 
     const {colors, sizes} = useTheme();
     const toast = useToast();
+    const [product, setProduct] = useState<ProductDTO[]>([]);
+    const [filterSelected, setFilterSelected] = useState('todos');
 
     const [active, setActive] = useState<ActiveTypes>('todos');
     const [userPhoto, setUserPhoto] = useState('https://github.com/JRSparrowII.png'); 
-    const [product, setProduct] = useState<string[]>([
-        // {
-        //     id: '1'
-        // },
-        // {
-        //     id: '2'
-        // },
-        // {
-        //     id: '3'
-        // },
-        // {
-        //     id: '4'
-        // }
-    ]);
 
     function handleOpenPreview() { 
         navigation.navigate('preview');
@@ -79,27 +69,31 @@ export function MyAds(){
         navigation.navigate('newad');
     } 
 
+    function handleProductDetails(id: string | undefined) {
+        navigation.navigate('myadsdetails', {user_id: id});
+    }    
+
     async function fetchMyAds() {       
         try {
-          const response = await api.get('/products');
-          setProduct(response.data);
-            //   console.log(response.data);
+            const response = await api.get('/users/products');
+            setProduct(response.data);
+            console.log(response.data);
     
         } catch (error) {
-          const isAppError = error instanceof AppError;
-          const title = isAppError ? error.message : 'Não foi possível carregar os produtos';
-    
-          toast.show({
-            title,
-            placement: 'top',
-            bgColor: 'red.500'
-          })
+            const isAppError = error instanceof AppError;
+            const title = isAppError ? error.message : 'Não foi possível carregar os produtos';
+        
+            toast.show({
+                title,
+                placement: 'top',
+                bgColor: 'red.500'
+            })
         }
     }
 
-    useEffect(() => {
+    useFocusEffect(useCallback(() => {
         fetchMyAds();
-    },[])
+    },[]))
 
     return(
         <ScrollView 
@@ -133,33 +127,38 @@ export function MyAds(){
 
                 <HStack justifyContent="space-between" alignItems="center" mt={5}>
                     <Text color="gray.700" fontFamily="body" fontSize="lg">
-                        9 anúnicios
+                        {product.length} anúncios
                     </Text>
 
                     <Selects/>
                 </HStack>              
             </VStack> 
 
+              
+
             <VStack pr={4} pl={6} backgroundColor="gray.100">            
-                {/* <FlatList 
+                <FlatList 
                     data={product}
                     keyExtractor={item => item.id}
                     numColumns={2}
                     renderItem={({ item }) => (
-                        <Product                    
-                            image='source={{ uri: userPhoto }}'
-                            title='Tenis vermelho'
-                            price={50}
-                            status='NOVO'
-                            avatar='source={{ uri: userPhoto }}'
-                        />                      
+                        // <Pressable onPress={() => handleProductDetails(item.id)}>
+                            <Product                    
+                                product_images={item.product_images}
+                                name={item.name}
+                                price={item.price}
+                                is_new={item.is_new}
+                                // data={item}
+                                onPress={() => handleProductDetails(item.id)}
+                            /> 
+                        // </Pressable>                                      
                     )}
                     w='full' 
                     showsVerticalScrollIndicator={false}
                     _contentContainerStyle={{
                         paddingBottom: 20
                     }}
-                />  */}
+                /> 
             </VStack>
         </ScrollView>       
     )        

@@ -5,7 +5,7 @@ import { AppTabNavigatorRoutesProps } from '@routes/app.tab.routes';
 import React, { useEffect, useState } from "react";
 
 import { Text, HStack, VStack, ScrollView, Image, useTheme, Avatar, 
-    Center, Heading, View, useToast } from 'native-base'
+    Center, Heading, View, useToast, Icon } from 'native-base'
 ;
 import {useAuth} from '@hooks/useAuth';
 import { AdsDTO } from "@dtos/AdsDTO";
@@ -19,6 +19,7 @@ import { Loading } from '@components/Loading';
 import BackgroundImg from '@assets/produto_2.png';
 
 import { ArrowLeft, Bank, Barcode, CreditCard, Money, QrCode, Tag} from 'phosphor-react-native';
+import { MaterialCommunityIcons, Feather} from '@expo/vector-icons';
 import { AppError } from '@utils/AppError';
 
 import { storageAdsGet } from '@storage/storageAds';
@@ -215,7 +216,7 @@ export function Preview(){
                                     </Text>         
                                 
                                     <Text color="gray.700" >
-                                        {ads.accept_trade}
+                                        {ads.accept_trade ? 'Sim' : 'Não'}
                                     </Text> 
                                 </HStack>                                     
                 
@@ -224,8 +225,16 @@ export function Preview(){
                                 </Text>
 
                                 <VStack mt={2}>
+                                    {ads.payment_methods.map(method =>
+                                        <HStack alignItems='center' key={method}>
+                                            <Icon as={MaterialCommunityIcons} name='cash-multiple' size={4} color='gray.2' mr={2}/>
+                                            <Text fontFamily='body' textTransform='capitalize' fontSize='sm' color='gray.2'>
+                                                {method}
+                                            </Text>
+                                        </HStack>
+                                    )}
                                     
-                                    <HStack space={2}>
+                                    {/* <HStack space={2}>
                                         <Barcode size={sizes[5]} color={colors.gray[700]} />
 
                                         <Text fontSize="sm" color="gray.700">
@@ -263,7 +272,7 @@ export function Preview(){
                                         <Text fontSize="sm" color="gray.700">
                                             Depósito bancário
                                         </Text>
-                                    </HStack>
+                                    </HStack> */}
                                     
                                 </VStack>
                                     

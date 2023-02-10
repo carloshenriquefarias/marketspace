@@ -12,7 +12,7 @@ type AppRoutes = {
   hometab: undefined;
   preview: undefined;
   productdetails: undefined;
-  myadsdetails: undefined;
+  myadsdetails: { params: {user_id :string }};
   myads: undefined;
 }
 
