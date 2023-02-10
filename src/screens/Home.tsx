@@ -22,7 +22,6 @@ import { SafeAreaView } from 'react-native';
 import { Loading } from '@components/Loading';
 
 import { ProductDTO } from '@dtos/ProductDTO';
-import { SignOutModal } from '@components/SignOutModal';
 
 type RouteParamsProps = {
     productId: string;
@@ -72,7 +71,7 @@ export function Home(){
             const response = await api.get('/products');
             setProduct(response.data);
             setLoading(false) 
-            console.log(response.data)
+            // console.log(response.data)
     
         } catch (error) {
           const isAppError = error instanceof AppError;
@@ -173,8 +172,7 @@ export function Home(){
                                     <Text color="blue.700" fontFamily={'heading'} fontWeight="bold" fontSize={RFValue(13)}>Meus anúncios </Text>
                                     <ArrowRight color={colors.blue[500]} size={sizes[5]}/>
                                 </HStack>   
-                            </Pressable>
-                                                
+                            </Pressable>                                                
                         </HStack>                    
                     </Box>
 
@@ -191,90 +189,44 @@ export function Home(){
                     />
                 </VStack>
 
-                <VStack pr={4} pl={6} backgroundColor="gray.100">
-                    { 
-                        
-                        
-                        <FlatList //VER ERRO DE ID NA FLATLIST
-                            data={product}
-                            keyExtractor={item => item.id}
-                            numColumns={2}
+                <VStack pr={4} pl={6} backgroundColor="gray.100">                   
+                    <FlatList
+                        data={product}
+                        keyExtractor={item => item.id}
+                        numColumns={2}
 
-                            renderItem={({ item }) => (
-                                (!loading) ?
+                        renderItem={({ item }) => (
+                            (!loading) ?
                                 <Product                    
                                     product_images={item.product_images}
                                     name={item.name}
                                     price={item.price}
                                     user={item.user}
-                                />    :  
-                                <Loading 
-                                    bgColor='white'                      
-                                />                  
-                            )}
+                                    onPress={handleProductDetails}
+                                    // onPress={() => handleProductDetails(item.id)} 
+                                    // data={item}
+                                /> 
+                            :  
+                            <Loading bgColor='white'/>                  
+                        )}
 
-                            w='full' 
-                            showsVerticalScrollIndicator={false}
-                            _contentContainerStyle={{
-                                paddingBottom: 20
-                            }}
-                            ListEmptyComponent={() => (
-                                    <VStack alignItems='center' justifyContent='center' flex={1} mt={16}>
-                                        
-                                        <Text fontFamily='body' color='gray.4' fontSize='md'>
-                                        Nenhum anúncio encontrado
-                                        </Text>
-                                    </VStack>
-                                    )}
-                        /> 
+                        w='full' 
+                        showsVerticalScrollIndicator={false}
+                        _contentContainerStyle={{ paddingBottom: 20 }}
 
-
-                        // <FlatList
-                        //     data={Products}
-                        //     keyExtractor={item => item.id}
-                        //     numColumns={2}
-                        //     columnWrapperStyle={{ justifyContent: 'space-between' }}
-                        //     contentContainerStyle={{ paddingBottom: 92 }}
-                        //     showsVerticalScrollIndicator={false}
-                        //     //refreshControl={<RefreshControl size={1} refreshing={refreshing} onRefresh={handleResetFilters}/>}
-                        //     renderItem={({item}) => {
-                        //     if(!loadingProducts) {
-                        //         return (
-                        //         <ProductCard
-                        //         onPress={() => handleProductDetails(item.id)}
-                        //         name={item.name}
-                        //         avatar={item.user.avatar}
-                        //         price={item.price}
-                        //         is_new={item.is_new}
-                        //         image={item.product_images[0].path}
-                        //         />
-                        //         )
-                        //     }
-                        //     return <SkeletonCard/>
-                        //     }
-                        //     }
-                        //     ListEmptyComponent={() => (
-                        //     <VStack alignItems='center' justifyContent='center' flex={1} mt={16}>
-                        //         <LogoSvg/>
-                        //         <Text fontFamily='body' color='gray.4' fontSize='md'>
-                        //         Nenhum anúncio encontrado
-                        //         </Text>
-                        //     </VStack>
-                        //     )}
-                        // />
-                    }
+                        ListEmptyComponent={() => (
+                            <VStack alignItems='center' justifyContent='center' flex={1} mt={16}>                                    
+                                <Text fontFamily='body' color='gray.4' fontSize='md'>
+                                    Nenhum anúncio encontrado
+                                </Text>
+                            </VStack>
+                        )}
+                    />                    
                 </VStack>
                 
-            {/* {(visibleModal) ?
-                <FilterModal title='NOVO'/>
-            :null} */}
-
-            {(visibleModal) ?
-                <SignOutModal/>
-            :null}
+            {(visibleModal) ? <FilterModal title='NOVO'/> : null}
             
         </SafeAreaView>                            
-        </ScrollView>
-        
+        </ScrollView>        
     )
 }

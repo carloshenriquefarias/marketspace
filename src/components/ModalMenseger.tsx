@@ -1,7 +1,14 @@
 import React from "react";
 import { Modal, Button, HStack } from "native-base";
 
-export function SignOutModal() {
+type ModalProps = {
+    title: string;
+    nameButtonOne: string;
+    nameButtonTwo: string;
+    onPress: () => Promise<void>;
+};
+
+export function ModalMenseger({title, nameButtonOne, nameButtonTwo, onPress}: ModalProps) {
     const [modalVisible, setModalVisible] = React.useState(true);
     const initialRef = React.useRef(null);
     const finalRef = React.useRef(null);
@@ -12,7 +19,7 @@ export function SignOutModal() {
                 <Modal.Header fontWeight="bold" color="gray.700">ATENÇÃO!</Modal.Header>
 
                 <Modal.Body fontSize="3xl" color="gray.700" fontWeight="bold" >
-                    Você REALMENTE deseja sair do Marketspace?
+                    {title}
                 </Modal.Body>
 
                 <HStack>
@@ -23,18 +30,18 @@ export function SignOutModal() {
                             colorScheme="blueGray" 
                             fontSize="md"
                             w="48%"
-                            onPress={() => {setModalVisible(false)}}
+                            onPress={onPress}
                         >
-                            Não, Volte!
+                            {nameButtonOne}
                         </Button>
 
                         <Button 
                             colorScheme="gray.700" 
                             bg="red.500" 
                             fontSize="md"
-                            onPress={() => {setModalVisible(false)}}
+                            onPress={onPress}
                         >
-                            Sim, Quero sair!
+                            {nameButtonTwo}
                         </Button>
                     </Button.Group>
                 </HStack>
