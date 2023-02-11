@@ -2,7 +2,7 @@ import { AppNavigatorRoutesProps } from '@routes/app.routes';
 import { AppTabNavigatorRoutesProps } from '@routes/app.tab.routes';
 import { useNavigation } from '@react-navigation/native';
 
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from 'react';
 
 import { Text, HStack, VStack, Button, Box, useTheme, Switch, 
@@ -33,6 +33,7 @@ import { AdsDTO } from '@dtos/AdsDTO';
 import { InputNewAd } from '@components/InputNewAd';
 import { storageAdsGet, storageAdsSave } from '@storage/storageAds';
 import { TouchableOpacity } from 'react-native';
+import { background } from 'native-base/lib/typescript/theme/styled-system';
 
 const NewAdSchema = yup.object({
     name: yup.string().required('Informe o nome do produto'),
@@ -45,28 +46,18 @@ export function NewAd(){
     const { control, handleSubmit, formState: { errors } } = useForm<AdsDTO>({
         resolver: yupResolver(NewAdSchema),
     });
+    const { colors, sizes } = useTheme(); 
 
+    const PHOTO_SIZE = 24;
     const navigation = useNavigation<AppNavigatorRoutesProps>(); 
     const navigationTab = useNavigation<AppTabNavigatorRoutesProps>(); 
+    const toast= useToast();
 
     const [isLoading, setIsLoading] = useState(false);
     const [paymentMethods, setPaymentMethods] = useState<string[]>([])
-    
-    const toast= useToast();
-    const {colors, sizes} = useTheme();    
-
-    const [userPhoto, setUserPhoto] = useState<string | null>(null);  
-    const [image, setImage] = useState(false);    
-    const PHOTO_SIZE = 24;
-
+    const [images, setImages] = useState<string[]>([]);    
     const [switchValue, setSwitchValue] = useState(false);
     const [statusProduto, setStatusProduto] = useState<string | undefined>(undefined);
-
-    // const [groupValue, setGroupValue] = React.useState([]);
-
-    // React.useEffect(() => {
-    //     alert(groupValue)
-    // },[groupValue])    
 
     const RadioStatusProduct = () => {
         return (
@@ -89,7 +80,7 @@ export function NewAd(){
     };
 
     const Switches = () => {      
-        const toggleSwitch = (value) => {
+        const toggleSwitch = (value : any) => {
           setSwitchValue(value);
         };
       
@@ -113,35 +104,37 @@ export function NewAd(){
 
     async function handleUserPhotoSelected(){
 
-        // if(image.length > 3) {
-        //     return toast.show({
-        //       title: 'Seu produto pode ter somente 3 imagens',
-        //       bg: 'yellow.500',
-        //       placement: 'top',
-        //       mx: 4
-        //     })
-        // } //Perguntar ao Prisco
-
-        setImage(true);
-        
+        if(images.length > 2) {
+            return toast.show({
+              title: 'Você não pode colocar acima de 3 imagens',
+              bg: 'yellow.500',
+              placement: 'top',
+              mx: 4
+            })
+        } 
+  
         try {
-          const photoSelected = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.Images,
-            quality: 1,
-            aspect: [4, 4],
-            allowsEditing: true, 
-          });
-      
-          if(photoSelected.canceled) {
-            return;
-          }           
+            const photoSelected = await ImagePicker.launchImageLibraryAsync({
+                mediaTypes: ImagePicker.MediaTypeOptions.Images,
+                quality: 1,
+                aspect: [4, 4],
+                allowsEditing: true, 
+            });
 
-            setUserPhoto(photoSelected.assets[0].uri);
+            if(photoSelected.canceled) {
+                return;
+            }           
+
+            setImages(preValues => [...preValues, photoSelected.assets[0].uri]);     
       
         } catch (error) {
           console.log(error)  // trocar por toast informando que n foi possivel pegar a imagem        
         } 
     }
+
+    useEffect(() => {
+        console.log('imagens', images)
+    },[images])   
 
     function setPrice(amount : string) {
         return parseFloat(amount);
@@ -163,7 +156,6 @@ export function NewAd(){
                   title: 'Atenção! Por favor, escolha pelo menos um método de pagamento',
                   bgColor: 'yellow.500',
                   placement: 'top',
-                //   mx: 4,
                 })
             }
 
@@ -178,7 +170,7 @@ export function NewAd(){
                 return
             }
 
-            if ( !userPhoto ) {
+            if ( !images ) {
                 const title = 'Atenção! Por favor, escolha uma imagem.';
 
                 toast.show({    
@@ -196,10 +188,9 @@ export function NewAd(){
                 description: description,
                 is_new:  getConverteStatusProdutoBoolean(statusProduto),
                 price: setPrice(price),
-                accept_trade:  true,
+                accept_trade:  switchValue,
                 payment_methods: paymentMethods,
-                images: [userPhoto]
-                // images: [{uri: "qualquercoisa", type: "image"}]
+                images: images
             }
             console.log(data)
 
@@ -253,38 +244,40 @@ export function NewAd(){
                             Escolha até 3 imagens para mostrar o quanto seu produto é incrivel!
                         </Text>
 
-                        {/* <ScrollView mb={8} horizontal showsHorizontalScrollIndicator={false}>
-                            {image.map (image => <Images source={{uri: image}} key={image} />)}
-                            <TouchableOpacity onPress={handleUserPhotoSelected}>
-                                <Center h='100px' w='100px' bg='gray.5' rounded='md'>
-                                <Icon/>
-                                </Center>
-                            </TouchableOpacity>
-                        </ScrollView> */}
+                        
 
                         <HStack 
                             justifyContent="flex-start" 
                             mt={5}
                             space={5}
                         >
-                            {image ? (
-                                <Images
-                                    source={{ uri: userPhoto }}   
-                                    size={24}  
-                                    alt="photo"                  
-                                />
+                            {images ? (
+                                <ScrollView mb={8} horizontal showsHorizontalScrollIndicator={false} >
+                                    { images.map ( image => (
+                                        <Images 
+                                            source={{uri: image}} 
+                                            key={image} 
+                                            size={24}  
+                                            mr={1}
+                                            alt={'Foto'}
+                                        />
+                                        )
+                                    )}
+                                    <HStack>
+                                        <Button
+                                            onPress={handleUserPhotoSelected} 
+                                            h={24} 
+                                            w={24} 
+                                            backgroundColor="gray.300"
+                                            alignItems="center"
+                                        >
+                                            <Plus />
+                                        </Button> 
+                                    </HStack>   
+                                </ScrollView>
                             ) : null}
                             
-                            <HStack>
-                                <Button
-                                    onPress={handleUserPhotoSelected} 
-                                    h={24} w={24} 
-                                    backgroundColor="gray.300"
-                                    alignItems="center"
-                                >
-                                    <Plus />
-                                </Button> 
-                            </HStack>                         
+                                                  
                         </HStack>
 
                         <Text color="gray.700" mt={5} mb={5} fontFamily="heading" fontSize="md">
@@ -350,7 +343,7 @@ export function NewAd(){
                             Aceita troca?
                         </Text>
 
-                        <Switches/>
+                        <Switches />
 
                         <Text color="gray.700" fontFamily="heading" fontSize="md" mb={1}>
                             Meios de pagamentos aceitos:

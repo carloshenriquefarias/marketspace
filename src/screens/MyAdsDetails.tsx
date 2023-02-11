@@ -25,6 +25,7 @@ import { AdsDTO } from "@dtos/AdsDTO";
 import { MaterialCommunityIcons, Feather} from '@expo/vector-icons';
 import { ProductDTO } from '@dtos/ProductDTO';
 import { Loading } from '@components/Loading';
+import { SliderCarousel } from '@components/SliderCarousel';
 
 type RouteParams = {
     userProduct_id: string;
@@ -54,7 +55,7 @@ export function MyAdsDetails(){
         try {
             setIsLoading(true);
             const response = await api.get(`/products/${userProduct_id}`);
-            // console.log(userProduct_id); //Checar pra ver se ta trazendo os dados
+            console.log(response.data); //Checar pra ver se ta trazendo os dados
             setProduct(response.data);
         
         } catch (error) {
@@ -170,17 +171,11 @@ export function MyAdsDetails(){
 
                 { isLoading ? <Loading/> :
                     <>                  
-                        <View h='300px' >
-                            <Image
-                                w='full'
-                                h='full'
-                                // rounded="lg"       
-                                // source={{ uri: `${api.defaults.baseURL}/products/images/${userProduct_id}` }}                 
-                                source={BackgroundImg}
-                                alt="Tenis vermelho"              
-                                resizeMode="cover"         
-                            />
-                        </View>
+                    
+
+                        <SliderCarousel 
+
+                        />                            
 
                         <VStack             
                             flex="1" 
