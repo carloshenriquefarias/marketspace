@@ -8,7 +8,7 @@ export type ProductDTO = {
     payment_methods: string[];
     product_images: ImageStyleProps[]; 
     user: UserProps;
-    onPress?: (id: string) => Promise<void>;
+    onPress?: (userProduct_id: string) => Promise <void>;
 };
 
 export type ImageStyleProps = {

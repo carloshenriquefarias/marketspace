@@ -69,15 +69,15 @@ export function MyAds(){
         navigation.navigate('newad');
     } 
 
-    function handleProductDetails(id: string | undefined) {
-        navigation.navigate('myadsdetails', {user_id: id});
+    function handleProductDetails(userProduct_id: string) {
+        navigation.navigate('myadsdetails', {userProduct_id});
     }    
 
     async function fetchMyAds() {       
         try {
             const response = await api.get('/users/products');
             setProduct(response.data);
-            console.log(response.data);
+            // console.log(response.data);
     
         } catch (error) {
             const isAppError = error instanceof AppError;
@@ -142,16 +142,14 @@ export function MyAds(){
                     keyExtractor={item => item.id}
                     numColumns={2}
                     renderItem={({ item }) => (
-                        // <Pressable onPress={() => handleProductDetails(item.id)}>
-                            <Product                    
-                                product_images={item.product_images}
-                                name={item.name}
-                                price={item.price}
-                                is_new={item.is_new}
-                                // data={item}
-                                onPress={() => handleProductDetails(item.id)}
-                            /> 
-                        // </Pressable>                                      
+                        <Product                    
+                            product_images={item.product_images}
+                            name={item.name}
+                            price={item.price}
+                            is_new={item.is_new}
+                            // data={item}
+                            onPress={() => handleProductDetails(item.id)}
+                        />                                     
                     )}
                     w='full' 
                     showsVerticalScrollIndicator={false}
