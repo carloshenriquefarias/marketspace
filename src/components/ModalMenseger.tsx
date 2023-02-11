@@ -23,14 +23,16 @@ export function ModalMenseger({title, nameButtonOne, nameButtonTwo, onPress}: Mo
                 </Modal.Body>
 
                 <HStack>
-                    <Button.Group space={1} justifyContent="space-between" w="full" p={5}>
+                    <Button.Group space={0.2} justifyContent="space-between" w="full" p={2}>
                         <Button 
                             variant="gray.700" 
                             bg="gray.200" 
                             colorScheme="blueGray" 
                             fontSize="md"
-                            w="48%"
+                            w="49%"
                             onPress={onPress}
+                            textAlign="center"
+                            justifyContent="center"
                         >
                             {nameButtonOne}
                         </Button>
@@ -39,6 +41,9 @@ export function ModalMenseger({title, nameButtonOne, nameButtonTwo, onPress}: Mo
                             colorScheme="gray.700" 
                             bg="red.500" 
                             fontSize="md"
+                            textAlign="center"
+                            justifyContent="center"
+                            w="49%"
                             onPress={onPress}
                         >
                             {nameButtonTwo}
