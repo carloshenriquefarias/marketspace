@@ -171,11 +171,9 @@ export function MyAdsDetails(){
 
                 { isLoading ? <Loading/> :
                     <>                  
-                    
-
-                        <SliderCarousel 
-
-                        />                            
+                        {/* <SliderCarousel 
+                            images={product.product_images}  
+                        />                             */}
 
                         <VStack             
                             flex="1" 

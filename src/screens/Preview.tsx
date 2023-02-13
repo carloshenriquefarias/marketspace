@@ -95,7 +95,7 @@ export function Preview(){
                     bgColor: 'green.500'
                 })   
                 
-                //handleOpenPreview();
+                handleGoHome();
 
             } else {
                 throw new Error();
@@ -167,8 +167,7 @@ export function Preview(){
                                 <SliderCarousel 
                                   images={ads.images}  
                                 />
-                            </VStack>
-                            
+                            </VStack>                            
 
                             <VStack             
                                 flex="1"

@@ -15,20 +15,20 @@ type Props = {
   images?: imageProps[] | string[],
 }
 
-export function SliderCarousel({images} : Props) {
+export function SliderCarousel({ images } : Props) {
   const { width } = Dimensions.get('window')
+  // console.log('conteudo do meu images', images)
 
-  console.log('conteudo do meu images', images)
   return (
-    <View style={{ flex: 1 }}>
+    
             <Carousel
                 //loop
                 width={width}
-                height={width}
-                // autoPlay={true}
+                height={width} 
+                //autoPlay={true}
                 data={images}
                 scrollAnimationDuration={1000}
-                //onSnapToItem={(item:number) => console.log('current index:', item)}
+                onSnapToItem={(item:number) => console.log('current index:', item)}
                 renderItem={({ item }) => (
                     <Image 
                         w={width}
@@ -36,11 +36,11 @@ export function SliderCarousel({images} : Props) {
                         justifyContent="center"
                         alt={"Imagens"}
                         //source={{ uri: `${api.defaults.baseURL}/images/${item.path}` }}
-                        source={{ uri: (item.path) ? `${api.defaults.baseURL}/images/${item.path}` : item }}
+                        source={{ uri: item }}
                     />
                 )}
             />
-        </View>
+      
 
     )
 }

@@ -10,9 +10,9 @@ import { Text, HStack, VStack, Button, Box, useTheme, Switch,
    Container, FormControl, WarningOutlineIcon, Center, NativeBaseProvider, Icon
 } from 'native-base';
 
-import { useForm, Controller } from 'react-hook-form';
-import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
+// import { useForm, Controller } from 'react-hook-form';
+// import * as yup from 'yup';
+// import { yupResolver } from '@hookform/resolvers/yup';
 
 import { ButtonDefault } from '@components/Button';
 import { Input } from '@components/Input'
@@ -40,41 +40,42 @@ export function EditAds(){
     const navigation = useNavigation<AppNavigatorRoutesProps>(); 
     const navigationTab = useNavigation<AppTabNavigatorRoutesProps>(); 
 
-    const [isLoading, setIsLoading] = useState(false);
-    const [paymentMethods, setPaymentMethods] = useState<string[]>([])
-    const [ads, setAds] = useState<AdsDTO | undefined>(undefined);
-    
+    const route = useRoute();
+    const product = route.params as AdsDTO;
+    const PHOTO_SIZE = 24;
     const toast= useToast();
-    const {colors, sizes} = useTheme();    
+
+    const {colors, sizes} = useTheme(); 
+
+    const [isLoading, setIsLoading] = useState(false);
+    // const [paymentMethods, setPaymentMethods] = useState<string[]>([])
+    const [ads, setAds] = useState<AdsDTO | undefined>(undefined);
 
     const [userPhoto, setUserPhoto] = useState<string | null>(null);  
-    const [image, setImage] = useState(false);    
-    const PHOTO_SIZE = 24;
+    const [image, setImage] = useState(false);   
 
     const [switchValue, setSwitchValue] = useState(false);
     const [statusProduto, setStatusProduto] = useState<string | undefined>(undefined);
     const [isUpdating, setIsUpdating] = useState(false);
     const [visibleModal, setVisibleModal] = useState(false)
 
-    const route = useRoute()
-    const product = route.params as AdsDTO
     const [editing, setEditing] = useState(false)
 
     // const paymentMethodsKey = product.payment_methods.map(({ key }) => key)
 
-    // const [images, setImages] = useState<string[]>([])
-    // const [title, setTitle] = useState(product.name)
-    // const [description, setDescription] = useState(product.description)
-    // const [isNew, setIsNew] = useState(product.is_new)
-    // const [price, setPrice] = useState(product.price.toString())
-    // const [isTradable, setIsTradable] = useState(product.accept_trade)
+    const [images, setImages] = useState<string[]>([])
+    const [name, setName] = useState('')
+    const [description, setDescription] = useState('')
+    const [isNew, setIsNew] = useState('')
+    const [price, setPrice] = useState('')
+    const [isTradable, setIsTradable] = useState('')
     // const [paymentMethods, setPaymentMethods] = useState(paymentMethodsKey)  
 
-    // const [groupValue, setGroupValue] = React.useState([]);
+    const [groupValue, setGroupValue] = React.useState([]);
 
-    // React.useEffect(() => {
-    //     alert(groupValue)
-    // },[groupValue])    
+    React.useEffect(() => {
+        console.log('route params',route.params)
+    })    
 
     const RadioStatusProduct = () => {
         return (
@@ -144,54 +145,68 @@ export function EditAds(){
     //     }
     // }
 
-    // async function handleEditDataAds() {
+    async function handleEditDataAds() {
 
-    //     setEditing(true)
+        setEditing(true)
 
-    //     const updatedAds: AdsDTO = {
-    //         name: title,
-    //         images: images,
-    //         description,
-    //         is_new: isNew,
-    //         accept_trade: isTradable,
-    //         payment_methods: paymentMethods,
-    //         price: Number(price)
-    //     }
+        const updatedAds: AdsDTO = {
+            name: name,
+            images: images,
+            description: description,
+            is_new: isNew,
+            accept_trade: isTradable,
+            // payment_methods: paymentMethods,
+            price: Number(price)
+        }
         
-    //     try {
-    //         await editAnnounce (updatedAds, product.id)
+        try {
+            // await editAnnounce (updatedAds, product.id)
 
-    //         toast.show({
-    //             title: 'Dados do seu anúncio foram atualizados com sucesso!',
-    //             placement: 'top',
-    //             bgColor: 'green.500'
-    //         });
+            toast.show({
+                title: 'Dados do seu anúncio foram atualizados com sucesso!',
+                placement: 'top',
+                bgColor: 'green.500'
+            });
 
-    //         handleGoBack()
+            handleGoBack()
     
-    //     } catch (error) {
-    //         const isAppError = error instanceof AppError;
-    //         const title = isAppError ? error.message : 'Não foi possível atualizar os dados. Tente novamente mais tarde.';
+        } catch (error) {
+            const isAppError = error instanceof AppError;
+            const title = isAppError ? error.message : 'Não foi possível atualizar os dados. Tente novamente mais tarde.';
         
-    //         toast.show({
-    //             title,
-    //             placement: 'top',
-    //             bgColor: 'red.500'
-    //         })
+            toast.show({
+                title,
+                placement: 'top',
+                bgColor: 'red.500'
+            })
 
-    //     } finally {
-    //         setEditing(false)
-    //     }
-    // }
+        } finally {
+            setEditing(false)
+        }
+    }
 
     async function handleDataUpdate(data: AdsDTO) { 
         try {
-            setIsUpdating(true);
+            setEditing(true)
+
+            const updatedAds: AdsDTO = {
+                name: name,
+                images: images,
+                description: description,
+                is_new: isNew,
+                accept_trade: isTradable,
+                // payment_methods: paymentMethods,
+                price: Number(price)
+            }
+
+           
+            return
+            // setIsUpdating(true);
         
             // const userUpdated = user;
             // userUpdated.name = data.name;
         
-            await api.put('/users/products', data); //PUT é o metodo para atualizar
+            await api.put('/users/products', updatedAds); //PUT é o metodo para atualizar
         
             // await updateUserProfile(userUpdated);
         
@@ -212,7 +227,8 @@ export function EditAds(){
             })
 
         } finally {
-            setIsUpdating(false);
+            setEditing(false)
+            // setIsUpdating(false);
         }
     }
 
@@ -366,7 +382,7 @@ export function EditAds(){
                             Edite seu anúncio
                         </Text>
 
-                        <Box size={6} bg="gray.100"/>
+                        <Box size={6} bg="gray.300"/>
                     </HStack>
 
                     <VStack mt={5}>                
@@ -418,7 +434,7 @@ export function EditAds(){
 
                         <Input 
                             placeholder="Título do anúncio"
-                            // onChangeText={onChange}
+                            onChangeText={setName}
                             // value={value}          
                             keyboardType="default"
                             autoCapitalize="none"     
@@ -427,7 +443,7 @@ export function EditAds(){
                     
                         <Input 
                             placeholder="Descrição do anúncio"
-                            // onChangeText={onChange}
+                            onChangeText={setDescription}
                             // value={value}          
                             keyboardType="default"
                             autoCapitalize="none"     
@@ -443,7 +459,7 @@ export function EditAds(){
 
                         <InputNewAd 
                             placeholder="Valor do produto"
-                            // onChangeText={onChange}
+                            onChangeText={setPrice}
                             // value={teste}          
                             keyboardType="numeric" //COLOCAR A MASCARA
                             autoCapitalize="none"     
@@ -454,15 +470,18 @@ export function EditAds(){
                             Aceita troca?
                         </Text>
 
-                        <Switches/>
+                        <Switches
+                            // onChange={setIsNew} 
+                            // value={isNew} 
+                        />
 
                         <Text color="gray.700" fontFamily="heading" fontSize="md" mb={1}>
                             Meios de pagamentos aceitos:
                         </Text>
 
                         <Checkbox.Group 
-                            onChange={setPaymentMethods} 
-                            value={paymentMethods} 
+                            // onChange={setPaymentMethods} 
+                            // value={paymentMethods} 
                             accessibilityLabel="choose numbers"
                         >
                             <Checkbox value='boleto' mb={1}>Boleto</Checkbox>
