@@ -150,21 +150,21 @@ export function EditAds(){
 
             setEditing(true)
 
-            if (    
-                    // product.images.length  === 0 || 
-                    // product.payment_methods.length === 0 || 
-                    product.name.trim() === '' || 
-                    product.description.trim() === '' || 
-                    product.price === null
-                ) {
+            // if (    
+            //         // product.images.length  === 0 || 
+            //         // product.payment_methods.length === 0 || 
+            //         product.name.trim() === '' || 
+            //         product.description.trim() === '' || 
+            //         // product.price === null
+            //     ) {
 
-                return toast.show({
-                    title: 'Por favor preenchar todos os campos.',
-                    bg: 'yellow.400',
-                    placement: 'top',
-                    mx: 4,
-                })
-            }
+            //     return toast.show({
+            //         title: 'Por favor preenchar todos os campos.',
+            //         bg: 'yellow.400',
+            //         placement: 'top',
+            //         mx: 4,
+            //     })
+            // }
     
             const data = {
                 // images,
@@ -441,7 +441,7 @@ export function EditAds(){
                             value={price}          
                             keyboardType="numeric" //COLOCAR A MASCARA
                             autoCapitalize="none"     
-                            secureTextEntry={false}               
+                            // secureTextEntry={false}               
                         />                          
                         
                         <Text color="gray.700" fontFamily="heading" fontSize="md">
@@ -497,7 +497,7 @@ export function EditAds(){
                     variant="base2" 
                     isLoading={isUpdating}  
                     // onPress={handleOpenModal}
-                    onPress={UpdateAds}                                 
+                    onPress={() => UpdateAds}                                 
                 />                    
             </HStack> 
 

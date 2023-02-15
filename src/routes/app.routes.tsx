@@ -13,7 +13,7 @@ type AppRoutes = {
   editads: {userProduct_id: string};
   hometab: undefined;
   preview: undefined;
-  productdetails: undefined;
+  productdetails: {product_id: string};
   myadsdetails: {userProduct_id: string};
   myads: undefined;
 }

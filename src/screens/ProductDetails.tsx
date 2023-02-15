@@ -22,7 +22,7 @@ import { ProductDTO } from '@dtos/ProductDTO';
 import { api } from '@services/api';
 
 type RouteParams = {
-    userProduct_id: string;
+    product_id: string;
 }
 
 export function ProductDetails(){
@@ -36,8 +36,8 @@ export function ProductDetails(){
     const [product, setProduct] = useState<ProductDTO>({} as ProductDTO); 
     const [isLoading, setIsLoading] = useState(true);
 
-    // const route = useRoute();
-    // const {userProduct_id} = route.params as RouteParams;  
+    const route = useRoute();
+    const {product_id} = route.params as RouteParams;  
 
     function handleGoBack() { 
         navigation.navigate('hometab');
@@ -45,7 +45,7 @@ export function ProductDetails(){
 
     // async function handleOpenWhats() {
     //     try {
-    //         const url = `https://wa.me/55${advert.user.tel}`;
+    //         const url = `https://wa.me/55${product.user.tel}`;
         
     //         const supported = await Linking.canOpenURL(url);
         
@@ -92,32 +92,32 @@ export function ProductDetails(){
         }
     }
 
-    // async function fetchProductDetails() {
-    //     try {
-    //         setIsLoading(true);
-    //         const response = await api.get(`/products/${userProduct_id}`);
-    //         console.log(userProduct_id); //Checar pra ver se ta trazendo os dados
-    //         setProduct(response.data);
+    async function fetchProductDetails() {
+        try {
+            setIsLoading(true);
+            const response = await api.get(`/products/${product_id}`);
+            console.log(product_id); //Checar pra ver se ta trazendo os dados
+            setProduct(response.data);
         
-    //     } catch (error) {
-    //         const isAppError = error instanceof AppError;
-    //         // const title = isAppError ? error.message : 'Não foi possível carregar os detalhes do produto';
-    //         const title = 'Não foi possível carregar os detalhes do produto';
+        } catch (error) {
+            const isAppError = error instanceof AppError;
+            // const title = isAppError ? error.message : 'Não foi possível carregar os detalhes do produto';
+            const title = 'Não foi possível carregar os detalhes do produto';
         
-    //         toast.show({
-    //             title,
-    //             placement: 'top',
-    //             bgColor: 'red.500'
-    //         })
+            toast.show({
+                title,
+                placement: 'top',
+                bgColor: 'red.500'
+            })
     
-    //     } finally {
-    //         setIsLoading(false);
-    //     }
-    // }
+        } finally {
+            setIsLoading(false);
+        }
+    }
 
-    // useEffect(() => {
-    //     fetchProductDetails();
-    // },[userProduct_id])
+    useEffect(() => {
+        fetchProductDetails();
+    },[product_id])
 
     return(
         <HStack>
