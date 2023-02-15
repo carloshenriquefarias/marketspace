@@ -6,6 +6,7 @@ type ModalProps = {
     nameButtonOne: string;
     nameButtonTwo: string;
     onPress: () => Promise<void>;
+    isLoading?: boolean;
 };
 
 export function ModalMenseger({title, nameButtonOne, nameButtonTwo, onPress}: ModalProps) {

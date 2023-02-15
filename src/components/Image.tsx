@@ -10,7 +10,6 @@ export function Images({ size, ...rest }: Props) {
       w={size} 
       h={size} 
       rounded={5}
-      borderWidth={2}
       {...rest} 
     />
   );

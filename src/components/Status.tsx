@@ -18,7 +18,6 @@ export function Status({ name }: Props) {
       rounded={10}
       h={6}
       w={'16'} 
-      // pl={2} pr={2}
       padding={1}
       justifyContent="center"
     >

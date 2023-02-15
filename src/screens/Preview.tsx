@@ -12,7 +12,7 @@ import { AdsDTO } from "@dtos/AdsDTO";
 
 import { ButtonDefault } from '@components/Button'
 import { Status } from '@components/Status'
-import { ImageCarousel } from '@components/Carousel';
+import { SliderCarousel } from '@components/SliderCarousel';
 // import { IndexCarousel } from '@components/Slider';
 import { Loading } from '@components/Loading';
 
@@ -23,6 +23,8 @@ import { MaterialCommunityIcons, Feather} from '@expo/vector-icons';
 import { AppError } from '@utils/AppError';
 
 import { storageAdsGet } from '@storage/storageAds';
+import { api } from '@services/api';
+import { Images } from '@components/Image';
 
 export function Preview(){
 
@@ -41,77 +43,79 @@ export function Preview(){
         navigationTab.navigate('home');
     } 
 
-    function handleOpenMyAdsDetails() { 
-        navigation.navigate('myadsdetails');
-    } 
 
     function handleOpenNewAd() { 
         navigation.navigate('newad');
     }
 
-    // async function handleCreateNewAd (image: string, name: string, description: string, price: number,
-    //     is_new: boolean, accept_trade: boolean, payment_methods: string[]) { 
+    async function handleCreateNewAd() { 
             
-    //     try {
-    //         setIsLoading(true);
+        try {
+            setIsLoading(true);
 
-    //         const response_product = await api.post('/products', 
-    //             { image, name , description, is_new,  price : setPrice(amount),
-    //             accept_trade, payment_methods },
-                
-    //         );  
+            const data = {
+                name: ads?.name,
+                description: ads?.description,
+                is_new: ads?.is_new,
+                price: ads?.price,
+                accept_trade: ads?.accept_trade,
+                payment_methods: ads?.payment_methods
+            }
+
+            const response_product = await api.post('/products', data);  
                         
-    //         if (response_product.data.id) {   
+            if (response_product.data.id) {   
 
-    //             let formData = new FormData(); 
+                let formData = new FormData(); 
 
-    //             formData.append("images", {
-    //                 uri: userPhoto,
-    //                 name: "image.jpg",
-    //                 type: "image/jpg",
-    //             });
-    
-    //             formData.append('product_id', response_product.data.id)
+                ads?.images.map(( item ) => {
+                    formData.append("images", {
+                        uri: item,
+                        name: "image.jpg",
+                        type: "image/jpg",
+                    });
+                })
+
+                formData.append('product_id', response_product.data.id)
                
-    //             const response = await api.post('/products/images', formData, {
-    //                 headers: {
-    //                     'Content-Type': 'multipart/form-data',
-    //                 },
-    //                 transformRequest: (data, headers) => {                        
-    //                     return formData;
-    //                 },
-    //             });
-
-    //             const title = 'Salvo com sucesso';
-    //             toast.show({    
-    //                 title,
-    //                 placement: 'top',
-    //                 bgColor: 'green.500'
-    //             })   
                 
-    //             handleOpenPreview();
+                await api.post('/products/images', formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    },
+                    transformRequest: (data, headers) => {                        
+                        return formData;
+                    },
+                });
 
-    //             return
+                const title = 'Seu anúncio foi salvo com sucesso!';
+                toast.show({    
+                    title,
+                    placement: 'top',
+                    bgColor: 'green.500'
+                })   
+                
+                handleGoHome();
 
-    //         } else {
-    //             throw new Error();
-    //         }         
+            } else {
+                throw new Error();
+            }         
 
-    //     } catch(error) {
+        } catch(error) {
 
-    //         const isAppError = error instanceof AppError;
-    //         const title = isAppError ? error.message : 
-    //         'Não foi possível enviar os dados. Tente novamente mais tarde';
+            const isAppError = error instanceof AppError;
+            const title = isAppError ? error.message : 
+            'Não foi possível enviar os dados. Tente novamente mais tarde';
 
-    //         setIsLoading(false);
+            setIsLoading(false);
         
-    //         toast.show({    
-    //             title,
-    //             placement: 'top',
-    //             bgColor: 'red.500'
-    //         })
-    //     }
-    // }
+            toast.show({    
+                title,
+                placement: 'top',
+                bgColor: 'red.500'
+            })
+        }
+    }
 
     useEffect(() => {
         async function fetchAds() {
@@ -119,6 +123,7 @@ export function Preview(){
             try {
                 const adLoad = await storageAdsGet();
                 setAds(adLoad);
+                console.log(adLoad)
             
             }   catch (error) {
     
@@ -139,12 +144,12 @@ export function Preview(){
     return(
         <>
             {(!ads) ? <Loading /> :        
-                <HStack>      
+                <VStack flex={1}>      
                     <ScrollView 
                         contentContainerStyle={{ flexGrow: 1 }} 
                         showsVerticalScrollIndicator={false}              
                     >
-                        <VStack flex={1}  pb='18%'>
+                        <VStack flex={1} >
 
                             <Center bg="blue.500" h={32} pt={8}>
                                 <Heading fontSize="md" color="gray.100">
@@ -156,19 +161,13 @@ export function Preview(){
                                 </Text>
                             </Center>                            
 
-                            <View h='300px' >
-
-                               {/* <ImageCarousel/>*/}
-
-                                {/* <Image
-                                    w='full'
-                                    h='full'
-                                    // rounded="lg"                       
-                                    source={{uri: ads?.images[0]}}
-                                    alt="Tenis vermelho"              
-                                    resizeMode="cover"         
-                                /> */}
-                            </View>                
+                            <VStack
+                                h="32%"
+                            >
+                                <SliderCarousel 
+                                  images={ads.images}  
+                                />
+                            </VStack>                            
 
                             <VStack             
                                 flex="1"
@@ -281,38 +280,37 @@ export function Preview(){
                         </VStack> 
                     </ScrollView>  
                     
-                    <HStack 
-                        justifyContent="space-between" 
-                        pr={8} pl={8}
-                        space={2} 
-                        bg="white" 
-                        pt={5} pb={5}
-                        position="absolute" 
-                        bottom={0}
-                        flex={1}
-                        w='full'
-                        h='12%'
-                    >
-                        <ButtonDefault 
-                            title="Voltar e Editar" 
-                            size="half"                             
-                            variant="default"  
-                            leftIcon={<ArrowLeft color={colors.gray[500]} size={sizes[5]} />}
-                            onPress={handleOpenNewAd}                    
-                        />          
-
-                        <ButtonDefault 
-                            title="Publicar" 
-                            size="half"                             
-                            variant="base1" 
-                            onPress={handleOpenMyAdsDetails}
-                            isLoading={isLoading}
-                            // onPress={handleCreateNewAd}
-                            leftIcon={<Tag color={colors.gray[200]} size={sizes[5]} /> }                                         
-                        />                    
-                    </HStack>  
-                </HStack>
+                    
+                </VStack>
             }
+            <HStack 
+                justifyContent="space-between" 
+                pr={8} pl={8}
+                space={2} 
+                bg="white" 
+                pt={5} pb={5}
+                position="absolute" 
+                bottom={0}
+                w='full'
+                h='12%'
+            >
+                <ButtonDefault 
+                    title="Voltar e Editar" 
+                    size="half"                             
+                    variant="default"  
+                    leftIcon={<ArrowLeft color={colors.gray[500]} size={sizes[5]} />}
+                    onPress={handleOpenNewAd}                    
+                />          
+
+                <ButtonDefault 
+                    title="Publicar" 
+                    size="half"                             
+                    variant="base1" 
+                    isLoading={isLoading}
+                    onPress={handleCreateNewAd}
+                    leftIcon={<Tag color={colors.gray[200]} size={sizes[5]} /> }                                         
+                />                    
+            </HStack>  
         </>
     )        
 }

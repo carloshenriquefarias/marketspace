@@ -9,6 +9,7 @@ export type ProductDTO = {
     product_images: ImageStyleProps[]; 
     user: UserProps;
     onPress?: (userProduct_id: string) => Promise <void>;
+    is_active?: boolean;
 };
 
 export type ImageStyleProps = {

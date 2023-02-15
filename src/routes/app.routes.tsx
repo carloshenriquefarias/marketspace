@@ -10,7 +10,7 @@ import { MyAds } from '@screens/MyAds';
 
 type AppRoutes = {
   newad: undefined;
-  editads: undefined;
+  editads: {userProduct_id: string};
   hometab: undefined;
   preview: undefined;
   productdetails: undefined;
