@@ -1,14 +1,20 @@
 # Desafio Ignite Rocketseat -  Marketspace 
 
-# Desafio Ignite Rocketseat -  Marketspace 
 
+
+### Sobre:
+Uma aplicação mobile em React Native de anúncios de produtos estilo OLX, que contém as seguintes funcionalidades:
+
+### Demo:
+<h1 align="center">
+  <img alt="Marketspace" height="800" title="" src="./github/home.png" />
+  <img alt="Marketspace" height="800" title="" src="./github/login.png" />
+</h1>
 <div align="center">
-
-  <iframe src="https://dms.licdn.com/playlist/C4D05AQGgfC_GnnEVqw/mp4-720p-30fp-crf28/0/1675912865201?e=1677088800&v=beta&t=zT11Zjh_Pu1AAHzIah7qbrfT64jJPWSTe40hksUys7M">
+    <img alt="Marketspace" height="800" title="" 
+  src="./github/tentativa2_acelerado_2x.gif" />
 </div>
 
-### Sobre:
-Uma aplicação mobile em React Native de anúncios de produtos estilo OLX, que contém as seguintes funcionalidades:
 
 ### Funcionalidades:
 - Login e cadastro de usuários
@@ -32,37 +38,4 @@ Foram utilizadas as seguintes temas:
 - Typescript
 
 </h1>
-<h1 align="center">
-  <img alt="Marketspace" height="800" title="" src="./github/home.png" />
-  <img alt="Marketspace" height="800" title="" src="./github/login.png" />
-</h1>
 
-### Sobre:
-Uma aplicação mobile em React Native de anúncios de produtos estilo OLX, que contém as seguintes funcionalidades:
-
-### Funcionalidades:
-- Login e cadastro de usuários
-- Gerenciamento de produtos
-- Listagem de produtos com busca e filtros
-- Envio de múltiplas imagens
-- Ativar/Desativar/Remover anúncio
-
-E outras coisinhas.
-
-### Ferramentas, Técnicas e Bibliotecas da API:
-Foram utilizadas as seguintes temas:
-
-- Consumo de API (com Autenticação JWT)
-- Upload de imagens
-- Validação de formulários
-- Hooks
-- ContextAPI
-- React Navigation
-- LocalStorage
-- Typescript
-
-</h1>
-<h1 align="center">
-  <img alt="Marketspace" height="800" title="" src="./github/home.png" />
-  <img alt="Marketspace" height="800" title="" src="./github/login.png" />
-</h1>
