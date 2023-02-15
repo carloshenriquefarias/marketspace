@@ -10,8 +10,9 @@ import { Text, HStack, ScrollView, VStack, Box, useToast, FlatList} from 'native
 import { ButtonDefault } from '@components/Button'
 import { FilterModal } from '@components/FilterModal'
 import { Product } from '@components/Product'
-import { UserPhoto } from '@components/UserPhoto';
+import { UserPhoto } from '@components/UserPhoto'
 import { InputFilter } from '@components/InputFilter' 
+import { Loading } from '@components/Loading'
 
 import { AppError } from '@utils/AppError';
 import { api , baseURL } from '@services/api';
@@ -19,15 +20,8 @@ import { api , baseURL } from '@services/api';
 import { useAuth } from '@hooks/useAuth'
 import { RFValue } from 'react-native-responsive-fontsize';
 import { SafeAreaView } from 'react-native';
-import { Loading } from '@components/Loading';
 
 import { ProductDTO } from '@dtos/ProductDTO';
-
-type RouteParamsProps = {
-    productId: string;
-}
-
-// import { formatCoin } from '@utils/FormatCoin';
 
 export function Home(){
 
@@ -39,15 +33,12 @@ export function Home(){
     const [product, setProduct] = useState<ProductDTO[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
-    const route = useRoute()
-    // const { productId } = route.params as RouteParamsProps;
-
     const toast = useToast();
     const { user } = useAuth();
- 
-    function handleProductDetails() {
-        navigation.navigate('productdetails');
-    } 
+
+    function handleProductDetails(product_id: string) {
+        navigation.navigate('productdetails', {product_id});
+    }
     
     function handleNewAd() {
         navigation.navigate('newad');
@@ -61,13 +52,9 @@ export function Home(){
         setVisibleModal(true);
     }
 
-    function handleCloseModal() {
-        setVisibleModal(false);
-    }
-
     async function fetchProduct() {       
         try {
-            // const response = await api.get(`/product/${productId}`);
+            // const response = await api.get(`/product/${product_id}`);
             const response = await api.get('/products');
             setProduct(response.data);
             setLoading(false) 
@@ -111,7 +98,7 @@ export function Home(){
                                     : { 
                                         uri: userPhoto 
                                     } 
-                                } //Colocar o icone
+                                }
 
                                 alt="Foto do usuário"
                                 size={12}
@@ -156,8 +143,8 @@ export function Home(){
 
                                 <VStack ml={4}>
                                     <Text color="gray.600" fontFamily={'heading'} fontSize={RFValue(20)} fontWeight="bold" lineHeight={'md'}>
-                                        4
-                                        {/* {ads.length} */}
+                                        {/* 4 */}
+                                        {product.length}
                                     </Text>  
                                     <Text color="black" fontSize={RFValue(12)}>anúncios ativos</Text> 
                                 </VStack>

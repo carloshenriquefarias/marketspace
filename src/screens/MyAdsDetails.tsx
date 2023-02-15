@@ -91,15 +91,15 @@ export function MyAdsDetails(){
         setVisibleModal(true);
     }
 
-    async function fetchUserProducts() {
-        try {
-          const { data } = await api.get('/users/products')
-          setProducts(data)
+    // async function fetchUserProducts() {
+    //     try {
+    //       const { data } = await api.get('/users/products')
+    //       setProducts(data)
 
-        } catch (error) {
+    //     } catch (error) {
     
-        } 
-    }
+    //     } 
+    // }
 
     async function handleAdsEnabledOrDisabled() {
         try {
@@ -111,7 +111,7 @@ export function MyAdsDetails(){
         
             await api.patch(`/products/${userProduct_id}`, data)
 
-            await fetchUserProducts()
+            // await fetchUserProducts()
 
             const title = 'Seu anúncio está desabilitado!'; //Fazer a condição DO ANUNCIO
       
@@ -171,9 +171,9 @@ export function MyAdsDetails(){
         fetchProductDetails();
     },[userProduct_id])
 
-    useEffect(() => {
-        fetchUserProducts()
-    })
+    // useEffect(() => {
+    //     fetchUserProducts()
+    // })
 
     return(
         <ScrollView
