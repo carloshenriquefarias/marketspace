@@ -1,7 +1,10 @@
 # Desafio Ignite Rocketseat -  Marketspace 
 
-<h1 align="center">
-<img alt="Marketspace" height="800" title="" src="https://dms.licdn.com/playlist/C4D05AQGgfC_GnnEVqw/mp4-720p-30fp-crf28/0/1675912865201?e=1677088800&v=beta&t=zT11Zjh_Pu1AAHzIah7qbrfT64jJPWSTe40hksUys7M" />
+<div align="center">
+  <img alt="Marketspace" height="800" title="" 
+  src="https://dms.licdn.com/playlist/C4D05AQGgfC_GnnEVqw/mp4-720p-30fp-crf28/0/1675912865201?e=1677088800&v=beta&t=zT11Zjh_Pu1AAHzIah7qbrfT64jJPWSTe40hksUys7M" />
+
+</div>
 
 ### Sobre:
 Uma aplicação mobile em React Native de anúncios de produtos estilo OLX, que contém as seguintes funcionalidades:
