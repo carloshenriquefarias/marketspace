@@ -46,16 +46,17 @@ export function MyAdsDetails(){
     const [ads, setAds] = useState<AdsDTO | undefined>(undefined);
 
     const route = useRoute();
-    const {userProduct_id} = route.params as RouteParams;    
+    const {userProduct_id} = route.params as RouteParams;     
 
     const [product, setProduct] = useState<ProductDTO>({} as ProductDTO); 
+    const [products, setProducts] = useState<ProductDTO>({} as ProductDTO); 
     const [visibleModal, setVisibleModal] = useState(false)
 
     async function fetchProductDetails() {
         try {
             setIsLoading(true);
             const response = await api.get(`/products/${userProduct_id}`);
-            console.log(response.data); //Checar pra ver se ta trazendo os dados
+            // console.log(response.data); //Checar pra ver se ta trazendo os dados
             setProduct(response.data);
         
         } catch (error) {
@@ -74,12 +75,12 @@ export function MyAdsDetails(){
         }
     }
 
+    function handleEditProductDetails(userProduct_id: string) {
+        navigation.navigate('editads', {userProduct_id});
+    }  
+
     function handleOpenMyAds() { 
         navigation.navigate('myads');
-    } 
-
-    function handleOpenEdit() { 
-        navigation.navigate('editads');
     } 
 
     function handleGoBack() {
@@ -90,13 +91,37 @@ export function MyAdsDetails(){
         setVisibleModal(true);
     }
 
+    async function fetchUserProducts() {
+        try {
+          const { data } = await api.get('/users/products')
+          setProducts(data)
+
+        } catch (error) {
+    
+        } 
+    }
+
     async function handleAdsEnabledOrDisabled() {
         try {
             setIsUpdating(true)
-          
-           //FAZER FUNÇÃO DE HABILITAR E DESABILITAR
+                  
+            const data = {
+                is_active : !products.is_active
+            }
+        
+            await api.patch(`/products/${userProduct_id}`, data)
 
-            handleGoBack()
+            await fetchUserProducts()
+
+            const title = 'Seu anúncio está desabilitado!'; //Fazer a condição DO ANUNCIO
+      
+            toast.show({
+                title,
+                placement: 'top',
+                bgColor: 'green.500'
+            })
+                          
+            // handleGoBack()
 
         } catch (error) {
             const isAppError = error instanceof AppError;
@@ -113,13 +138,14 @@ export function MyAdsDetails(){
         }
     }
 
-    async function handleDeleteAds() {
+    async function handleDeleteAds(userProduct_id: string) {
         try {
             setIsDeleting(true)
             
-            //FAZER A FUNÇÃO DELETAR
+            await api.delete(`/products/${userProduct_id}`)            
         
             handleGoBack()
+
             toast.show({
                 title: 'SUCESSO!, seu anúncio foi excluido!',
                 placement: 'top',
@@ -145,6 +171,10 @@ export function MyAdsDetails(){
         fetchProductDetails();
     },[userProduct_id])
 
+    useEffect(() => {
+        fetchUserProducts()
+    })
+
     return(
         <ScrollView
             contentContainerStyle={{ flexGrow: 1 }} 
@@ -165,22 +195,22 @@ export function MyAdsDetails(){
 
                     <IconButton
                         icon={<PencilSimpleLine size={sizes[6]} color={colors.gray[600]} weight="bold"/>}
-                        onPress={handleOpenEdit}
+                        onPress={() => handleEditProductDetails(userProduct_id)}
                     />
                 </HStack>
 
                 { isLoading ? <Loading/> :
                     <>                  
-                        {/* <SliderCarousel 
-                            images={product.product_images}  
-                        />                             */}
+                        <SliderCarousel 
+                            // images={product.product_images}  
+                        />                            
 
                         <VStack             
                             flex="1" 
                             padding={6}
                             backgroundColor='gray.100'
                         >                    
-                            <HStack space={3} mb={2}>
+                            <HStack space={3} mb={5}>
                                 <Avatar 
                                     h={6} w={6} 
                                     rounded="full" 
@@ -193,9 +223,9 @@ export function MyAdsDetails(){
                                 </Text> 
                             </HStack>
 
-                            {/* <Status {productId.is_new}/> */}
+                            <Status name={product.is_new}/>
                             
-                            <HStack justifyContent="space-between" mt={1}>
+                            <HStack justifyContent="space-between" mt={3}>
                                 <Text color="gray.700" fontFamily="heading" fontSize="2xl">
                                     {product.name}
                                 </Text>
@@ -231,11 +261,11 @@ export function MyAdsDetails(){
 
                             <VStack mt={2}>
 
-                                {/* {productId.payment_methods.map(method =>
-                                    <HStack alignItems='center' key={method}>
+                                {/* {product.payment_methods.map(method =>
+                                    <HStack alignItems='center' key={method.key}>
                                         <Icon as={MaterialCommunityIcons} name='cash-multiple' size={4} color='gray.2' mr={2}/>
                                         <Text fontFamily='body' textTransform='capitalize' fontSize='sm' color='gray.2'>
-                                            {method}
+                                            {method.key}
                                         </Text>
                                     </HStack>
                                 )} */}
@@ -284,12 +314,12 @@ export function MyAdsDetails(){
 
                         <VStack pr={6} pl={6} mb={5}>
                             <ButtonDefault 
-                                title="Desativar anúncio" 
+                                title= {products.is_active ? 'Ativar anúncio' : 'Desativar anúncio'}
                                 size="total"                             
-                                variant="base2"  
+                                variant={products.is_active ? 'base2' : 'base1'} 
+                                isLoading={isUpdating} 
                                 onPress={handleAdsEnabledOrDisabled}
-                                leftIcon={<Power size={sizes[5]} color={colors.gray[100]} />}
-                                // onPress={handleNewAd}                    
+                                leftIcon={<Power size={sizes[5]} color={colors.gray[100]} />}                    
                             />          
 
                             <ButtonDefault 
@@ -310,7 +340,8 @@ export function MyAdsDetails(){
                     title='Você deseja REALMENTE excluir este produto?'
                     nameButtonOne='Não, Volte!'
                     nameButtonTwo='Sim, Excluir!'
-                    onPress={handleDeleteAds} 
+                    onPress={() => handleDeleteAds(userProduct_id)} 
+                    isLoading={isLoading}
                 />
             :null}
 

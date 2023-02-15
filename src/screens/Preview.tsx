@@ -88,7 +88,7 @@ export function Preview(){
                     },
                 });
 
-                const title = 'Salvo com sucesso';
+                const title = 'Seu anúncio foi salvo com sucesso!';
                 toast.show({    
                     title,
                     placement: 'top',

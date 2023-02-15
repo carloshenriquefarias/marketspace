@@ -14,8 +14,12 @@ COISAS PRA FAZER NO PROJETO:
 [X] 10 - Na tela HOME arrumar a FlatList
 [X] 11 - Arrumar a FlatList e a tela de Meus anuncios pelo Usuario
 [] 12 - Arrumar a mascara dos numeros;
+
 [] 13 - Construi a função de Ativar e Desativar o anúncio;
 [] 14 - Construi a função de Deletar o anúncio;
-[] 15 - Construi a tela de EDITAR o anúncio;
+[] 15 - Na tela de MyAdsDetails, arrumar o map dos meios de pagamento do anúncio;
+[] 16 - Na tela de MyAdsDetails, arrumar a imagem carrossel do anúncio;
+
+[] 17 - Construi a tela de EDITAR o anúncio;
 
 
