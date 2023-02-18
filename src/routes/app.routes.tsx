@@ -1,4 +1,8 @@
-import { createNativeStackNavigator, NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { 
+  createStackNavigator, 
+  StackNavigationProp 
+} from '@react-navigation/stack';
+
 import { Tab } from './app.tab.routes';
 
 import { NewAd } from '@screens/NewAd';
@@ -18,20 +22,20 @@ type AppRoutes = {
   myads: undefined;
 }
 
-export type AppNavigatorRoutesProps = NativeStackNavigationProp<AppRoutes>;
+export type AppNavigatorRoutesProps = StackNavigationProp<AppRoutes>;
 
-const { Navigator, Screen } = createNativeStackNavigator<AppRoutes>();
+const { Navigator, Screen } = createStackNavigator<AppRoutes>();
 
 export function AppRoutes() {
   return (
     <Navigator screenOptions={{ headerShown: false }}> 
-      <Screen name='hometab' component={Tab} />
+      {/* <Screen name='hometab' component={Tab} />
       <Screen name='newad' component={NewAd} />
-      <Screen name='editads' component={EditAds} />
+      <Screen name='editads' component={EditAds} /> */}
       <Screen name='preview' component={Preview}/>
-      <Screen name='productdetails' component={ProductDetails}/>
+      {/* <Screen name='productdetails' component={ProductDetails}/>
       <Screen name='myadsdetails' component={MyAdsDetails}/>  
-      <Screen name='myads' component={MyAds}/>  
+      <Screen name='myads' component={MyAds}/>   */}
     </Navigator>
   )
 }
