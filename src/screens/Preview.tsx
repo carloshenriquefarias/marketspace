@@ -18,7 +18,7 @@ import { Loading } from '@components/Loading';
 
 import BackgroundImg from '@assets/produto_2.png';
 
-import { ArrowLeft, Bank, Barcode, CreditCard, Money, QrCode, Tag} from 'phosphor-react-native';
+// import { ArrowLeft, Bank, Barcode, CreditCard, Money, QrCode, Tag} from 'phosphor-react-native';
 import { MaterialCommunityIcons, Feather} from '@expo/vector-icons';
 import { AppError } from '@utils/AppError';
 
@@ -164,7 +164,7 @@ export function Preview(){
                             <VStack
                                 h="32%"
                             >
-                                <SliderCarousel 
+                                <SliderCarousel
                                   images={ads.images}  
                                 />
                             </VStack>                            
@@ -298,7 +298,7 @@ export function Preview(){
                     title="Voltar e Editar" 
                     size="half"                             
                     variant="default"  
-                    leftIcon={<ArrowLeft color={colors.gray[500]} size={sizes[5]} />}
+                    // leftIcon={<ArrowLeft color={colors.gray[500]} size={sizes[5]} />}
                     onPress={handleOpenNewAd}                    
                 />          
 
@@ -308,7 +308,7 @@ export function Preview(){
                     variant="base1" 
                     isLoading={isLoading}
                     onPress={handleCreateNewAd}
-                    leftIcon={<Tag color={colors.gray[200]} size={sizes[5]} /> }                                         
+                    // leftIcon={<Tag color={colors.gray[200]} size={sizes[5]} /> }                                         
                 />                    
             </HStack>  
         </>
