@@ -189,6 +189,7 @@ export function Home(){
                                     name={item.name}
                                     price={item.price}
                                     user={item.user}
+                                    is_active={true}
                                     onPress={handleProductDetails}
                                     // onPress={() => handleProductDetails(item.id)} 
                                     // data={item}

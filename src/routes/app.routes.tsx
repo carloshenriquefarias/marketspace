@@ -29,13 +29,13 @@ const { Navigator, Screen } = createStackNavigator<AppRoutes>();
 export function AppRoutes() {
   return (
     <Navigator screenOptions={{ headerShown: false }}> 
-      {/* <Screen name='hometab' component={Tab} />
+      <Screen name='hometab' component={Tab} />
       <Screen name='newad' component={NewAd} />
-      <Screen name='editads' component={EditAds} /> */}
+      <Screen name='editads' component={EditAds} />
       <Screen name='preview' component={Preview}/>
-      {/* <Screen name='productdetails' component={ProductDetails}/>
+      <Screen name='productdetails' component={ProductDetails}/>
       <Screen name='myadsdetails' component={MyAdsDetails}/>  
-      <Screen name='myads' component={MyAds}/>   */}
+      <Screen name='myads' component={MyAds}/>  
     </Navigator>
   )
 }

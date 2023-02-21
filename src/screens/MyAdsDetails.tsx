@@ -1,14 +1,14 @@
 import { Text, useTheme, HStack, VStack, ScrollView, Image, 
-    Avatar, IconButton, View, useToast, Icon } from 'native-base'
+    Avatar, IconButton, View, useToast, Icon, Box } from 'native-base'
 ;
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 import { AppNavigatorRoutesProps } from '@routes/app.routes';
 
 import { ArrowLeft, Bank, Barcode, CreditCard, PencilSimpleLine, Power, 
     TrashSimple, Money, QrCode } from 'phosphor-react-native'
 ;
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useFocusEffect, useNavigation, useRoute } from '@react-navigation/native';
 
 import { ButtonDefault } from '@components/Button';
 import { Status } from '@components/Status';
@@ -43,13 +43,12 @@ export function MyAdsDetails(){
 
     const toast = useToast();
     const { user } = useAuth();
-    const [ads, setAds] = useState<AdsDTO | undefined>(undefined);
 
     const route = useRoute();
     const {userProduct_id} = route.params as RouteParams;     
 
     const [product, setProduct] = useState<ProductDTO>({} as ProductDTO); 
-    const [products, setProducts] = useState<ProductDTO>({} as ProductDTO); 
+
     const [visibleModal, setVisibleModal] = useState(false)
 
     async function fetchProductDetails() {
@@ -91,37 +90,27 @@ export function MyAdsDetails(){
         setVisibleModal(true);
     }
 
-    // async function fetchUserProducts() {
-    //     try {
-    //       const { data } = await api.get('/users/products')
-    //       setProducts(data)
-
-    //     } catch (error) {
-    
-    //     } 
-    // }
-
     async function handleAdsEnabledOrDisabled() {
         try {
             setIsUpdating(true)
                   
             const data = {
-                is_active : !products.is_active
+                is_active : !product.is_active
             }
         
             await api.patch(`/products/${userProduct_id}`, data)
 
-            // await fetchUserProducts()
+            console.log('MOSTRE AQUI OS DADOS', data)
 
-            const title = 'Seu anúncio está desabilitado!'; //Fazer a condição DO ANUNCIO
+            const title = !product.is_active ? 'Seu anúncio está ativado!' : 'Seu anúncio está desativado!';
       
             toast.show({
                 title,
                 placement: 'top',
                 bgColor: 'green.500'
             })
-                          
-            // handleGoBack()
+
+            handleOpenMyAds();
 
         } catch (error) {
             const isAppError = error instanceof AppError;
@@ -133,7 +122,7 @@ export function MyAdsDetails(){
                 bgColor: 'red.500'
             })
 
-            } finally {
+        } finally {
             setIsUpdating(false)
         }
     }
@@ -167,13 +156,9 @@ export function MyAdsDetails(){
         }
     }
 
-    useEffect(() => {
+    useFocusEffect(useCallback(() => {
         fetchProductDetails();
-    },[userProduct_id])
-
-    // useEffect(() => {
-    //     fetchUserProducts()
-    // })
+    },[userProduct_id]))
 
     return(
         <ScrollView
@@ -200,10 +185,20 @@ export function MyAdsDetails(){
                 </HStack>
 
                 { isLoading ? <Loading/> :
-                    <>                  
-                        <SliderCarousel 
-                            // images={product.product_images}  
-                        />                            
+                    <> 
+                        <VStack h="32%">
+                            <SliderCarousel images={product.product_images} />
+                            {!product.is_active &&
+                                (
+                                    <VStack  h='100%' w='100%' justifyContent='center' alignItems='center' position='absolute' zIndex={1}>
+                                        <Box bg='gray.500' h='100%' w='100%' opacity={0.7} rounded='md'/>
+                                        <Text fontFamily='heading' fontSize='lg' color='gray.100' position='absolute' zIndex={2}>
+                                            ANÚNCIO DESATIVADO
+                                        </Text>
+                                    </VStack>
+                                )
+                            }
+                        </VStack>
 
                         <VStack             
                             flex="1" 
@@ -314,9 +309,9 @@ export function MyAdsDetails(){
 
                         <VStack pr={6} pl={6} mb={5}>
                             <ButtonDefault 
-                                title= {products.is_active ? 'Ativar anúncio' : 'Desativar anúncio'}
+                                title= {!product.is_active ? 'Ativar anúncio' : 'Desativar anúncio'}
                                 size="total"                             
-                                variant={products.is_active ? 'base2' : 'base1'} 
+                                variant={!product.is_active ? 'base1' : 'base2'} 
                                 isLoading={isUpdating} 
                                 onPress={handleAdsEnabledOrDisabled}
                                 leftIcon={<Power size={sizes[5]} color={colors.gray[100]} />}                    

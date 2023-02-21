@@ -1,8 +1,8 @@
 import { Image } from 'native-base'
-import { useState } from 'react'
-import { Dimensions, View, Text  } from 'react-native'
-import Carousel from 'react-native-reanimated-carousel';
+import { Dimensions } from 'react-native'
 import { api } from '../services/api'
+
+import Carousel from 'react-native-reanimated-carousel';
 import * as React from 'react';
 import 'react-native-reanimated';
 
@@ -17,30 +17,23 @@ type Props = {
 
 export function SliderCarousel({ images } : Props) {
   const { width } = Dimensions.get('window')
-  // console.log('conteudo do meu images', images)
 
-  return (
-    
-            <Carousel
-                //loop
-                width={width}
-                height={width} 
-                //autoPlay={true}
-                data={images}
-                scrollAnimationDuration={1000}
-                onSnapToItem={(item:number) => console.log('current index:', item)}
-                renderItem={({ item }) => (
-                    <Image 
-                        w={width}
-                        h={300}
-                        justifyContent="center"
-                        alt={"Imagens"}
-                        //source={{ uri: `${api.defaults.baseURL}/images/${item.path}` }}
-                        source={{ uri: item }}
-                    />
-                )}
-            />
-      
-
-    )
+  return (    
+    <Carousel
+      width={width}
+      height={width} 
+      data={images}
+      scrollAnimationDuration={1000}
+      onSnapToItem={(item:number) => console.log('current index:', item)}
+      renderItem={({ item }) => (
+        <Image 
+          w={width}
+          h={300}
+          justifyContent="center"
+          alt={"Imagens"}
+          source={{uri : item.path ? `${api.defaults.baseURL}/images/${item.path}` : item}}
+        />
+      )}
+    />    
+  )
 }
