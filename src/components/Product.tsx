@@ -1,4 +1,4 @@
-import { Text, HStack, VStack, Image, Pressable, Avatar} from 'native-base';
+import { Text, HStack, VStack, Image, Pressable, Avatar, Box} from 'native-base';
 import { TouchableOpacity, TouchableOpacityProps } from 'react-native';
 import { useState } from 'react';
 
@@ -11,9 +11,12 @@ import { baseURL } from "@services/api"
 //     data: ProductDTO;
 //   };
 
-export function Product({onPress, product_images, is_new, user, name, price, ...rest}: ProductDTO){
+export function Product({onPress, product_images, is_new, is_active, user, name, price, ...rest}: ProductDTO){
 
     const [userPhoto, setUserPhoto] = useState('https://github.com/JRSparrowII.png');
+    const [product, setProduct] = useState<ProductDTO>({} as ProductDTO);
+
+  
 
     return(
                  
@@ -43,6 +46,18 @@ export function Product({onPress, product_images, is_new, user, name, price, ...
                             alt={name}             
                             resizeMode="cover"         
                         />
+
+                        {!is_active &&
+                            (
+                                <VStack  h='120' w='100%' justifyContent='center' alignItems='center' position='absolute' zIndex={1}>
+                                    <Box h='100%' w='100%' opacity={0.6} rounded='md' backgroundColor="gray.600"/>
+                                    <Text fontFamily='heading' fontSize='sm' color='gray.100' position='absolute' zIndex={2}>
+                                        ANÚNCIO DESATIVADO
+                                    </Text>
+                                </VStack>
+                            )
+                        } 
+
                     </VStack>
 
                     <HStack 
@@ -88,4 +103,3 @@ export function Product({onPress, product_images, is_new, user, name, price, ...
     )
 }
 
-    

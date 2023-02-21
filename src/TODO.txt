@@ -16,10 +16,10 @@ COISAS PRA FAZER NO PROJETO:
 [] 12 - Arrumar a mascara dos numeros;
 
 [] 13 - Construi a função de Ativar e Desativar o anúncio;
-[] 14 - Construi a função de Deletar o anúncio;
+[X] 14 - Construi a função de Deletar o anúncio;
 [] 15 - Na tela de MyAdsDetails, arrumar o map dos meios de pagamento do anúncio;
-[] 16 - Na tela de MyAdsDetails, arrumar a imagem carrossel do anúncio;
+[X] 16 - Na tela de MyAdsDetails, arrumar a imagem carrossel do anúncio;
 
-[] 17 - Construi a tela de EDITAR o anúncio;
+[X] 17 - Construi a tela de EDITAR o anúncio;
 
 

@@ -77,6 +77,7 @@ export function MyAds(){
         try {
             const response = await api.get('/users/products');
             setProduct(response.data);
+            console.log(response.data);
     
         } catch (error) {
             const isAppError = error instanceof AppError;
@@ -131,23 +132,22 @@ export function MyAds(){
 
                     <Selects/>
                 </HStack>              
-            </VStack> 
-
-              
+            </VStack>
 
             <VStack pr={4} pl={6} backgroundColor="gray.100">            
                 <FlatList 
                     data={product}
                     keyExtractor={item => item.id}
                     numColumns={2}
-                    renderItem={({ item }) => (
+                    renderItem={({ item }) => (                        
                         <Product                    
                             product_images={item.product_images}
                             name={item.name}
                             price={item.price}
                             is_new={item.is_new}
+                            is_active={item.is_active}
                             onPress={() => handleProductDetails(item.id)}
-                        />                                     
+                        />                                                      
                     )}
                     w='full' 
                     showsVerticalScrollIndicator={false}
