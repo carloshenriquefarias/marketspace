@@ -67,6 +67,15 @@ export function FilterModal({ title, variant = 'New'}: Props) {
                                     fontWeight="bold"
                                     fontSize={12} 
                                 >
+                                    Novo
+                                </Text> 
+
+                                <Text 
+                                    textAlign="center" 
+                                    color={variant === 'New' ? 'white' : 'gray.700'} 
+                                    fontWeight="bold"
+                                    fontSize={12} 
+                                >
                                     Usado
                                 </Text> 
                             </Box>       

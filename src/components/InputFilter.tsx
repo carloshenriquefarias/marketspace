@@ -11,9 +11,7 @@ type Props = IInputProps & {
 }
 
 export function InputFilter({ typeInput = null, fulanodetal }: Props) { 
-
-    return (
-        
+    return (        
         <NativeBaseInput
             bg="white"                
                 h={14}
@@ -58,11 +56,8 @@ export function InputFilter({ typeInput = null, fulanodetal }: Props) {
                             size={5}
                         />
                     </Pressable>
-                </HStack>        
-              
+                </HStack>      
             }   
-
-        />   
-       
+        />          
     );
 }

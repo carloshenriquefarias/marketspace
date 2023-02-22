@@ -6,6 +6,8 @@ import { FontAwesome5} from '@expo/vector-icons';
 import { ButtonDefault } from '@components/Button'
 import BackgroundImg from '@assets/produto_1.png';
 
+import { MaterialCommunityIcons, Feather} from '@expo/vector-icons';
+
 import { useTheme } from 'native-base';
 import { Linking } from "react-native";
 
@@ -20,6 +22,8 @@ import { AppError } from '@utils/AppError';
 import { useAuth } from '@hooks/useAuth';
 import { ProductDTO } from '@dtos/ProductDTO';
 import { api } from '@services/api';
+import { SliderCarousel } from '@components/SliderCarousel';
+import { ProductDetailsDTO } from '@dtos/ProductDetailsDTO';
 
 type RouteParams = {
     product_id: string;
@@ -33,7 +37,7 @@ export function ProductDetails(){
     const [sendingMessage, setSendingMessage] = useState(false)
     const toast= useToast();
     const { user } = useAuth();
-    const [product, setProduct] = useState<ProductDTO>({} as ProductDTO); 
+    const [product, setProduct] = useState<ProductDetailsDTO>({} as ProductDetailsDTO); 
     const [isLoading, setIsLoading] = useState(true);
 
     const route = useRoute();
@@ -96,7 +100,7 @@ export function ProductDetails(){
         try {
             setIsLoading(true);
             const response = await api.get(`/products/${product_id}`);
-            console.log(product_id); //Checar pra ver se ta trazendo os dados
+            console.log(response.data.payment_methods); //Checar pra ver se ta trazendo os dados
             setProduct(response.data);
         
         } catch (error) {
@@ -139,17 +143,9 @@ export function ProductDetails(){
                         />         
                     </HStack> 
 
-                    <View h='300px' >
-                        <Image
-                            w='full'
-                            h='full'
-                            // rounded="lg"       
-                            // source={{ uri: `${api.defaults.baseURL}/products/images/${userProduct_id}` }}                 
-                            source={BackgroundImg}
-                            alt="Tenis vermelho"              
-                            resizeMode="cover"         
-                        />
-                    </View>
+                    <VStack h="32%">
+                        <SliderCarousel images={product.product_images} />
+                    </VStack>
 
                     <VStack             
                         flex="1" 
@@ -206,55 +202,16 @@ export function ProductDetails(){
                         </Text>
 
                         <VStack mt={2}>
-
-                            {/* {productId.payment_methods.map(method =>
-                                <HStack alignItems='center' key={method}>
-                                    <Icon as={MaterialCommunityIcons} name='cash-multiple' size={4} color='gray.2' mr={2}/>
-                                    <Text fontFamily='body' textTransform='capitalize' fontSize='sm' color='gray.2'>
-                                        {method}
-                                    </Text>
-                                </HStack>
-                            )} */}
-                            
-                            <HStack space={2}>
-                                <Barcode size={sizes[5]} color={colors.gray[700]} />
-
-                                <Text fontSize="sm" color="gray.700">
-                                    Boleto
-                                </Text>
-                            </HStack>
-                            
-                            <HStack space={2}>
-                                <QrCode size={sizes[5]} color={colors.gray[700]} />
-
-                                <Text fontSize="sm" color="gray.700">
-                                    Pix
-                                </Text>
-                            </HStack>                 
-                            
-                            <HStack space={2}>
-                                <Money size={sizes[5]} color={colors.gray[700]} />
-
-                                <Text fontSize="sm" color="gray.700">
-                                    Dinheiro
-                                </Text>
-                            </HStack>
-                                                    
-                            <HStack space={2}>
-                                <CreditCard size={sizes[5]} color={colors.gray[700]} />
-
-                                <Text fontSize="sm" color="gray.700">
-                                    Cartão de crédito
-                                </Text>
-                            </HStack>
-                                                
-                            <HStack space={2}>
-                                <Bank size={sizes[5]} color={colors.gray[700]} />
-
-                                <Text fontSize="sm" color="gray.700">
-                                    Depósito bancário
-                                </Text>
-                            </HStack>                                
+                            {product.payment_methods && (                            
+                                product.payment_methods.map(method =>                               
+                                    <HStack alignItems='center' key={method.key}>
+                                        <Icon as={MaterialCommunityIcons} name='cash-multiple' size={4} color='gray.2' mr={2}/>
+                                        <Text fontFamily='body' textTransform='capitalize' fontSize='sm' color='gray.2'>
+                                            {method.name}
+                                        </Text>
+                                    </HStack>
+                                )
+                            )}
                         </VStack>                    
                     </VStack>                              
                 </VStack>
@@ -278,7 +235,7 @@ export function ProductDetails(){
                     </Text>
 
                     <Text color="blue.500" fontWeight="bold" fontSize="2xl" textAlign="center">
-                        {/* {product.price} */}
+                        {product.price}
                     </Text>
                 </HStack>
                         

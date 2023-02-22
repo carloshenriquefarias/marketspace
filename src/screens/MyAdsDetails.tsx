@@ -26,6 +26,7 @@ import { MaterialCommunityIcons, Feather} from '@expo/vector-icons';
 import { ProductDTO } from '@dtos/ProductDTO';
 import { Loading } from '@components/Loading';
 import { SliderCarousel } from '@components/SliderCarousel';
+import { ProductDetailsDTO } from '@dtos/ProductDetailsDTO';
 
 type RouteParams = {
     userProduct_id: string;
@@ -47,7 +48,7 @@ export function MyAdsDetails(){
     const route = useRoute();
     const {userProduct_id} = route.params as RouteParams;     
 
-    const [product, setProduct] = useState<ProductDTO>({} as ProductDTO); 
+    const [product, setProduct] = useState<ProductDetailsDTO>({} as ProductDetailsDTO); 
 
     const [visibleModal, setVisibleModal] = useState(false)
 
@@ -183,151 +184,110 @@ export function MyAdsDetails(){
                         onPress={() => handleEditProductDetails(userProduct_id)}
                     />
                 </HStack>
-
-                { isLoading ? <Loading/> :
-                    <> 
-                        <VStack h="32%">
-                            <SliderCarousel images={product.product_images} />
-                            {!product.is_active &&
-                                (
-                                    <VStack  h='100%' w='100%' justifyContent='center' alignItems='center' position='absolute' zIndex={1}>
-                                        <Box bg='gray.500' h='100%' w='100%' opacity={0.7} rounded='md'/>
-                                        <Text fontFamily='heading' fontSize='lg' color='gray.100' position='absolute' zIndex={2}>
-                                            ANÚNCIO DESATIVADO
-                                        </Text>
-                                    </VStack>
-                                )
-                            }
-                        </VStack>
-
-                        <VStack             
-                            flex="1" 
-                            padding={6}
-                            backgroundColor='gray.100'
-                        >                    
-                            <HStack space={3} mb={5}>
-                                <Avatar 
-                                    h={6} w={6} 
-                                    rounded="full" 
-                                    bg="gray.100" 
-                                    source={{ uri: userPhoto }}
-                                />          
-                            
-                                <Text color="gray.700" fontFamily="body" fontSize="lg">
-                                    {user.name}
-                                </Text> 
-                            </HStack>
-
-                            <Status name={product.is_new}/>
-                            
-                            <HStack justifyContent="space-between" mt={3}>
-                                <Text color="gray.700" fontFamily="heading" fontSize="2xl">
-                                    {product.name}
-                                </Text>
-
-                                <HStack space={1} alignItems="baseline">
-                                    <Text color="blue.500" fontWeight="bold" fontSize="md" textAlign="center">
-                                        R$
+                
+                <> 
+                    <VStack h="32%">
+                        <SliderCarousel images={product.product_images} />
+                        {!product.is_active &&
+                            (
+                                <VStack  h='100%' w='100%' justifyContent='center' alignItems='center' position='absolute' zIndex={1}>
+                                    <Box bg='gray.500' h='100%' w='100%' opacity={0.7} rounded='md'/>
+                                    <Text fontFamily='heading' fontSize='lg' color='gray.100' position='absolute' zIndex={2}>
+                                        ANÚNCIO DESATIVADO
                                     </Text>
+                                </VStack>
+                            )
+                        }
+                    </VStack>
 
-                                    <Text color="blue.500" fontWeight="bold" fontSize="2xl" textAlign="center">
-                                        {product.price}
-                                    </Text>
-                                </HStack>  
-                            </HStack>
-
-                            <Text color="gray.700" mt={3}>
-                                {product.description}
+                    <VStack             
+                        flex="1" 
+                        padding={6}
+                        backgroundColor='gray.100'
+                    >                    
+                        <HStack space={3} mb={5}>
+                            <Avatar 
+                                h={6} w={6} 
+                                rounded="full" 
+                                bg="gray.100" 
+                                source={{ uri: userPhoto }}
+                            />          
+                        
+                            <Text color="gray.700" fontFamily="body" fontSize="lg">
+                                {user.name}
                             </Text> 
+                        </HStack>
 
-                            <HStack space={3} mt={5}>
-                                <Text color="gray.700" fontWeight="bold">
-                                    Aceita troca?
-                                </Text>         
-                            
-                                <Text color="gray.700" >
-                                    {product.accept_trade ? 'Sim' : 'Não'}
-                                </Text> 
-                            </HStack>                                     
-            
-                            <Text color="gray.700" mb={0} fontWeight="bold" mt={3}>
-                                Meios de pagamentos aceitos:
+                        <Status name={product.is_new}/>
+                        
+                        <HStack justifyContent="space-between" mt={3}>
+                            <Text color="gray.700" fontFamily="heading" fontSize="2xl">
+                                {product.name}
                             </Text>
 
-                            <VStack mt={2}>
+                            <HStack space={1} alignItems="baseline">
+                                <Text color="blue.500" fontWeight="bold" fontSize="md" textAlign="center">
+                                    R$
+                                </Text>
 
-                                {/* {product.payment_methods.map(method =>
+                                <Text color="blue.500" fontWeight="bold" fontSize="2xl" textAlign="center">
+                                    {product.price}
+                                </Text>
+                            </HStack>  
+                        </HStack>
+
+                        <Text color="gray.700" mt={3}>
+                            {product.description}
+                        </Text> 
+
+                        <HStack space={3} mt={5}>
+                            <Text color="gray.700" fontWeight="bold">
+                                Aceita troca?
+                            </Text>         
+                        
+                            <Text color="gray.700" >
+                                {product.accept_trade ? 'Sim' : 'Não'}
+                            </Text> 
+                        </HStack>                                     
+        
+                        <Text color="gray.700" mb={0} fontWeight="bold" mt={3}>
+                            Meios de pagamentos aceitos:
+                        </Text>
+
+                        <VStack mt={2}>
+                            {product.payment_methods && (                            
+                                product.payment_methods.map(method =>                               
                                     <HStack alignItems='center' key={method.key}>
                                         <Icon as={MaterialCommunityIcons} name='cash-multiple' size={4} color='gray.2' mr={2}/>
                                         <Text fontFamily='body' textTransform='capitalize' fontSize='sm' color='gray.2'>
-                                            {method.key}
+                                            {method.name}
                                         </Text>
                                     </HStack>
-                                )} */}
-                                
-                                <HStack space={2}>
-                                    <Barcode size={sizes[5]} color={colors.gray[700]} />
+                                )
+                            )}
+                        </VStack>                                                               
+                    </VStack>                   
 
-                                    <Text fontSize="sm" color="gray.700">
-                                        Boleto
-                                    </Text>
-                                </HStack>
-                                
-                                <HStack space={2}>
-                                    <QrCode size={sizes[5]} color={colors.gray[700]} />
+                    <VStack pr={6} pl={6} mb={5}>
+                        <ButtonDefault 
+                            title= {!product.is_active ? 'Ativar anúncio' : 'Desativar anúncio'}
+                            size="total"                             
+                            variant={!product.is_active ? 'base1' : 'base2'} 
+                            isLoading={isUpdating} 
+                            onPress={handleAdsEnabledOrDisabled}
+                            leftIcon={<Power size={sizes[5]} color={colors.gray[100]} />}                    
+                        />          
 
-                                    <Text fontSize="sm" color="gray.700">
-                                        Pix
-                                    </Text>
-                                </HStack>                 
-                                
-                                <HStack space={2}>
-                                    <Money size={sizes[5]} color={colors.gray[700]} />
-
-                                    <Text fontSize="sm" color="gray.700">
-                                        Dinheiro
-                                    </Text>
-                                </HStack>
-                                                        
-                                <HStack space={2}>
-                                    <CreditCard size={sizes[5]} color={colors.gray[700]} />
-
-                                    <Text fontSize="sm" color="gray.700">
-                                        Cartão de crédito
-                                    </Text>
-                                </HStack>
-                                                    
-                                <HStack space={2}>
-                                    <Bank size={sizes[5]} color={colors.gray[700]} />
-
-                                    <Text fontSize="sm" color="gray.700">
-                                        Depósito bancário
-                                    </Text>
-                                </HStack>                                
-                            </VStack>                                
-                        </VStack>                   
-
-                        <VStack pr={6} pl={6} mb={5}>
-                            <ButtonDefault 
-                                title= {!product.is_active ? 'Ativar anúncio' : 'Desativar anúncio'}
-                                size="total"                             
-                                variant={!product.is_active ? 'base1' : 'base2'} 
-                                isLoading={isUpdating} 
-                                onPress={handleAdsEnabledOrDisabled}
-                                leftIcon={<Power size={sizes[5]} color={colors.gray[100]} />}                    
-                            />          
-
-                            <ButtonDefault 
-                                title="Excluir anúncio" 
-                                size="total"                             
-                                variant="default" 
-                                mt={2}
-                                onPress={handleOpenModal}
-                                leftIcon={<TrashSimple size={sizes[5]} color={colors.gray[700]} />}                    
-                            />                    
-                        </VStack>
-                    </>
-                } 
+                        <ButtonDefault 
+                            title="Excluir anúncio" 
+                            size="total"                             
+                            variant="default" 
+                            mt={2}
+                            onPress={handleOpenModal}
+                            leftIcon={<TrashSimple size={sizes[5]} color={colors.gray[700]} />}                    
+                        />                    
+                    </VStack>
+                </>
             </VStack> 
 
             {(visibleModal) ?
