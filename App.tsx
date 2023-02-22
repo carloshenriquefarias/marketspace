@@ -2,6 +2,7 @@ import { View, StatusBar, RecyclerViewBackedScrollView } from 'react-native';
 import { NativeBaseProvider } from 'native-base';
 import { useFonts, Karla_400Regular, Karla_700Bold } from '@expo-google-fonts/karla';
 import { Loading } from '@components/Loading';
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
 
 import { Theme } from './src/theme';
 
@@ -26,16 +27,17 @@ export default function App() {
   return (
 
     <NativeBaseProvider theme={Theme}>
-
-      <StatusBar
-        barStyle="dark-content"
-        backgroundColor="transparent"
-        translucent
-      />
-      
-      <AuthContextProvider>
-        { fontsloaded ? <Routes/> : <Loading/>}
-      </AuthContextProvider>
+      <BottomSheetModalProvider>     
+        <StatusBar
+          barStyle="dark-content"
+          backgroundColor="transparent"
+          translucent
+        />
+        
+        <AuthContextProvider>
+          { fontsloaded ? <Routes/> : <Loading/>}
+        </AuthContextProvider>
+      </BottomSheetModalProvider>
             
     </NativeBaseProvider>
   );

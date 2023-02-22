@@ -3,7 +3,7 @@ import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 
 import { useContext } from 'react';
 
-import { ImageSlider} from '@screens/TesteSlide';
+import { TesteDeModal} from '@screens/teste';
 
 import {useAuth} from '@hooks/useAuth';
 import {useAds} from '@hooks/useAds';
@@ -17,7 +17,6 @@ export function Routes() {
 
   const {colors} = useTheme();
   const {user, isLoadingUserStorageData} = useAuth();
-  // console.log ("usuario logado =>", user);
 
   const theme = DefaultTheme;
   theme.colors.background = colors.gray[200];
@@ -29,9 +28,8 @@ export function Routes() {
   return (
     <Box flex={1} bg="gray.200"> 
         <NavigationContainer theme={theme}>
-          {/* <ImageSlider/> */}
-          {user.id ? <AppRoutes/> : <AuthRoutes/>}
-          {/* <AppRoutes/>           */}
+          <TesteDeModal/>
+          {/* {user.id ? <AppRoutes/> : <AuthRoutes/>} */}
         </NavigationContainer>
     </Box>
   );
