@@ -1,25 +1,28 @@
 COISAS PRA FAZER NO PROJETO:
 
 [X] 1 - Verificar por que na tela de SIGNOUT nao ta carregando a imagem;
-[] 2 - Testar as contas da Google e Apple no PC do Prisco;
-[X] 3 - No componente PRODUCT, colocar os nomes e preços dinamicos PARA FLAT LIST;
-[X] 4 - Arrumar o modal
-[] 5 - No botao de sair, colocar o modal 
-[X] 6 - Na tela de NewAd, componente de Image, fazer funcionar a inserção das 3 imagens;
+[X] 2 - No componente PRODUCT, colocar os nomes e preços dinamicos PARA FLAT LIST;
+[X] 3 - Arrumar o modal
+[X] 4 - Na tela de NewAd, componente de Image, fazer funcionar a inserção das 3 imagens;
+[X] 5 - Fazer a verificação da CHECKBOX meios de pagamento;
+[X] 6 - Perguntar por que a description nao ta funcionando, alem da troca e meios de pagamento;
+[X] 7 - Ao publicar, CRIAR O ID e voltar a tela home;
+[X] 8 - Na tela HOME arrumar a FlatList
+[X] 9 - Arrumar a FlatList e a tela de Meus anuncios pelo Usuario
+[X] 10 - Construi a função de Ativar e Desativar o anúncio;
+[X] 11 - Construi a função de Deletar o anúncio;
+[X] 12 - Na tela de MyAdsDetails, arrumar o map dos meios de pagamento do anúncio;
+[X] 13 - Na tela de MyAdsDetails, arrumar a imagem carrossel do anúncio;
+[X] 14 - Construi a tela de EDITAR o anúncio;
+[] 15 - Arrumar o Filtro da tela principal;
+[] 16 - No modal do filter, arrumar o fulanodetal;
+[] 17 - Botao de Filtro so esta funcionando NA PRIMEIRA VEZ, arrumar ISSO;
+[] 18 - No botao de sair do app, colocar a cor do botão vermelho;
+[] 19 - Colocar safe area em todas as telas;
 
-[X] 7 - Fazer a verificação da CHECKBOX meios de pagamento;
-[X] 8 - Perguntar por que a description nao ta funcionando, alem da troca e meios de pagamento;
+MELHORIAS A FAZER:
 
-[X] 9 - Ao publicar, CRIAR O ID e voltar a tela home;
-[X] 10 - Na tela HOME arrumar a FlatList
-[X] 11 - Arrumar a FlatList e a tela de Meus anuncios pelo Usuario
-[] 12 - Arrumar a mascara dos numeros;
-
-[] 13 - Construi a função de Ativar e Desativar o anúncio;
-[X] 14 - Construi a função de Deletar o anúncio;
-[] 15 - Na tela de MyAdsDetails, arrumar o map dos meios de pagamento do anúncio;
-[X] 16 - Na tela de MyAdsDetails, arrumar a imagem carrossel do anúncio;
-
-[X] 17 - Construi a tela de EDITAR o anúncio;
-
+[] 1 - Testar as contas da Google e Apple no PC do Prisco;
+[] 2 - No botao de sair, colocar o modal;
+[] 3 - Arrumar a mascara dos numeros;
 

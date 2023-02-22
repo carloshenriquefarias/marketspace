@@ -77,7 +77,7 @@ export function MyAds(){
         try {
             const response = await api.get('/users/products');
             setProduct(response.data);
-            console.log(response.data);
+            // console.log(response.data);
     
         } catch (error) {
             const isAppError = error instanceof AppError;

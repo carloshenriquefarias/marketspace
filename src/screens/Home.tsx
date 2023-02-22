@@ -9,6 +9,7 @@ import { Text, HStack, ScrollView, VStack, Box, useToast, FlatList} from 'native
 
 import { ButtonDefault } from '@components/Button'
 import { FilterModal } from '@components/FilterModal'
+import { FilterModalNovo } from '@components/FilterModalNovo'
 import { Product } from '@components/Product'
 import { UserPhoto } from '@components/UserPhoto'
 import { InputFilter } from '@components/InputFilter' 
@@ -52,23 +53,66 @@ export function Home(){
         setVisibleModal(true);
     }
 
+    // async function handleFilterProducts() {
+    //     try {
+    //       handleCloseModal()
+    //       const params = {
+    //         query: filterName.trim() === '' ? null : filterName,
+    //         is_new: isNew,
+    //         accept_trade: isTradable,
+    //         payment_methods: paymentMethods,
+    //       }
+    
+    //      const {data} = await api.get('/products', {params})
+    
+    //       setProducts(data)
+    
+    //     } catch (error) {
+    //       ErrorToast(error)
+    //     }
+    // }
+      
+    // async function handleFilterByName() {
+    //     try {
+    //         if(filterName.trim() === '') {
+    //         fetchProducts()
+    //         }
+    //         const {data} = await api.get('/products', {params : {query: filterName}})
+
+    //         setProducts(data)
+    //     } catch (error) {
+    //         ErrorToast(error)
+    //     }
+    // }
+    
+    // async function handleResetFilters() {
+    //     try {
+    //         setFilterName('')
+    //         setIsNew(true)
+    //         setIsTradable(true)
+    //         setPaymentMethods([])
+
+    //         await fetchProducts()
+    //     } catch (error) {
+    //         ErrorToast(error)
+    //     }
+    // }
+
     async function fetchProduct() {       
         try {
-            // const response = await api.get(`/product/${product_id}`);
             const response = await api.get('/products');
             setProduct(response.data);
-            setLoading(false) 
-            // console.log(response.data)
+            setLoading(false); 
     
         } catch (error) {
-          const isAppError = error instanceof AppError;
-          const title = isAppError ? error.message : 'Não foi possível carregar os produtos';
-    
-          toast.show({
-            title,
-            placement: 'top',
-            bgColor: 'red.500'
-          })
+            const isAppError = error instanceof AppError;
+            const title = isAppError ? error.message : 'Não foi possível carregar os produtos';
+        
+            toast.show({
+                title,
+                placement: 'top',
+                bgColor: 'red.500'
+            })
         }
     }
 
@@ -190,8 +234,8 @@ export function Home(){
                                     price={item.price}
                                     user={item.user}
                                     is_active={true}
-                                    onPress={handleProductDetails}
-                                    // onPress={() => handleProductDetails(item.id)} 
+                                    // onPress={handleProductDetails}
+                                    onPress={() => handleProductDetails(item.id)} 
                                     // data={item}
                                 /> 
                             :  
@@ -211,10 +255,14 @@ export function Home(){
                         )}
                     />                    
                 </VStack>
+
+                {/* <FilterModalNovo/> */}
                 
-            {(visibleModal) ? <FilterModal title='NOVO'/> : null}
-            
-        </SafeAreaView>                            
+                {/* {(visibleModal) ? <FilterModal title='NOVO'/> : null} */}
+
+                {/* {(visibleModal) ? <FilterModalNovo/> : null} */}
+                
+            </SafeAreaView>                            
         </ScrollView>        
     )
 }
