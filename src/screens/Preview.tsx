@@ -123,7 +123,7 @@ export function Preview(){
             try {
                 const adLoad = await storageAdsGet();
                 setAds(adLoad);
-                console.log(adLoad)
+                // console.log(adLoad)
             
             }   catch (error) {
     
@@ -231,58 +231,16 @@ export function Preview(){
                                                 {method}
                                             </Text>
                                         </HStack>
-                                    )}
-                                    
-                                    {/* <HStack space={2}>
-                                        <Barcode size={sizes[5]} color={colors.gray[700]} />
-
-                                        <Text fontSize="sm" color="gray.700">
-                                            Boleto
-                                        </Text>
-                                    </HStack>
-                                    
-                                    <HStack space={2}>
-                                        <QrCode size={sizes[5]} color={colors.gray[700]} />
-
-                                        <Text fontSize="sm" color="gray.700">
-                                            Pix
-                                        </Text>
-                                    </HStack>                 
-                                    
-                                    <HStack space={2}>
-                                        <Money size={sizes[5]} color={colors.gray[700]} />
-
-                                        <Text fontSize="sm" color="gray.700">
-                                            Dinheiro
-                                        </Text>
-                                    </HStack>
-                                                            
-                                    <HStack space={2}>
-                                        <CreditCard size={sizes[5]} color={colors.gray[700]} />
-
-                                        <Text fontSize="sm" color="gray.700">
-                                            Cartão de crédito
-                                        </Text>
-                                    </HStack>
-                                                        
-                                    <HStack space={2}>
-                                        <Bank size={sizes[5]} color={colors.gray[700]} />
-
-                                        <Text fontSize="sm" color="gray.700">
-                                            Depósito bancário
-                                        </Text>
-                                    </HStack> */}
-                                    
+                                    )}                                    
                                 </VStack>
                                     
                             </VStack>
                             
                         </VStack> 
-                    </ScrollView>  
-                    
-                    
+                    </ScrollView>                    
                 </VStack>
             }
+
             <HStack 
                 justifyContent="space-between" 
                 pr={8} pl={8}
