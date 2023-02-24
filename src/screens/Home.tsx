@@ -10,7 +10,6 @@ import { ArrowRight, Plus, Tag} from 'phosphor-react-native';
 
 // import { ButtonDefault } from '@components/Button'
 import { FilterModal } from '@components/FilterModal'
-import { FilterModalNovo } from '@components/FilterModalNovo'
 import { Product } from '@components/Product'
 import { UserPhoto } from '@components/UserPhoto'
 import { InputFilter } from '@components/InputFilter' 
