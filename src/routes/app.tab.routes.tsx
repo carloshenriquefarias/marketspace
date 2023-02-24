@@ -36,8 +36,11 @@ export function Tab() {
 
     const { sizes, colors } = useTheme();
     const { signOut } = useAuth();
+
     const iconSize = sizes[6];
+
     
+   
   return (
     <Navigator screenOptions={{ 
         headerShown: false,
@@ -83,6 +86,7 @@ export function Tab() {
                     e.preventDefault();
                     //COLOCAR O MODAL: QUER MESMO SAIR DO APP? SIM OU NAO
                     signOut();
+                   
                 },
             }}
         />

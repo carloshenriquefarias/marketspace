@@ -71,15 +71,24 @@ export function TesteDeModal() {
 
     async function handleFilterProducts() {
         try {
-            handleCloseModal()
+            // handleCloseModal()
+
             const params = {
                 query: filterName.trim() === '' ? null : filterName,
                 is_new: isNew,
                 accept_trade: switchValue,
                 payment_methods: paymentMethods,
             }
+
+            console.log("params: ", params)
+
+            const response = await api.get(`/products?accept_trade=${switchValue}`)   
+
+            console.log("response: ", response)
+            return;
+            
         
-            const response = await api.get('/products', {params})        
+                 
             setProducts(response.data)
     
         } catch (error) {
