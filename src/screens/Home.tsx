@@ -1,22 +1,19 @@
 import { AppNavigatorRoutesProps } from '@routes/app.routes';
 import { AppTabNavigatorRoutesProps } from '@routes/app.tab.routes';
-import { NavigationContainer, useNavigation, useRoute } from '@react-navigation/native';
-// import { useEffect, useState } from 'react'; 
+import { useNavigation } from '@react-navigation/native';
 
 import { Pressable, useTheme, View } from 'native-base';
 import { ArrowRight, Plus, Tag} from 'phosphor-react-native';
 
-// import { Text, HStack, ScrollView, VStack, Box, useToast, FlatList} from 'native-base';
-
-// import { ButtonDefault } from '@components/Button'
-import { FilterModal } from '@components/FilterModal'
 import { Product } from '@components/Product'
 import { UserPhoto } from '@components/UserPhoto'
 import { InputFilter } from '@components/InputFilter' 
 import { Loading } from '@components/Loading'
+import { Status } from '@components/Status'
+import { ButtonDefault } from "@components/Button";
 
 import { AppError } from '@utils/AppError';
-import { api , baseURL } from '@services/api';
+import { api, baseURL } from '@services/api';
 
 import { useAuth } from '@hooks/useAuth'
 import { RFValue } from 'react-native-responsive-fontsize';
@@ -24,18 +21,12 @@ import { SafeAreaView } from 'react-native';
 
 import { ProductDTO } from '@dtos/ProductDTO';
 
-
-
-
-import { Box, Button, FlatList, Checkbox, Heading, HStack, Icon, IconButton, ScrollView, Switch, Text, useToast, VStack } from "native-base";
+import { Box, FlatList, Checkbox, Heading, HStack, Icon, 
+    IconButton, ScrollView, Switch, Text, useToast, VStack } from "native-base";
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { Status } from '@components/Status'
+
 import BottomSheet from "@gorhom/bottom-sheet";
 import {AntDesign} from '@expo/vector-icons'
-// import { api } from "@services/api";
-// import { ProductDTO } from "@dtos/ProductDTO";
-import { ButtonDefault } from "@components/Button";
-// import { AppError } from "@utils/AppError";
 
 export function Home(){
 
@@ -50,10 +41,6 @@ export function Home(){
 
     const toast = useToast();
     const { user } = useAuth();
-
-
-
-
 
     const [products, setProducts] = useState<ProductDTO[]>([])
     const [loadingProducts, setLoadingProducts] = useState(true)
@@ -99,10 +86,6 @@ export function Home(){
         navigation.navigate('myads');
     }
 
-    // function handleOpenModal() {
-    //     setVisibleModal(true);
-    // }
-
     async function fetchProduct() {       
         try {
             const response = await api.get('/products');
@@ -123,9 +106,7 @@ export function Home(){
 
     useEffect(() => {
         fetchProduct();
-    },[])
-    
-    
+    },[])    
 
     function handleOpenModal() {
         bottomSheetRef.current?.expand()
@@ -168,10 +149,7 @@ export function Home(){
                 payment_methods: paymentMethods,
             }
 
-            // console.log("params: ", params)
-
-            const response = await api.get(`/products?accept_trade=${switchValue}`)          
-                 
+            const response = await api.get(`/products?accept_trade=${switchValue}`)             
             setProducts(response.data)
     
         } catch (error) {
@@ -413,10 +391,8 @@ export function Home(){
                         <HStack 
                             justifyContent="space-between" 
                             space={2} 
-                            pt={5} pb={5}
-                            // bottom={0}
-                            // w='full'
-                            // h='12%'
+                            pt={5} 
+                            pb={5}
                         >
                             <ButtonDefault 
                                 title="Resetar Filtros" 
@@ -436,8 +412,7 @@ export function Home(){
                     </ScrollView>
                     </VStack>
                 </BottomSheet>
-            </SafeAreaView>  
-                                   
+            </SafeAreaView>                             
         </ScrollView>        
     )
 }
