@@ -13,7 +13,6 @@ import { Text, HStack, VStack, Button, Box, useTheme, Switch,
 import { ButtonDefault } from '@components/Button';
 import { Input } from '@components/Input'
 import { Images } from '@components/Image';
-import { TextAreaAtual } from '@components/TextArea';
 import { Loading } from '@components/Loading';
 
 import { ArrowLeft, Plus } from 'phosphor-react-native';
@@ -76,9 +75,6 @@ export function EditAds(){
     const [paymentMethods, setPaymentMethods] = useState([]) 
 
     const [product, setProduct] = useState<ProductDTO>({} as ProductDTO);
-     
-
-    // const [groupValue, setGroupValue] = React.useState([]);
 
     const RadioStatusProduct = () => {
         return (
@@ -119,7 +115,6 @@ export function EditAds(){
         try {
             setIsLoading(true);
             const response = await api.get(`/products/${userProduct_id}`);
-            // console.log(response.data); //Checar pra ver se ta trazendo os dados
 
             // setImages(response.data.images)
             setName(response.data.name);
@@ -130,10 +125,7 @@ export function EditAds(){
             // setPaymentMethods(response.data.payment_methods)
         
         } catch (error) {
-            const isAppError = error instanceof AppError;
-            // const title = isAppError ? error.message : 'Não foi possível carregar os detalhes do produto';
-            const title = 'Não foi possível carregar os detalhes do produto';
-        
+            const title = 'Não foi possível carregar os detalhes do produto';        
             toast.show({
                 title,
                 placement: 'top',

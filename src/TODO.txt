@@ -14,7 +14,7 @@ COISAS PRA FAZER NO PROJETO:
 [X] 12 - Na tela de MyAdsDetails, arrumar o map dos meios de pagamento do anúncio;
 [X] 13 - Na tela de MyAdsDetails, arrumar a imagem carrossel do anúncio;
 [X] 14 - Construi a tela de EDITAR o anúncio;
-[] 15 - Arrumar o Filtro da tela principal;
+[X] 15 - Arrumar o Filtro da tela principal;
 [] 16 - No modal do filter, arrumar o fulanodetal;
 [] 17 - Botao de Filtro so esta funcionando NA PRIMEIRA VEZ, arrumar ISSO;
 [] 18 - No botao de sair do app, colocar a cor do botão vermelho;
