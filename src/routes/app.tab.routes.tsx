@@ -77,7 +77,7 @@ export function Tab() {
             component={SignIn}
             options={{
                 tabBarIcon: ({color}) => (
-                    <SignOut color={color} size={iconSize} />
+                    <SignOut color={'red'} size={iconSize} />
                 ),
             }}           
 
