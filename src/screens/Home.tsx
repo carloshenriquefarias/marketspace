@@ -44,6 +44,8 @@ export function Home(){
 
     const [products, setProducts] = useState<ProductDTO[]>([])
     const [loadingProducts, setLoadingProducts] = useState(true)
+    const [conditionSelected, setConditionSelected] = useState('novo');
+    
     // const [isLoading, setIsLoading] = useState(true)
     // const toast= useToast();
 
@@ -78,9 +80,9 @@ export function Home(){
         navigation.navigate('newad');
     }
 
-    function handleTeste() {
-        navigation.navigate('teste');
-    }
+    // function handleTeste() {
+    //     navigation.navigate('teste');
+    // }
 
     function handleMyAds() {
         navigation.navigate('myads');
@@ -230,7 +232,7 @@ export function Home(){
                             title="Criar Anúncio" 
                             size="half"                             
                             variant="base2" 
-                            onPress={handleTeste}
+                            onPress={handleNewAd}
                             leftIcon={<Plus size={sizes[5]} color={colors.gray[200]} />}                 
                         />                    
                     </HStack>  
@@ -405,7 +407,7 @@ export function Home(){
                                 title="Aplicar Filtros" 
                                 size="half"                             
                                 variant="base1" 
-                                isLoading={isLoading}
+                                // isLoading={isLoading}
                                 onPress={handleFilterProducts}                                      
                             />                    
                         </HStack> 

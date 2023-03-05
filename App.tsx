@@ -30,7 +30,7 @@ export default function App() {
       <BottomSheetModalProvider>     
         <StatusBar
           barStyle="dark-content"
-          backgroundColor="transparent"
+          backgroundColor="#F7F7F8"
           translucent
         />
         

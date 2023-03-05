@@ -101,7 +101,7 @@ export function MyAdsDetails(){
         
             await api.patch(`/products/${userProduct_id}`, data)
 
-            console.log('MOSTRE AQUI OS DADOS', data)
+            // console.log('MOSTRE AQUI OS DADOS', data)
 
             const title = !product.is_active ? 'Seu anúncio está ativado!' : 'Seu anúncio está desativado!';
       
