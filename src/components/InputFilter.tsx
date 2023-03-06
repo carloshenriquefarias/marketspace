@@ -7,25 +7,26 @@ import { Entypo, Octicons} from '@expo/vector-icons';
 
 type Props = IInputProps & {
     typeInput?: null | 'filter';
-    fulanodetal: () => void;
+    filter: () => void;
+    handleOpenModal: () => void;
 }
 
-export function InputFilter({ typeInput = null, fulanodetal }: Props) { 
+export function InputFilter({ typeInput = null, filter, handleOpenModal}: Props) { 
     return (        
         <NativeBaseInput
             bg="white"                
-                h={14}
-                px={4}
-                borderWidth={0}
-                fontSize="md"
-                color="gray.700"
-                fontFamily="body"
-                placeholderTextColor="gray.400"  
-                placeholder='Buscar anúncio'
-                rounded={8} 
-                mt={4}         
-                
-                _focus={{
+            h={14}
+            px={4}
+            borderWidth={0}
+            fontSize="md"
+            color="gray.700"
+            fontFamily="body"
+            placeholderTextColor="gray.400"  
+            placeholder='Buscar anúncio'
+            rounded={8} 
+            mt={4}         
+            
+            _focus={{
                 bgColor: 'white',
                 borderWidth: 1,
                 borderColor: 'blue.500'
@@ -33,7 +34,7 @@ export function InputFilter({ typeInput = null, fulanodetal }: Props) {
 
             InputRightElement={
                 <HStack justifyContent="center" pr={4}>
-                    <Pressable>
+                    <Pressable onPress={() => handleOpenModal()}>
                         <Icon 
                             as={<Octicons name="search" size={24} color="gray.700" />}  
                             size={5} 
@@ -47,7 +48,7 @@ export function InputFilter({ typeInput = null, fulanodetal }: Props) {
                     />            
 
                     <Pressable 
-                        onPress={() => fulanodetal()}
+                        onPress={() => filter()}
                     >
                         <Icon 
                             as={<Entypo name="sound-mix" size={24} color="gray.700" />}

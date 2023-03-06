@@ -28,6 +28,10 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import BottomSheet from "@gorhom/bottom-sheet";
 import {AntDesign} from '@expo/vector-icons'
 
+import { InputSearch } from '@components/InputSearch';
+import { Filters } from '@components/Filters';
+import { BoxCondition } from '@components/BoxCondition';
+
 export function Home(){
 
     const navigation = useNavigation<AppNavigatorRoutesProps>();
@@ -45,6 +49,8 @@ export function Home(){
     const [products, setProducts] = useState<ProductDTO[]>([])
     const [loadingProducts, setLoadingProducts] = useState(true)
     const [conditionSelected, setConditionSelected] = useState('novo');
+
+    const [condition, setCondition] = useState<string[]>(['Novo', 'Usado']);
     
     // const [isLoading, setIsLoading] = useState(true)
     // const toast= useToast();
@@ -144,16 +150,42 @@ export function Home(){
         try {
             // handleCloseModal()
 
-            const params = {
-                query: filterName.trim() === '' ? null : filterName,
-                is_new: isNew,
-                accept_trade: switchValue,
-                payment_methods: paymentMethods,
-            }
-
-            const response = await api.get(`/products?accept_trade=${switchValue}`)             
+            // const params = {
+            //     query: filterName.trim() === '' ? null : filterName,
+            //     is_new: isNew,
+            //     accept_trade: switchValue,
+            //     payment_methods: paymentMethods,
+            // }
+            // let filters = '';
+            // if (is_null()) {
+            //     filters = ``;
+            // }
+            // `accept_trade=${switchValue}`
+            
+            const response = await api.get(`/products?is_new=${isNew}`)             
             setProducts(response.data)
     
+        } catch (error) {
+            const isAppError = error instanceof AppError;
+            const title = isAppError ? error.message : 'Não foi possível carregar os filtros do produto';
+        
+            toast.show({
+                title,
+                placement: 'top',
+                bgColor: 'red.500'
+            })
+        }
+    }
+
+    async function handleFilterByName() {
+        try {
+            if (filterName.trim() === '') {
+                fetchProducts()
+            }
+
+           const response = await api.get('/products', {params : {query: filterName}})
+            setProducts(response.data)
+
         } catch (error) {
             const isAppError = error instanceof AppError;
             const title = isAppError ? error.message : 'Não foi possível carregar os filtros do produto';
@@ -187,9 +219,9 @@ export function Home(){
         }
     }
 
-    // useEffect(() => {
-    //     fetchProducts()
-    // },[])
+    useEffect(() => {
+        fetchProducts()
+    },[])
 
     return(
         
@@ -281,15 +313,31 @@ export function Home(){
 
                     <Text 
                         color="gray.500"
-                        mt={10}
+                        mt={8}
                     >
                         Compre produtos variados
                     </Text>
                     
                     <InputFilter
                         typeInput={"filter"}
-                        fulanodetal={handleOpenModal}                           
-                    />
+                        filter={handleOpenModal}  
+                        handleOpenModal={handleOpenModal}                 
+                    />                    
+                        
+                    {/* <HStack>
+                        <Filters handleOpenModal={handleOpenModal} filter={handleFilterByName}/>
+                    </HStack>
+
+                    <InputSearch
+                        value={filterName}
+                        onChangeText={setFilterName}
+                        InputRightElement={                            
+                            <Filters handleOpenModal={handleOpenModal} filter={handleFilterByName}/>
+                        }
+                        // color="gray.700"
+                        // bg="red"
+                    /> */}
+
                 </VStack>
 
                 <VStack pr={4} pl={6} backgroundColor="gray.100">                   
@@ -354,64 +402,66 @@ export function Home(){
                                 Condição
                             </Text>
                         
-                            <HStack space={2} mb={6}>
-                                <Status
-                                    name='Novo'
-                                    isActive={isNew === true}
-                                    onPress={() => setIsNew(true)}
-                                />
-
-                                <Status
-                                    name='Usado'
-                                    isActive={isNew === false}
-                                    onPress={() => setIsNew(false)}
-                                />
+                            <HStack mb={6} space={5}>
+                                <FlatList 
+                                    data={condition}
+                                    keyExtractor={item => item}
+                                    renderItem={({ item }) => (
+                                        <BoxCondition 
+                                            name={item}
+                                            isActive={conditionSelected.toLocaleUpperCase() === item.toLocaleUpperCase()}
+                                            onPress={() => setConditionSelected(item)}
+                                        />
+                                    )}
+                                    horizontal
+                                    showsHorizontalScrollIndicator={false}
+                                />                                                                 
                             </HStack>
 
                             <Text fontFamily='heading' fontSize='sm' color='gray.600' mb={1}>
                                 Aceita troca?
                             </Text>
                         
-                        <Switches/>
+                            <Switches/>
 
-                        <Text fontFamily='heading' fontSize='sm' color='gray.600' mb={3}>
-                            Métodos de Pagamentos Aceitos:
-                        </Text>
-                        
-                        <Checkbox.Group 
-                            onChange={setPaymentMethods} 
-                            value={paymentMethods} 
-                            accessibilityLabel="choose numbers"
-                        >
-                            <Checkbox value='boleto' mb={1}>Boleto</Checkbox>
-                            <Checkbox value='pix' mb={1}>Pix</Checkbox>
-                            <Checkbox value='cash' mb={1}>Dinheiro</Checkbox>
-                            <Checkbox value='card' mb={1}>Cartão Crédito</Checkbox>
-                            <Checkbox value='deposit' mb={1}>Depósito Bancário</Checkbox>
-                        </Checkbox.Group>   
+                            <Text fontFamily='heading' fontSize='sm' color='gray.600' mb={3}>
+                                Métodos de Pagamentos Aceitos:
+                            </Text>
+                            
+                            <Checkbox.Group 
+                                onChange={setPaymentMethods} 
+                                value={paymentMethods} 
+                                accessibilityLabel="choose numbers"
+                            >
+                                <Checkbox value='boleto' mb={1}>Boleto</Checkbox>
+                                <Checkbox value='pix' mb={1}>Pix</Checkbox>
+                                <Checkbox value='cash' mb={1}>Dinheiro</Checkbox>
+                                <Checkbox value='card' mb={1}>Cartão Crédito</Checkbox>
+                                <Checkbox value='deposit' mb={1}>Depósito Bancário</Checkbox>
+                            </Checkbox.Group>   
 
-                        <HStack 
-                            justifyContent="space-between" 
-                            space={2} 
-                            pt={5} 
-                            pb={5}
-                        >
-                            <ButtonDefault 
-                                title="Resetar Filtros" 
-                                size="half"                             
-                                variant="default"  
-                                onPress={handleResetFilters}                    
-                            />          
+                            <HStack 
+                                justifyContent="space-between" 
+                                space={2} 
+                                pt={5} 
+                                pb={5}
+                            >
+                                <ButtonDefault 
+                                    title="Resetar Filtros" 
+                                    size="half"                             
+                                    variant="default"  
+                                    onPress={handleResetFilters}                    
+                                />          
 
-                            <ButtonDefault 
-                                title="Aplicar Filtros" 
-                                size="half"                             
-                                variant="base1" 
-                                // isLoading={isLoading}
-                                onPress={handleFilterProducts}                                      
-                            />                    
-                        </HStack> 
-                    </ScrollView>
+                                <ButtonDefault 
+                                    title="Aplicar Filtros" 
+                                    size="half"                             
+                                    variant="base1" 
+                                    // isLoading={isLoading}
+                                    onPress={handleFilterProducts}                                      
+                                />                    
+                            </HStack> 
+                        </ScrollView>
                     </VStack>
                 </BottomSheet>
             </SafeAreaView>                             

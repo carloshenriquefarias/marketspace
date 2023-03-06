@@ -21,7 +21,7 @@ import { Status } from '@components/Status';
 import { AppError } from '@utils/AppError';
 import { useAuth } from '@hooks/useAuth';
 import { ProductDTO } from '@dtos/ProductDTO';
-import { api } from '@services/api';
+import { api, baseURL } from '@services/api';
 import { SliderCarousel } from '@components/SliderCarousel';
 import { ProductDetailsDTO } from '@dtos/ProductDetailsDTO';
 
@@ -47,54 +47,53 @@ export function ProductDetails(){
         navigation.navigate('hometab');
     } 
 
-    // async function handleOpenWhats() {
-    //     try {
-    //         const url = `https://wa.me/55${product.user.tel}`;
+    async function handleOpenWhats() {
+        try {
+            const url = `https://wa.me/${product.user.tel}`;
         
-    //         const supported = await Linking.canOpenURL(url);
+            const supported = await Linking.canOpenURL(url);
         
-    //         if (!supported) {
-    //             throw new AppError('Não foi possível abrir o whatsapp!');
-    //         }
+            if (!supported) {
+                throw new AppError('Não foi possível abrir o whatsapp!');
+            }
         
-    //         await Linking.openURL(url);
-
-    //     } catch (e) {
-    //         console.error(e);
-    //         const isAppError = e instanceof AppError;
-        
-    //         const title = isAppError
-    //             ? e.message
-    //             : 'Não foi possível abrir o whatsapp. Tente novamente mais tarde!';
-        
-    //         toast.show({
-    //             title,
-    //             placement: 'top',
-    //             bgColor: 'red',
-    //         });
-    //     }
-    // }
-
-    async function handleSendMessage() {
-        setSendingMessage(true)
-
-        try{
-            // Linking.openURL(`https://wa.me/${product.user.tel}`)
+            await Linking.openURL(url);
 
         } catch (error) {
+
             const isAppError = error instanceof AppError;
-            const title = isAppError ? error.message : 'Não foi possível fazer contato. Tente novamente mais tarde.';
+            const title = isAppError
+                ? error.message
+                : 'Não foi possível abrir o whatsapp. Tente novamente mais tarde!';
         
             toast.show({
                 title,
                 placement: 'top',
-                bgColor: 'red.500'
-            })
-
-        } finally {
-            setSendingMessage(false)
+                bgColor: 'red',
+            });
         }
     }
+
+    // async function handleSendMessage() {
+    //     setSendingMessage(true)
+
+    //     try{
+    //         Linking.openURL(`https://wa.me/${product.user.tel}`)
+
+    //     } catch (error) {
+    //         const isAppError = error instanceof AppError;
+    //         const title = isAppError ? error.message : 'Não foi possível fazer contato. Tente novamente mais tarde.';
+        
+    //         toast.show({
+    //             title,
+    //             placement: 'top',
+    //             bgColor: 'red.500'
+    //         })
+
+    //     } finally {
+    //         setSendingMessage(false)
+    //     }
+    // }
 
     async function fetchProductDetails() {
         try {
@@ -157,7 +156,13 @@ export function ProductDetails(){
                                 h={6} w={6} 
                                 rounded="full" 
                                 bg="gray.100" 
-                                source={{ uri: userPhoto }}
+                                source={
+                                    user.avatar ? {uri: baseURL() + '/images/' + user.avatar} 
+                                    : { 
+                                        uri: userPhoto 
+                                    } 
+                                }
+                                // source={{ uri: userPhoto }}
                             />          
                         
                             <Text color="gray.700" fontFamily="body" fontSize="lg">
@@ -245,7 +250,7 @@ export function ProductDetails(){
                     variant="base1" 
                     leftIcon={<Icon as={FontAwesome5} name='whatsapp' size={5} color='gray.100'/>}
                     isLoading={sendingMessage}
-                    onPress={handleSendMessage}                   
+                    onPress={handleOpenWhats}                   
                 />                    
             </HStack> 
         </HStack>      
