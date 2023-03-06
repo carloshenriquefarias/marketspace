@@ -23,7 +23,7 @@ import { MaterialCommunityIcons, Feather} from '@expo/vector-icons';
 import { AppError } from '@utils/AppError';
 
 import { storageAdsGet } from '@storage/storageAds';
-import { api } from '@services/api';
+import { api, baseURL } from '@services/api';
 import { Images } from '@components/Image';
 
 export function Preview(){
@@ -178,8 +178,14 @@ export function Preview(){
                                     <Avatar 
                                         h={6} w={6} 
                                         rounded="full" 
-                                        bg="gray.100" 
-                                        source={{ uri: userPhoto }}
+                                        bg="gray.100"
+                                        source={
+                                            user.avatar ? {uri: baseURL() + '/images/' + user.avatar} 
+                                            : { 
+                                                uri: userPhoto 
+                                            } 
+                                        } 
+                                        // source={{ uri: userPhoto }}
                                     />          
                                 
                                     <Text color="gray.700" fontFamily="body" fontSize="lg">
