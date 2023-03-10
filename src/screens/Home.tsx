@@ -2,15 +2,18 @@ import { AppNavigatorRoutesProps } from '@routes/app.routes';
 import { AppTabNavigatorRoutesProps } from '@routes/app.tab.routes';
 import { useNavigation } from '@react-navigation/native';
 
-import { Pressable, useTheme, View } from 'native-base';
+// import { Pressable, useTheme} from 'native-base';
 import { ArrowRight, Plus, Tag} from 'phosphor-react-native';
 
 import { Product } from '@components/Product'
 import { UserPhoto } from '@components/UserPhoto'
 import { InputFilter } from '@components/InputFilter' 
 import { Loading } from '@components/Loading'
-import { Status } from '@components/Status'
+// import { Status } from '@components/Status'
 import { ButtonDefault } from "@components/Button";
+import { InputSearch } from '@components/InputSearch';
+import { Filters } from '@components/Filters';
+import { BoxCondition } from '@components/BoxCondition';
 
 import { AppError } from '@utils/AppError';
 import { api, baseURL } from '@services/api';
@@ -21,39 +24,27 @@ import { SafeAreaView } from 'react-native';
 
 import { ProductDTO } from '@dtos/ProductDTO';
 
-import { Box, FlatList, Checkbox, Heading, HStack, Icon, 
+import { Box, FlatList, Checkbox, Heading, HStack, Icon, Pressable, useTheme,
     IconButton, ScrollView, Switch, Text, useToast, VStack } from "native-base";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 
 import BottomSheet from "@gorhom/bottom-sheet";
 import {AntDesign} from '@expo/vector-icons'
 
-import { InputSearch } from '@components/InputSearch';
-import { Filters } from '@components/Filters';
-import { BoxCondition } from '@components/BoxCondition';
-
 export function Home(){
 
     const navigation = useNavigation<AppNavigatorRoutesProps>();
-    const navigationTab = useNavigation<AppTabNavigatorRoutesProps>();
     const {colors, sizes} = useTheme();
-    const [visibleModal, setVisibleModal] = useState(false)
     const [loading, setLoading] = useState(true)
     const [userPhoto, setUserPhoto] = useState('https://github.com/JRSparrowII.png');
-    const [product, setProduct] = useState<ProductDTO[]>([]);
     const [isLoading, setIsLoading] = useState(true);    
-
     const toast = useToast();
     const { user } = useAuth();
 
-    const [products, setProducts] = useState<ProductDTO[]>([])
-    const [loadingProducts, setLoadingProducts] = useState(true)
-    const [conditionSelected, setConditionSelected] = useState('novo');
+    const [products, setProducts] = useState<ProductDTO[]>([]);
 
+    const [conditionSelected, setConditionSelected] = useState('novo');
     const [condition, setCondition] = useState<string[]>(['Novo', 'Usado']);
-    
-    // const [isLoading, setIsLoading] = useState(true)
-    // const toast= useToast();
 
     const bottomSheetRef = useRef<BottomSheet>(null)
     const snapPoints = useMemo(() => ['88%'] ,[]) 
@@ -86,18 +77,22 @@ export function Home(){
         navigation.navigate('newad');
     }
 
-    // function handleTeste() {
-    //     navigation.navigate('teste');
-    // }
-
     function handleMyAds() {
         navigation.navigate('myads');
+    }
+
+    function handleOpenModal() {
+        bottomSheetRef.current?.expand()
+    }
+
+    function handleCloseModal() {
+        bottomSheetRef.current?.close()
     }
 
     async function fetchProduct() {       
         try {
             const response = await api.get('/products');
-            setProduct(response.data);
+            setProducts(response.data);
             setLoading(false); 
     
         } catch (error) {
@@ -110,58 +105,10 @@ export function Home(){
                 bgColor: 'red.500'
             })
         }
-    }
-
-    useEffect(() => {
-        fetchProduct();
-    },[])    
-
-    function handleOpenModal() {
-        bottomSheetRef.current?.expand()
-    }
-
-    function handleCloseModal() {
-        bottomSheetRef.current?.close()
-    }
-
-    async function fetchProducts() {
-        try {
-            setLoadingProducts(true)
-            const response = await api.get('/products')        
-            setProducts(response.data)
-
-        } catch (error) {
-            const isAppError = error instanceof AppError;
-            const title = isAppError ? error.message : 'Não foi possível carregar os produtos';
-        
-            toast.show({
-                title,
-                placement: 'top',
-                bgColor: 'red.500'
-            })
-
-        } finally {
-            setLoadingProducts(false)
-            setIsLoading(false)
-        }
-    }
+    }    
 
     async function handleFilterProducts() {
-        try {
-            // handleCloseModal()
-
-            // const params = {
-            //     query: filterName.trim() === '' ? null : filterName,
-            //     is_new: isNew,
-            //     accept_trade: switchValue,
-            //     payment_methods: paymentMethods,
-            // }
-            // let filters = '';
-            // if (is_null()) {
-            //     filters = ``;
-            // }
-            // `accept_trade=${switchValue}`
-            
+        try {            
             const response = await api.get(`/products?is_new=${isNew}`)             
             setProducts(response.data)
     
@@ -178,13 +125,9 @@ export function Home(){
     }
 
     async function handleFilterByName() {
-        try {
-            if (filterName.trim() === '') {
-                fetchProducts()
-            }
-
-           const response = await api.get('/products', {params : {query: filterName}})
-            setProducts(response.data)
+        try {           
+           const response = await api.get(`/products?query=${filterName}`)
+           setProducts(response.data)    
 
         } catch (error) {
             const isAppError = error instanceof AppError;
@@ -205,7 +148,7 @@ export function Home(){
             setSwitchValue(true)
             setPaymentMethods([])
     
-            await fetchProducts()
+            await fetchProduct()
 
         } catch (error) {
             const isAppError = error instanceof AppError;
@@ -220,25 +163,22 @@ export function Home(){
     }
 
     useEffect(() => {
-        fetchProducts()
+        fetchProduct()
     },[])
 
-    return(
-        
+    return(        
         <ScrollView 
             contentContainerStyle={{ flexGrow: 1 }} 
             showsVerticalScrollIndicator={false}
             backgroundColor="gray.100"
         >
-            <SafeAreaView>
-                
+            <SafeAreaView>                
                 <VStack  
                     mt={50}                         
                     flex={1}                        
                     px={6}                    
                 >
                     <HStack justifyContent="space-between">
-
                         <HStack justifyContent="space-between">
                             <UserPhoto 
                                 source={
@@ -247,7 +187,6 @@ export function Home(){
                                         uri: userPhoto 
                                     } 
                                 }
-
                                 alt="Foto do usuário"
                                 size={12}
                                 mr={2}
@@ -256,8 +195,7 @@ export function Home(){
                             <VStack>
                                 <Text color="black" fontSize={RFValue(13)}>Boas Vindas, </Text>  
                                 <Text color="black" fontFamily="heading" fontSize={RFValue(14)} fontWeight="700">{user.name}</Text> 
-                            </VStack>
-                                            
+                            </VStack>                                            
                         </HStack>               
 
                         <ButtonDefault 
@@ -269,10 +207,7 @@ export function Home(){
                         />                    
                     </HStack>  
 
-                    <Text 
-                        color="gray.500"
-                        mt={10}
-                    >
+                    <Text color="gray.500" mt={10}>
                         Seus produtos anunciados para vendas
                     </Text>
 
@@ -290,9 +225,15 @@ export function Home(){
                                 <Tag color={colors.blue[500]} size={sizes[7]} />
 
                                 <VStack ml={4}>
-                                    <Text color="gray.600" fontFamily={'heading'} fontSize={RFValue(20)} fontWeight="bold" lineHeight={'md'}>
+                                    <Text 
+                                        color="gray.600" 
+                                        fontFamily={'heading'} 
+                                        fontSize={RFValue(20)} 
+                                        fontWeight="bold" 
+                                        lineHeight={'md'}
+                                    >
                                         {/* 4 */}
-                                        {product.length}
+                                        {products.length}
                                     </Text>  
                                     <Text color="black" fontSize={RFValue(12)}>anúncios ativos</Text> 
                                 </VStack>
@@ -304,26 +245,32 @@ export function Home(){
                                     alignItems="center" 
                                     space={1}                      
                                 >
-                                    <Text color="blue.700" fontFamily={'heading'} fontWeight="bold" fontSize={RFValue(13)}>Meus anúncios </Text>
+                                    <Text 
+                                        color="blue.700" 
+                                        fontFamily={'heading'} 
+                                        fontWeight="bold" 
+                                        fontSize={RFValue(13)}
+                                    >
+                                        Meus anúncios 
+                                    </Text>
                                     <ArrowRight color={colors.blue[500]} size={sizes[5]}/>
                                 </HStack>   
                             </Pressable>                                                
                         </HStack>                    
                     </Box>
 
-                    <Text 
-                        color="gray.500"
-                        mt={8}
-                    >
+                    <Text color="gray.500" mt={8}>
                         Compre produtos variados
                     </Text>
                     
                     <InputFilter
+                        value={filterName} 
+                        onChangeText={setFilterName}
                         typeInput={"filter"}
-                        filter={handleOpenModal}  
+                        filter={handleFilterByName}  
                         handleOpenModal={handleOpenModal}                 
-                    />                    
-                        
+                    />                     
+                    
                     {/* <HStack>
                         <Filters handleOpenModal={handleOpenModal} filter={handleFilterByName}/>
                     </HStack>
@@ -342,7 +289,7 @@ export function Home(){
 
                 <VStack pr={4} pl={6} backgroundColor="gray.100">                   
                     <FlatList
-                        data={product}
+                        data={products} 
                         keyExtractor={item => item.id}
                         numColumns={2}
 
@@ -366,7 +313,7 @@ export function Home(){
 
                         ListEmptyComponent={() => (
                             <VStack alignItems='center' justifyContent='center' flex={1} mt={16}>                                    
-                                <Text fontFamily='body' color='gray.4' fontSize='md'>
+                                <Text fontFamily='body' color='gray.400' fontSize='md'>
                                     Nenhum anúncio encontrado
                                 </Text>
                             </VStack>
@@ -397,7 +344,10 @@ export function Home(){
                             />
                         </HStack>
 
-                        <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{paddingBottom: 16}}>
+                        <ScrollView 
+                            showsVerticalScrollIndicator={false} 
+                            contentContainerStyle={{paddingBottom: 16}}
+                        >
                             <Text fontFamily='heading' fontSize='sm' color='gray.600' mb={3}>
                                 Condição
                             </Text>
@@ -457,7 +407,7 @@ export function Home(){
                                     title="Aplicar Filtros" 
                                     size="half"                             
                                     variant="base1" 
-                                    // isLoading={isLoading}
+                                    isLoading={isLoading}
                                     onPress={handleFilterProducts}                                      
                                 />                    
                             </HStack> 

@@ -11,9 +11,11 @@ type Props = IInputProps & {
     handleOpenModal: () => void;
 }
 
-export function InputFilter({ typeInput = null, filter, handleOpenModal}: Props) { 
+export function InputFilter({valueFilter, onChangeText, typeInput = null, filter, handleOpenModal}: Props) {      
     return (        
         <NativeBaseInput
+            value={valueFilter}
+            onChangeText={onChangeText}
             bg="white"                
             h={14}
             px={4}
@@ -34,7 +36,7 @@ export function InputFilter({ typeInput = null, filter, handleOpenModal}: Props)
 
             InputRightElement={
                 <HStack justifyContent="center" pr={4}>
-                    <Pressable onPress={() => handleOpenModal()}>
+                    <Pressable onPress={filter}>
                         <Icon 
                             as={<Octicons name="search" size={24} color="gray.700" />}  
                             size={5} 
@@ -48,7 +50,7 @@ export function InputFilter({ typeInput = null, filter, handleOpenModal}: Props)
                     />            
 
                     <Pressable 
-                        onPress={() => filter()}
+                        onPress={() => handleOpenModal()}
                     >
                         <Icon 
                             as={<Entypo name="sound-mix" size={24} color="gray.700" />}
