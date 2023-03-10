@@ -15,8 +15,8 @@ COISAS PRA FAZER NO PROJETO:
 [X] 13 - Na tela de MyAdsDetails, arrumar a imagem carrossel do anúncio;
 [X] 14 - Construi a tela de EDITAR o anúncio;
 [X] 15 - Arrumar o Filtro da tela principal;
-[] 16 - No modal do filter, arrumar o fulanodetal;
-[] 17 - Botao de Filtro so esta funcionando NA PRIMEIRA VEZ, arrumar ISSO;
+[X] 16 - No modal do filter, arrumar o fulanodetal;
+[X] 17 - Botao de Filtro so esta funcionando NA PRIMEIRA VEZ, arrumar ISSO;
 [X] 18 - No botao de sair do app, colocar a cor do botão vermelho;
 [X] 19 - Colocar safe area em todas as telas;
 [] 20 - Colocar os icones dinamicos do metodo de pagamento;
@@ -24,7 +24,7 @@ COISAS PRA FAZER NO PROJETO:
     https://api.whatsapp.com/send/?phone=5561998859908
     &text=mensagem&type=phone_number&app_absent=0
 [] 22 - Arrumar a barra de pesquisa da tela home;
-[] 23 - No modal tem DOIS BOTÕES 'NOVOS', arrumar isso;
+[X] 23 - No modal tem DOIS BOTÕES 'NOVOS', arrumar isso;
 
 MELHORIAS A FAZER:
 
