@@ -34,36 +34,35 @@ import {AntDesign} from '@expo/vector-icons'
 export function Home(){
 
     const navigation = useNavigation<AppNavigatorRoutesProps>();
-    const {colors, sizes} = useTheme();
-    const [loading, setLoading] = useState(true)
-    const [userPhoto, setUserPhoto] = useState('https://github.com/JRSparrowII.png');
-    const [isLoading, setIsLoading] = useState(true);    
     const toast = useToast();
-    const { user } = useAuth();
-
-    const [products, setProducts] = useState<ProductDTO[]>([]);
-
-    const [conditionSelected, setConditionSelected] = useState('novo');
-    const [condition, setCondition] = useState<string[]>(['Novo', 'Usado']);
-
     const bottomSheetRef = useRef<BottomSheet>(null)
     const snapPoints = useMemo(() => ['88%'] ,[]) 
 
+    const { user } = useAuth();
+    const { colors, sizes } = useTheme();
+    
+    const [loading, setLoading] = useState(true)
+    const [userPhoto, setUserPhoto] = useState('https://github.com/JRSparrowII.png');
+    const [isLoading, setIsLoading] = useState(false);                
+    const [products, setProducts] = useState<ProductDTO[]>([]);
+    const [conditionSelected, setConditionSelected] = useState('NOVO');        
     const [filterName, setFilterName] = useState('')
     const [isNew, setIsNew] = useState(true)
-    const [switchValue, setSwitchValue] = useState(true);
+    const [acceptTrade, setAcceptTrade] = useState(true);
     const [paymentMethods, setPaymentMethods] = useState<string[]>([])
+
+    const conditionOptions = ['Novo', 'Usado'];
 
     const Switches = () => {      
         const toggleSwitch = (value : any) => {
-          setSwitchValue(value);
+            setAcceptTrade(value);
         };
       
         return (
             <VStack alignItems='flex-start'>
                 <Switch
                     onValueChange={toggleSwitch}
-                    value={switchValue}
+                    value={acceptTrade}
                 />
             </VStack>
         );
@@ -107,10 +106,31 @@ export function Home(){
         }
     }    
 
+    function handleCondition(item: string) {       
+        setConditionSelected(item);             
+        setIsNew(item ==='Novo' ? true : false);        
+    }
+
+    function resetCondition() {
+        setConditionSelected(conditionOptions[0]);             
+        setIsNew(true); 
+    }
+
     async function handleFilterProducts() {
-        try {            
-            const response = await api.get(`/products?is_new=${isNew}`)             
+        try {      
+            
+            setIsLoading(true);                 
+                       
+            const params = `is_new=${isNew}&accept_trade=${acceptTrade}&payment_methods=${JSON.stringify(paymentMethods)}`
+
+
+            console.log('params', params);
+
+            const response = await api.get(`/products?${params}`)  
+           
             setProducts(response.data)
+            setIsLoading(false)
+            handleCloseModal()
     
         } catch (error) {
             const isAppError = error instanceof AppError;
@@ -121,6 +141,7 @@ export function Home(){
                 placement: 'top',
                 bgColor: 'red.500'
             })
+            setIsLoading(false)
         }
     }
 
@@ -143,9 +164,10 @@ export function Home(){
 
     async function handleResetFilters() {
         try {
-            setFilterName('')
-            setIsNew(true)
-            setSwitchValue(true)
+            resetCondition()
+            
+            setFilterName('')                        
+            setAcceptTrade(true)
             setPaymentMethods([])
     
             await fetchProduct()
@@ -271,19 +293,7 @@ export function Home(){
                         handleOpenModal={handleOpenModal}                 
                     />                     
                     
-                    {/* <HStack>
-                        <Filters handleOpenModal={handleOpenModal} filter={handleFilterByName}/>
-                    </HStack>
-
-                    <InputSearch
-                        value={filterName}
-                        onChangeText={setFilterName}
-                        InputRightElement={                            
-                            <Filters handleOpenModal={handleOpenModal} filter={handleFilterByName}/>
-                        }
-                        // color="gray.700"
-                        // bg="red"
-                    /> */}
+                   
 
                 </VStack>
 
@@ -354,14 +364,17 @@ export function Home(){
                         
                             <HStack mb={6} space={5}>
                                 <FlatList 
-                                    data={condition}
+                                    data={conditionOptions}
                                     keyExtractor={item => item}
                                     renderItem={({ item }) => (
                                         <BoxCondition 
                                             name={item}
-                                            isActive={conditionSelected.toLocaleUpperCase() === item.toLocaleUpperCase()}
-                                            onPress={() => setConditionSelected(item)}
-                                        />
+                                            isActive={conditionSelected.toLocaleUpperCase() 
+                                                === item.toLocaleUpperCase()}
+                                            onPress={() =>  handleCondition(item)}
+                                                
+                                        />                                      
+                                   
                                     )}
                                     horizontal
                                     showsHorizontalScrollIndicator={false}

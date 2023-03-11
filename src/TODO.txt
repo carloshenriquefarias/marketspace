@@ -26,6 +26,18 @@ COISAS PRA FAZER NO PROJETO:
 [] 22 - Arrumar a barra de pesquisa da tela home;
 [X] 23 - No modal tem DOIS BOTÕES 'NOVOS', arrumar isso;
 
+
+[] 24 -Arrumar editar da tela de edição
+[] 25 - Contador de anúncios ativos está errado. Deveria está pegando valor dos anúncios ativos do usuario
+ logado e nao a quantidade de registros do flatlist
+
+[] 26 - usando no lugar do loading na flatlist home, usar o skeleton (ver na doc do desafio como usar)
+
+(!loading) ? 
+    <skeleton>
+:
+ faz o que jã está fazendo
+
 MELHORIAS A FAZER:
 
 [] 1 - Testar as contas da Google e Apple no PC do Prisco;
