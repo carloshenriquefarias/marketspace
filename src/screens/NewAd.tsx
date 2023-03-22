@@ -17,7 +17,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { ButtonDefault } from '@components/Button';
 import { Input } from '@components/Input'
 import { Images } from '@components/Image';
-import { TextAreaAtual } from '@components/TextArea';
+// import { TextAreaAtual } from '@components/TextArea';
 import { Loading } from '@components/Loading';
 
 import { ArrowLeft, Plus } from 'phosphor-react-native';
@@ -192,7 +192,7 @@ export function NewAd(){
                 payment_methods: paymentMethods,
                 images: images
             }
-            console.log(data)
+            // console.log(data)
 
             await storageAdsSave(data);
             setIsLoading(false)
