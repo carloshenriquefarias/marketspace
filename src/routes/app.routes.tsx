@@ -1,7 +1,4 @@
-import { 
-  createStackNavigator, 
-  StackNavigationProp 
-} from '@react-navigation/stack';
+import { createStackNavigator, StackNavigationProp } from '@react-navigation/stack';
 
 import { Tab } from './app.tab.routes';
 

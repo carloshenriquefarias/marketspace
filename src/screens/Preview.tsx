@@ -41,8 +41,7 @@ export function Preview(){
 
     function handleGoHome() { 
         navigationTab.navigate('home');
-    } 
-
+    }
 
     function handleOpenNewAd() { 
         navigation.navigate('newad');
