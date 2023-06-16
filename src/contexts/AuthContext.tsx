@@ -5,6 +5,7 @@ import { storageUserGet, storageUserSave, storageUserRemove } from '@storage/sto
 import { storageAuthTokenGet, storageAuthTokenRemove, storageAuthTokenSave } from "@storage/storageAuthToken";
 import { UserDTO } from "@dtos/UserDTO";
 import { api } from "@services/api";
+
 // import { SignOutModal } from "@components/SignOutModal";
 
 // const { CLIENT_ID } = process.env;
@@ -44,7 +45,6 @@ export function AuthContextProvider({children} : AuthContextProviderProps){
 
   const userStorageKey = '@marketspace:user';
   const [userStorageLoading, setUserStorageLoading] = useState(true);
-
 
   function handleOpenModal() {
     setVisibleModal(true);
@@ -109,18 +109,7 @@ export function AuthContextProvider({children} : AuthContextProviderProps){
 
   async function signOut () {  
 
-    //QUANDO ESTA FUNÇÃO FOR CHAMADA ABRA O MODAL PERGUNTANDO: SIM OU NAO.
-    //SE SIM, EXECUTE A FUNÇÃO SIGNOUT, SE NÃO VOLTE PARA TELA ONDE ESTAVA
-
-    // handleOpenModal();
-
     try {
-
-      // handleOpenModal();
-
-      // {(visibleModal) ?
-      //   <SignOutModal />
-      // :null}
 
       setIsLoadingUserStorageData(true);
       setUser({} as UserDTO);

@@ -16,8 +16,6 @@ export function Product({onPress, product_images, is_new, is_active, user, name,
     const [userPhoto, setUserPhoto] = useState('https://github.com/JRSparrowII.png');
     const [product, setProduct] = useState<ProductDTO>({} as ProductDTO);
 
-  
-
     return(
                  
         <VStack
@@ -39,8 +37,7 @@ export function Product({onPress, product_images, is_new, is_active, user, name,
                         <Image
                             w='full'
                             h='full' 
-                            rounded="lg" 
-                            // source={{ uri: `${api.defaults.baseURL}/exercise/thumb/${data.thumb}` }}                      
+                            rounded="lg"                      
                             source={{ uri: (product_images[0]) 
                                 ? baseURL()+ '/images/'+  product_images[0].path : userPhoto }}
                             alt={name}             

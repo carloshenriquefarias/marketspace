@@ -66,11 +66,11 @@ export function EditAds(){
 
     // const paymentMethodsKey = product.payment_methods.map(({ key }) => key)
 
-    // const [images, setImages] = useState<string[]>([])
+    const [images, setImages] = useState<string[]>([])
     const [name, setName] = useState()
     const [description, setDescription] = useState()
     const [isNew, setIsNew] = useState <string | undefined> (undefined);
-    const [price, setPrice] = useState()
+    const [price, setPrice] = useState<number>()
     const [isTradable, setIsTradable] = useState()
     const [paymentMethods, setPaymentMethods] = useState([]) 
 
@@ -115,8 +115,9 @@ export function EditAds(){
         try {
             setIsLoading(true);
             const response = await api.get(`/products/${userProduct_id}`);
+            console.log('aqui as 16:32 =>', response.data)
 
-            // setImages(response.data.images)
+            setImages(response.data.images)
             setName(response.data.name);
             setDescription(response.data.description);
             setIsNew(response.data.is_new);
@@ -352,7 +353,7 @@ export function EditAds(){
                             Edite seu anúncio
                         </Text>
 
-                        <Box size={6} bg="gray.300"/>
+                        <Box/>
                     </HStack>
 
                     <VStack mt={5}>                
@@ -364,14 +365,48 @@ export function EditAds(){
                             Escolha até 3 imagens para mostrar o quanto seu produto é incrivel!
                         </Text>
 
-                        {/* <ScrollView mb={8} horizontal showsHorizontalScrollIndicator={false}>
+                       {/* <ScrollView mb={8} horizontal showsHorizontalScrollIndicator={false}>
                             {image.map (image => <Images source={{uri: image}} key={image} />)}
                             <TouchableOpacity onPress={handleUserPhotoSelected}>
                                 <Center h='100px' w='100px' bg='gray.5' rounded='md'>
                                 <Icon/>
                                 </Center>
                             </TouchableOpacity>
-                        </ScrollView> */}
+                        </ScrollView>*/}
+
+                        <HStack 
+                            justifyContent="flex-start" 
+                            mt={5}
+                            space={5}
+                        >
+                            {images? (
+                                <ScrollView mb={8} horizontal showsHorizontalScrollIndicator={false} >
+                                    { images.map ( image => (
+                                        <Images 
+                                            source={{uri: image}} 
+                                            key={image} 
+                                            size={24}  
+                                            mr={1}
+                                            alt={'Foto'}
+                                        />
+                                        )
+                                    )}
+                                    <HStack>
+                                        <Button
+                                            onPress={handleUserPhotoSelected} 
+                                            h={24} 
+                                            w={24} 
+                                            backgroundColor="gray.300"
+                                            alignItems="center"
+                                        >
+                                            <Plus />
+                                        </Button> 
+                                    </HStack>   
+                                </ScrollView>
+                            ) : null}
+                            
+                                                  
+                        </HStack>
 
                         <HStack 
                             justifyContent="flex-start" 
@@ -431,7 +466,7 @@ export function EditAds(){
                             placeholder="Valor do produto"
                             onChangeText={() => setPrice}
                             value={price}          
-                            keyboardType="numeric" //COLOCAR A MASCARA
+                            keyboardType="numeric"
                             autoCapitalize="none"     
                             // secureTextEntry={false}               
                         />                          
@@ -506,73 +541,3 @@ export function EditAds(){
         </VStack>      
     )        
 }
-
-
-
-
-// async function handleNewAd({ name, price, description }: AdsDTO) {
-//     try {  
-
-//         if(paymentMethods.length === 0) {
-//             return toast.show({
-//               title: 'Atenção! Por favor, escolha pelo menos um método de pagamento',
-//               bgColor: 'yellow.500',
-//               placement: 'top',
-//             //   mx: 4,
-//             })
-//         }
-
-//         if ( !statusProduto ) {
-//             const title = 'Atenção! Por favor, informe se o produto novo ou usado.';
-
-//             toast.show({    
-//                 title,
-//                 placement: 'top',
-//                 bgColor: 'blue.500'
-//             })           
-//             return
-//         }
-
-//         if ( !userPhoto ) {
-//             const title = 'Atenção! Por favor, escolha uma imagem.';
-
-//             toast.show({    
-//                 title,
-//                 placement: 'top',
-//                 bgColor: 'blue.500'
-//             })           
-//             return
-//         }        
-        
-//         setIsLoading(true) 
-
-//         const data = {
-//             name: name,
-//             description: description,
-//             is_new:  getConverteStatusProdutoBoolean(statusProduto),
-//             price: setPrice(price),
-//             accept_trade:  true,
-//             payment_methods: paymentMethods,
-//             images: [userPhoto]
-//             // images: [{uri: "qualquercoisa", type: "image"}]
-//         }
-//         console.log(data)
-
-//         await storageAdsSave(data);
-//         setIsLoading(false)
-//         handleOpenPreview();               
-              
-//     } catch (error) {
-//         setIsLoading(false);
-    
-//         const isAppError = error instanceof AppError;
-//         const title = isAppError ? error.message : 
-//         'Não foi possível enviar os dados. Tente novamente mais tarde';
-    
-//         toast.show({    
-//             title,
-//             placement: 'top',
-//             bgColor: 'red.500'
-//         })
-//     }        
-// }
