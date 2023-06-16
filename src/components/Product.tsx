@@ -6,6 +6,7 @@ import BackgroundImg from '@assets/produto_1.png';
 import { Status } from './Status';
 import { ProductDTO } from '@dtos/ProductDTO'
 import { baseURL } from "@services/api"
+import FormattedNumber from 'src/global/price';
 
 // type Props = TouchableOpacityProps & {
 //     data: ProductDTO;
@@ -16,16 +17,9 @@ export function Product({onPress, product_images, is_new, is_active, user, name,
     const [userPhoto, setUserPhoto] = useState('https://github.com/JRSparrowII.png');
     const [product, setProduct] = useState<ProductDTO>({} as ProductDTO);
 
-    return(
-                 
-        <VStack
-            w={'50%'}
-            pr={2}
-            backgroundColor="gray.100"
-        >        
-            <Pressable
-                onPress={onPress}
-            >                    
+    return(                 
+        <VStack w={'50%'} pr={2} backgroundColor="gray.100">        
+            <Pressable onPress={onPress}>                    
                 <VStack  
                     justifyContent="space-between" 
                     w='full'
@@ -65,12 +59,10 @@ export function Product({onPress, product_images, is_new, is_active, user, name,
                         top={-120}
                     >
                         {
-                            (user) ? 
-                        
-                            <Avatar h={6} w={6} rounded="full" bg="gray.100" 
-                                source={{ uri: baseURL() + '/images/'+ user.avatar }}
-                            /> : 
-                            
+                            (user) ?                         
+                                <Avatar h={6} w={6} rounded="full" bg="gray.100" 
+                                    source={{ uri: baseURL() + '/images/'+ user.avatar }}
+                                /> :                             
                             null
                         }
 
@@ -91,7 +83,8 @@ export function Product({onPress, product_images, is_new, is_active, user, name,
                 </Text> 
 
                 <Text fontSize={20} fontWeight="bold">
-                    {price} 
+                <FormattedNumber numero={price}/>
+                     
                 </Text>                
             </HStack> 
                 

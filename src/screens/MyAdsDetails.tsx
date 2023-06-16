@@ -1,31 +1,22 @@
-import { Text, useTheme, HStack, VStack, ScrollView, Image, 
-    Avatar, IconButton, View, useToast, Icon, Box } from 'native-base'
+import { Text, useTheme, HStack, VStack, ScrollView,
+    Avatar, IconButton, useToast, Icon, Box } from 'native-base'
 ;
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 
 import { AppNavigatorRoutesProps } from '@routes/app.routes';
 
-import { ArrowLeft, Bank, Barcode, CreditCard, PencilSimpleLine, Power, 
-    TrashSimple, Money, QrCode } from 'phosphor-react-native'
-;
+import { ArrowLeft, PencilSimpleLine, Power, TrashSimple } from 'phosphor-react-native';
 import { useFocusEffect, useNavigation, useRoute } from '@react-navigation/native';
 
 import { ButtonDefault } from '@components/Button';
+import { ModalMenseger } from '@components/ModalMenseger';
+import { SliderCarousel } from '@components/SliderCarousel';
 import { Status } from '@components/Status';
 
-import { storageAdsRemove } from '@storage/storageAds';
-
-import BackgroundImg from '@assets/produto_1.png';
 import { AppError } from '@utils/AppError';
 import { api } from '@services/api';
-import { ModalMenseger } from '@components/ModalMenseger';
 import { useAuth } from '@hooks/useAuth';
-import { storageAdsGet } from '@storage/storageAds';
-// import { AdsDTO } from "@dtos/AdsDTO";
-import { MaterialCommunityIcons, Feather} from '@expo/vector-icons';
-import { ProductDTO } from '@dtos/ProductDTO';
-import { Loading } from '@components/Loading';
-import { SliderCarousel } from '@components/SliderCarousel';
+import { MaterialCommunityIcons} from '@expo/vector-icons';
 import { ProductDetailsDTO } from '@dtos/ProductDetailsDTO';
 
 type RouteParams = {
@@ -49,20 +40,17 @@ export function MyAdsDetails(){
     const {userProduct_id} = route.params as RouteParams;     
 
     const [product, setProduct] = useState<ProductDetailsDTO>({} as ProductDetailsDTO); 
-
     const [visibleModal, setVisibleModal] = useState(false)
 
     async function fetchProductDetails() {
         try {
             setIsLoading(true);
             const response = await api.get(`/products/${userProduct_id}`);
-            // console.log(response.data); //Checar pra ver se ta trazendo os dados
             setProduct(response.data);
         
         } catch (error) {
             const isAppError = error instanceof AppError;
-            // const title = isAppError ? error.message : 'Não foi possível carregar os detalhes do produto';
-            const title = 'Não foi possível carregar os detalhes do produto';
+            const title = isAppError ? error.message : 'Não foi possível carregar os detalhes do produto';
         
             toast.show({
                 title,
@@ -100,9 +88,6 @@ export function MyAdsDetails(){
             }
         
             await api.patch(`/products/${userProduct_id}`, data)
-
-            // console.log('MOSTRE AQUI OS DADOS', data)
-
             const title = !product.is_active ? 'Seu anúncio está ativado!' : 'Seu anúncio está desativado!';
       
             toast.show({
@@ -167,13 +152,7 @@ export function MyAdsDetails(){
             showsVerticalScrollIndicator={false}            
         >
             <VStack backgroundColor='gray.100'>
-                <HStack 
-                    justifyContent="space-between" 
-                    pt={10}
-                    pr={6}
-                    pl={6}
-                    pb={2}
-                >
+                <HStack justifyContent="space-between" pt={10} pr={6} pl={6} pb={2}>
                     <IconButton
                         icon={<ArrowLeft size={sizes[6]} color={colors.gray[600]} weight="bold"/>}
                         onPress={handleOpenMyAds}
@@ -200,11 +179,7 @@ export function MyAdsDetails(){
                         }
                     </VStack>
 
-                    <VStack             
-                        flex="1" 
-                        padding={6}
-                        backgroundColor='gray.100'
-                    >                    
+                    <VStack flex="1" padding={6} backgroundColor='gray.100'>                    
                         <HStack space={3} mb={5}>
                             <Avatar 
                                 h={6} w={6} 

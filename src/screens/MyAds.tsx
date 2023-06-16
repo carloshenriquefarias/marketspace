@@ -6,7 +6,7 @@ import { Text, HStack, VStack, ScrollView, CheckIcon, useTheme, Box, Select,
     Center, FlatList, IconButton, useToast } from 'native-base'
 ;
 
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 
 import { Plus } from 'phosphor-react-native';
 
@@ -101,10 +101,7 @@ export function MyAds(){
             backgroundColor="gray.100"
         >            
             <VStack padding={6} backgroundColor="gray.100" mt={3}>
-
-                <HStack 
-                    justifyContent="space-between" 
-                >
+                <HStack justifyContent="space-between">
                     <IconButton/>  
 
                     <Center>

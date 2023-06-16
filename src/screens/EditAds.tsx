@@ -6,8 +6,7 @@ import React, { useEffect } from "react";
 import { useState } from 'react';
 
 import { Text, HStack, VStack, Button, Box, useTheme, Switch, 
-   ScrollView, IconButton, Avatar, useToast, Alert , Radio, Checkbox,
-   Container, FormControl, WarningOutlineIcon, Center, NativeBaseProvider, Icon
+   ScrollView, IconButton, useToast, Radio, Checkbox,
 } from 'native-base';
 
 import { ButtonDefault } from '@components/Button';
@@ -26,8 +25,6 @@ import { AppError } from '@utils/AppError';
 import { AdsDTO } from '@dtos/AdsDTO';
 
 import { InputNewAd } from '@components/InputNewAd';
-import { storageAdsGet, storageAdsSave } from '@storage/storageAds';
-import { TouchableOpacity } from 'react-native';
 import { ModalMenseger } from '@components/ModalMenseger';
 import { ProductDTO } from '@dtos/ProductDTO';
 
@@ -40,31 +37,21 @@ export function EditAds(){
     const navigation = useNavigation<AppNavigatorRoutesProps>(); 
     const navigationTab = useNavigation<AppTabNavigatorRoutesProps>(); 
 
-    // const route = useRoute();
-    // const product = route.params as AdsDTO;
-
     const PHOTO_SIZE = 24;
     const toast= useToast();
 
     const {colors, sizes} = useTheme(); 
 
     const [isLoading, setIsLoading] = useState(false);
-    // const [paymentMethods, setPaymentMethods] = useState<string[]>([])
-    // const [ads, setAds] = useState<AdsDTO | undefined>(undefined);
 
     const [userPhoto, setUserPhoto] = useState<string | null>(null);  
     const [image, setImage] = useState(false);   
-
-    const [switchValue, setSwitchValue] = useState(false);
-    const [isUpdating, setIsUpdating] = useState(false);
     const [visibleModal, setVisibleModal] = useState(false)
 
     const [editing, setEditing] = useState(false)
 
     const route = useRoute();
     const {userProduct_id} = route.params as RouteParams; 
-
-    // const paymentMethodsKey = product.payment_methods.map(({ key }) => key)
 
     const [images, setImages] = useState<string[]>([])
     const [name, setName] = useState()
@@ -74,7 +61,8 @@ export function EditAds(){
     const [isTradable, setIsTradable] = useState()
     const [paymentMethods, setPaymentMethods] = useState([]) 
 
-    const [product, setProduct] = useState<ProductDTO>({} as ProductDTO);
+    // const [product, setProduct] = useState<ProductDTO>({} as ProductDTO);
+    // const paymentMethodsKey = product.payment_methods.map(({ key }) => key)
 
     const RadioStatusProduct = () => {
         return (
@@ -143,33 +131,31 @@ export function EditAds(){
 
             setEditing(true)
 
-            // if (    
-            //         // product.images.length  === 0 || 
-            //         // product.payment_methods.length === 0 || 
-            //         product.name.trim() === '' || 
-            //         product.description.trim() === '' || 
-            //         // product.price === null
-            //     ) {
+            if (    
+                    product.images.length  === 0 || 
+                    product.payment_methods.length === 0 || 
+                    product.name.trim() === '' || 
+                    product.description.trim() === '' || 
+                    product.price === null
+                ) {
 
-            //     return toast.show({
-            //         title: 'Por favor preenchar todos os campos.',
-            //         bg: 'yellow.400',
-            //         placement: 'top',
-            //         mx: 4,
-            //     })
-            // }
+                return toast.show({
+                    title: 'Por favor preenchar todos os campos.',
+                    bg: 'yellow.400',
+                    placement: 'top',
+                    mx: 4,
+                })
+            }
     
             const data = {
-                // images,
+                images,
                 name,
                 description,
-                // is_new,
+                isNew,
                 price,
-                // accept_trade,
-                // payment_methods,
+                isTradable,
+                paymentMethods,
             }
-
-            console.log('NOVO ITEM', data);
         
             await api.put(`/products/${userProduct_id}`, data)
 
@@ -404,8 +390,7 @@ export function EditAds(){
                                     </HStack>   
                                 </ScrollView>
                             ) : null}
-                            
-                                                  
+                                                                             
                         </HStack>
 
                         <HStack 
@@ -475,10 +460,7 @@ export function EditAds(){
                             Aceita troca?
                         </Text>
 
-                        <Switches
-                            // onChange={setIsTradable} 
-                            // value={isTradable} 
-                        />
+                        <Switches/>
 
                         <Text color="gray.700" fontFamily="heading" fontSize="md" mb={1}>
                             Meios de pagamentos aceitos:
@@ -522,8 +504,7 @@ export function EditAds(){
                     title="Atualizar" 
                     size="half"                             
                     variant="base2" 
-                    isLoading={isUpdating}  
-                    // onPress={handleOpenModal}
+                    isLoading={isLoading}  
                     onPress={() => UpdateAds}                                 
                 />                    
             </HStack> 
@@ -534,7 +515,6 @@ export function EditAds(){
                     nameButtonOne='Não, Quero Editar!'
                     nameButtonTwo='Sim, Retornar!'
                     onPress={handleOpenMyAds} 
-                    //PRECISA PASSAR DUAS FUNÇÕES POIS SAO DOIS BOTOES DIFETENTES
                 />
             :null}
 
