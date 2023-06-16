@@ -7,8 +7,6 @@ type Props = {
 }
 
 export function Status({ name }: Props) {
-
-  const {colors, sizes} = useTheme();
   
   return (
     <HStack

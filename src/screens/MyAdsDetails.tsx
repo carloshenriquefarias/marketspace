@@ -21,7 +21,7 @@ import { api } from '@services/api';
 import { ModalMenseger } from '@components/ModalMenseger';
 import { useAuth } from '@hooks/useAuth';
 import { storageAdsGet } from '@storage/storageAds';
-import { AdsDTO } from "@dtos/AdsDTO";
+// import { AdsDTO } from "@dtos/AdsDTO";
 import { MaterialCommunityIcons, Feather} from '@expo/vector-icons';
 import { ProductDTO } from '@dtos/ProductDTO';
 import { Loading } from '@components/Loading';

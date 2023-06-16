@@ -1,13 +1,6 @@
 import { useTheme, Box } from 'native-base';
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
-
-import { useContext } from 'react';
-
-import { TesteDeModal} from '@screens/teste';
-
 import {useAuth} from '@hooks/useAuth';
-import {useAds} from '@hooks/useAds';
-
 import { AuthRoutes } from "./auth.routes";
 import { AppRoutes } from "./app.routes"
 

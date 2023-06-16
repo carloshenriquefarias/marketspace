@@ -9,6 +9,7 @@ type Props = IInputProps & {
     typeInput?: null | 'filter';
     filter: () => void;
     handleOpenModal: () => void;
+    valueFilter: string
 }
 
 export function InputFilter({valueFilter, onChangeText, typeInput = null, filter, handleOpenModal}: Props) {      

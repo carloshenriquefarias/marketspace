@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Radio, Center, NativeBaseProvider, Stack } from "native-base";
+import { Radio, Stack } from "native-base";
 
 export function RadiosAtual(){
 

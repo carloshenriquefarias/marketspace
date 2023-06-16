@@ -2,17 +2,13 @@ import { AppNavigatorRoutesProps } from '@routes/app.routes';
 import { AppTabNavigatorRoutesProps } from '@routes/app.tab.routes';
 import { useNavigation } from '@react-navigation/native';
 
-// import { Pressable, useTheme} from 'native-base';
 import { ArrowRight, Plus, Tag} from 'phosphor-react-native';
 
 import { Product } from '@components/Product'
 import { UserPhoto } from '@components/UserPhoto'
 import { InputFilter } from '@components/InputFilter' 
 import { Loading } from '@components/Loading'
-// import { Status } from '@components/Status'
 import { ButtonDefault } from "@components/Button";
-import { InputSearch } from '@components/InputSearch';
-import { Filters } from '@components/Filters';
 import { BoxCondition } from '@components/BoxCondition';
 
 import { AppError } from '@utils/AppError';
@@ -122,9 +118,6 @@ export function Home(){
             setIsLoading(true);                 
                        
             const params = `is_new=${isNew}&accept_trade=${acceptTrade}&payment_methods=${JSON.stringify(paymentMethods)}`
-
-
-            console.log('params', params);
 
             const response = await api.get(`/products?${params}`)  
            
@@ -254,7 +247,6 @@ export function Home(){
                                         fontWeight="bold" 
                                         lineHeight={'md'}
                                     >
-                                        {/* 4 */}
                                         {products.length}
                                     </Text>  
                                     <Text color="black" fontSize={RFValue(12)}>anúncios ativos</Text> 
@@ -292,9 +284,6 @@ export function Home(){
                         filter={handleFilterByName}  
                         handleOpenModal={handleOpenModal}                 
                     />                     
-                    
-                   
-
                 </VStack>
 
                 <VStack pr={4} pl={6} backgroundColor="gray.100">                   
@@ -371,10 +360,8 @@ export function Home(){
                                             name={item}
                                             isActive={conditionSelected.toLocaleUpperCase() 
                                                 === item.toLocaleUpperCase()}
-                                            onPress={() =>  handleCondition(item)}
-                                                
-                                        />                                      
-                                   
+                                            onPress={() =>  handleCondition(item)}                                               
+                                        />                                                                         
                                     )}
                                     horizontal
                                     showsHorizontalScrollIndicator={false}

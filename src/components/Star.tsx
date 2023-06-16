@@ -1,7 +1,6 @@
 import { HStack } from "native-base";
 import { useState } from "react";
 
-
 type StarProps = {
     isActive: boolean;
     onClick(): void;

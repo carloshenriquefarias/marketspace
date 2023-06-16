@@ -25,6 +25,7 @@ import { AppError } from '@utils/AppError';
 import { storageAdsGet } from '@storage/storageAds';
 import { api, baseURL } from '@services/api';
 import { Images } from '@components/Image';
+import { ArrowLeft, Tag } from 'phosphor-react-native';
 
 export function Preview(){
 
@@ -61,23 +62,34 @@ export function Preview(){
                 payment_methods: ads?.payment_methods
             }
 
-            const response_product = await api.post('/products', data);  
+            const response_product = await api.post('/products', data);
+            console.log('AQUI AS 18:25 =>', response_product)
                         
             if (response_product.data.id) {   
 
-                let formData = new FormData(); 
+                // let formData = new FormData(); 
+
+                // ads?.images.map(( item ) => {
+                //     formData.append("images", {
+                //         uri: item,
+                //         name: "image.jpg",
+                //         type: "image/jpg",
+                //     });
+                // })
+
+                const formData = new FormData();
 
                 ads?.images.map(( item ) => {
-                    formData.append("images", {
-                        uri: item,
-                        name: "image.jpg",
-                        type: "image/jpg",
-                    });
-                })
+                    const imageFile = {
+                    ...item,
+                    name: "image.jpg" + "." + item.type,
+                    } as any;
+
+                    formData.append("images", imageFile);
+                });
 
                 formData.append('product_id', response_product.data.id)
-               
-                
+                             
                 await api.post('/products/images', formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
@@ -261,7 +273,7 @@ export function Preview(){
                     title="Voltar e Editar" 
                     size="half"                             
                     variant="default"  
-                    // leftIcon={<ArrowLeft color={colors.gray[500]} size={sizes[5]} />}
+                    leftIcon={<ArrowLeft color={colors.gray[500]} size={sizes[5]} />}
                     onPress={handleOpenNewAd}                    
                 />          
 
@@ -271,7 +283,7 @@ export function Preview(){
                     variant="base1" 
                     isLoading={isLoading}
                     onPress={handleCreateNewAd}
-                    // leftIcon={<Tag color={colors.gray[200]} size={sizes[5]} /> }                                         
+                    leftIcon={<Tag color={colors.gray[200]} size={sizes[5]} /> }                                         
                 />                    
             </HStack>  
         </>

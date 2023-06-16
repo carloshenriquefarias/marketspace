@@ -1,6 +1,5 @@
 import React from "react";
 import { Modal, Text, Button, FormControl, HStack, Switch, VStack, Checkbox, Box, IconButton, useTheme } from "native-base";
-import { Status } from "./Status";
 import { X } from 'phosphor-react-native';
 
 type Props = {

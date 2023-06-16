@@ -1,5 +1,4 @@
-import { Input as NativeBaseInput, IInputProps, FormControl, Pressable, Icon } from 'native-base';
-import { View } from 'react-native';
+import { Input as NativeBaseInput, IInputProps, FormControl, Icon } from 'native-base';
 import React from "react";
 import { MaterialIcons} from '@expo/vector-icons'; 
 
@@ -11,7 +10,6 @@ type Props = IInputProps & {
 export function InputNewAd({ typeInput = null, errorMessage = null, isInvalid, size, ...rest }: Props) {
   
     const invalid = !!errorMessage || isInvalid;
-    const [noShow, setNoShow] = React.useState(false);
 
     return (
         <FormControl mb={4} isInvalid={invalid}>
