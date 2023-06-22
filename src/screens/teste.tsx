@@ -131,10 +131,6 @@ export function TesteDeModal() {
     return(   
         <Box mt={10} mb={3} w="full" h={'100%'}> 
 
-            {/* <Button onPress={handleCloseModal}>
-                Clique aqui para fechar o modal
-            </Button> */}
-
             <Button onPress={handleOpenModal}>
                 Clique aqui para abrir o modal
             </Button>
@@ -207,9 +203,6 @@ export function TesteDeModal() {
                         justifyContent="space-between" 
                         space={2} 
                         pt={5} pb={5}
-                        // bottom={0}
-                        // w='full'
-                        // h='12%'
                     >
                         <ButtonDefault 
                             title="Resetar Filtros" 
@@ -229,7 +222,6 @@ export function TesteDeModal() {
                 </ScrollView>
                 </VStack>
             </BottomSheet>
-        </Box>       
-        
+        </Box>              
     )
 }
