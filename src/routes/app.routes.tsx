@@ -7,7 +7,7 @@ import { EditAds } from '@screens/EditAds';
 import { Preview } from '@screens/Preview';
 import { ProductDetails } from '@screens/ProductDetails';
 import { MyAdsDetails } from '@screens/MyAdsDetails';
-import { TesteDeModal } from '@screens/teste';
+// import { TesteDeModal } from '@screens/teste';
 
 import { MyAds } from '@screens/MyAds';
 
@@ -36,7 +36,7 @@ export function AppRoutes() {
       <Screen name='productdetails' component={ProductDetails}/>
       <Screen name='myadsdetails' component={MyAdsDetails}/>  
       <Screen name='myads' component={MyAds}/>  
-      <Screen name='teste' component={TesteDeModal}/>
+      {/* <Screen name='teste' component={TesteDeModal}/> */}
     </Navigator>
   )
 }
