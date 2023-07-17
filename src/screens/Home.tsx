@@ -21,7 +21,9 @@ import { SafeAreaView } from 'react-native';
 import { ProductDTO } from '@dtos/ProductDTO';
 
 import { Box, FlatList, Checkbox, Heading, HStack, Icon, Pressable, useTheme,
-    IconButton, ScrollView, Switch, Text, useToast, VStack } from "native-base";
+    IconButton, ScrollView, Switch, Text, useToast, VStack 
+} from "native-base";
+
 import React, { useEffect, useMemo, useRef, useState } from "react";
 
 import BottomSheet from "@gorhom/bottom-sheet";
