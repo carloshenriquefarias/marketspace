@@ -63,7 +63,6 @@ export function Preview(){
             }
 
             const response_product = await api.post('/products', data);
-            console.log('AQUI AS 18:25 =>', response_product)
                         
             if (response_product.data.id) {   
 
@@ -134,7 +133,6 @@ export function Preview(){
             try {
                 const adLoad = await storageAdsGet();
                 setAds(adLoad);
-                // console.log(adLoad)
             
             }   catch (error) {
     

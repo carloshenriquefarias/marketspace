@@ -6,7 +6,7 @@ import BackgroundImg from '@assets/produto_1.png';
 import { Status } from './Status';
 import { ProductDTO } from '@dtos/ProductDTO'
 import { baseURL } from "@services/api"
-import FormattedNumber from 'src/global/price';
+// import FormattedNumber from 'src/global/price';
 
 // type Props = TouchableOpacityProps & {
 //     data: ProductDTO;
@@ -65,7 +65,6 @@ export function Product({onPress, product_images, is_new, is_active, user, name,
                                 /> :                             
                             null
                         }
-
                         <Status name={is_new} />
                     </HStack>                       
                 </VStack>
@@ -81,15 +80,10 @@ export function Product({onPress, product_images, is_new, is_active, user, name,
                 <Text fontSize={20} fontWeight="bold">
                     R$ 
                 </Text> 
-
-                <Text fontSize={20} fontWeight="bold">
-                <FormattedNumber numero={price}/>
-                     
+                <Text fontSize={20} fontWeight="bold">                     
                 </Text>                
-            </HStack> 
-                
-        </VStack> 
-              
+            </HStack>                
+        </VStack>               
     )
 }
 
