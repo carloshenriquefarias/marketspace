@@ -7,7 +7,6 @@ Uma aplicação mobile em React Native de anúncios de produtos estilo OLX, que 
 
 ### Demo:
 <h1 align="center">
-  <img alt="Marketspace" height="800" title="" src="./github/home.png" />
   <img alt="Marketspace" height="800" title="" src="./github/login.png" />
 </h1>
 <div align="center">
@@ -40,6 +39,6 @@ Foram utilizadas as seguintes temas:
 </h1>
 
 <div align="center">
-  <small>Prisco Cleyton - 2023</small>
+  <small> Carlos Henrique Farias Júnior - 2023</small>
 </div>
 
