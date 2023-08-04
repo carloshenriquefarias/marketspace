@@ -7,7 +7,8 @@ Uma aplicação mobile em React Native de anúncios de produtos estilo OLX, que 
 
 ### Demo:
 <h1 align="center">
-  <img alt="Marketspace" height="800" title="" src="./github/login.png" />
+
+  <img alt="Marketspace" height="800" title="" src="./github/home.png" />
 </h1>
 <div align="center">
     <img alt="Marketspace" height="600" title="" 
